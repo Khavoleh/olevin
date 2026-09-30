@@ -1,0 +1,24 @@
+app.localhost {
+	tls internal
+	reverse_proxy host.docker.internal:3000
+}
+
+api.localhost {
+	tls internal
+	reverse_proxy host.docker.internal:5000
+}
+
+auth.localhost {
+	tls internal
+	reverse_proxy logto:3001
+}
+
+auth-admin.localhost {
+	tls internal
+	reverse_proxy logto:3002
+}
+
+seq.localhost {
+	tls internal
+	reverse_proxy seq:80
+}

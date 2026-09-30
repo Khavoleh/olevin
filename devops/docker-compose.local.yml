@@ -53,8 +53,8 @@ services:
     environment:
       TRUST_PROXY_HEADER: "1"
       DB_URL: postgres://olevin:olevin@postgresql:5432/auth
-      ENDPOINT: http://localhost:3001
-      ADMIN_ENDPOINT: http://localhost:3002
+      ENDPOINT: ${LOGTO_ENDPOINT:-http://localhost:3001}
+      ADMIN_ENDPOINT: ${LOGTO_ADMIN_ENDPOINT:-http://localhost:3002}
     networks:
       - olevin
     ports:
@@ -71,6 +71,23 @@ services:
       retries: 5
       start_period: 60s
 
+  caddy:
+    image: caddy:2.10
+    container_name: caddy
+    profiles: ["https"]
+    restart: unless-stopped
+    networks:
+      - olevin
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
 networks:
   olevin:
     name: olevin
@@ -79,4 +96,8 @@ volumes:
   postgresql_data:
     driver: local
   seq_data:
+    driver: local
+  caddy_data:
+    driver: local
+  caddy_config:
     driver: local
