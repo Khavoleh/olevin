@@ -42,6 +42,35 @@ services:
       retries: 5
       start_period: 10s
 
+  logto:
+    image: svhd/logto:1.44.0
+    container_name: logto
+    restart: unless-stopped
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
+    environment:
+      TRUST_PROXY_HEADER: "1"
+      DB_URL: postgres://olevin:olevin@postgresql:5432/auth
+      ENDPOINT: http://localhost:3001
+      ADMIN_ENDPOINT: http://localhost:3002
+    networks:
+      - olevin
+    ports:
+      - "3001:3001"
+      - "3002:3002"
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://localhost:3001/api/status'').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
 networks:
   olevin:
     name: olevin
