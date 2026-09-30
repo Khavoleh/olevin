@@ -1,0 +1,31 @@
+name: olevin
+
+services:
+  postgresql:
+    image: postgres:17.11
+    container_name: postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: olevin
+      POSTGRES_PASSWORD: olevin
+      POSTGRES_DB: olevin
+    networks:
+      - olevin
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgresql_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U olevin -d olevin"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+networks:
+  olevin:
+    name: olevin
+
+volumes:
+  postgresql_data:
+    driver: local
