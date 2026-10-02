@@ -22,3 +22,8 @@ seq.localhost {
 	tls internal
 	reverse_proxy seq:80
 }
+
+mail.localhost {
+	tls internal
+	reverse_proxy mailpit:8025
+}
