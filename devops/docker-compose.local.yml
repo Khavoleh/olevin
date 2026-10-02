@@ -31,8 +31,6 @@ services:
       SEQ_FIRSTRUN_NOAUTHENTICATION: "true"
     networks:
       - olevin
-    ports:
-      - "5341:80"
     volumes:
       - seq_data:/data
     healthcheck:
@@ -53,13 +51,10 @@ services:
     environment:
       TRUST_PROXY_HEADER: "1"
       DB_URL: postgres://olevin:olevin@postgresql:5432/auth
-      ENDPOINT: ${LOGTO_ENDPOINT:-http://localhost:3001}
-      ADMIN_ENDPOINT: ${LOGTO_ADMIN_ENDPOINT:-http://localhost:3002}
+      ENDPOINT: ${LOGTO_ENDPOINT:-https://localhost:3001}
+      ADMIN_ENDPOINT: ${LOGTO_ADMIN_ENDPOINT:-https://auth-admin.localhost}
     networks:
       - olevin
-    ports:
-      - "3001:3001"
-      - "3002:3002"
     healthcheck:
       test:
         [
@@ -82,9 +77,6 @@ services:
       MP_SMTP_AUTH_ALLOW_INSECURE: "true"
     networks:
       - olevin
-    ports:
-      - "1025:1025"
-      - "8025:8025"
     volumes:
       - mailpit_data:/data
     healthcheck:
@@ -114,6 +106,7 @@ services:
     ports:
       - "80:80"
       - "443:443"
+      - "3001:3001"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data

@@ -8,7 +8,8 @@ api.localhost {
 	reverse_proxy host.docker.internal:5000
 }
 
-auth.localhost {
+# Google OAuth forbids subdomains of localhost, so Logto is served on plain localhost:3001
+localhost:3001 {
 	tls internal
 	reverse_proxy logto:3001
 }
@@ -18,7 +19,7 @@ auth-admin.localhost {
 	reverse_proxy logto:3002
 }
 
-seq.localhost {
+logs.localhost {
 	tls internal
 	reverse_proxy seq:80
 }
