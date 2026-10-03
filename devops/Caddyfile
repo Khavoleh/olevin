@@ -5,7 +5,7 @@ app.localhost {
 
 api.localhost {
 	tls internal
-	reverse_proxy host.docker.internal:5000
+	reverse_proxy host.docker.internal:5001
 }
 
 # Google OAuth forbids subdomains of localhost, so Logto is served on plain localhost:3001
