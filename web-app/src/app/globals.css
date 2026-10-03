@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+	--color-background: oklch(98.5% 0.004 250);
+	--color-surface: oklch(100% 0 0);
+	--color-muted: oklch(96% 0.006 250);
+	--color-border: oklch(90% 0.01 250);
+	--color-text: oklch(25% 0.02 260);
+	--color-text-muted: oklch(50% 0.02 260);
+	--color-primary: oklch(52% 0.14 165);
+	--color-primary-hover: oklch(47% 0.13 165);
+	--color-primary-pressed: oklch(42% 0.12 165);
+	--color-on-primary: oklch(100% 0 0);
+	--color-focus: oklch(60% 0.17 250);
+	--color-danger: oklch(55% 0.2 27);
+}
+
+@layer base {
+	html {
+		color-scheme: light;
+	}
+
+	body {
+		@apply bg-background text-text antialiased;
+	}
+}

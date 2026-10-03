@@ -10,11 +10,11 @@ namespace Olevin.Api.Features.Account;
 public static class GetMe
 {
     /// <summary>
-    /// Handles <c>GET /api/me</c>.
+    /// Handles <c>GET /me</c>.
     /// </summary>
     /// <param name="user">The user from the validated access token.</param>
     /// <returns>The Logto identifier of the user.</returns>
-    [WolverineGet("/api/me")]
+    [WolverineGet("/me")]
     public static Response Handle(ClaimsPrincipal user)
     {
         return new Response(user.GetSubject());
