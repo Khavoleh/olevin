@@ -65,8 +65,6 @@ public static class Telemetry
         exporter.Protocol = OtlpExportProtocol.HttpProtobuf;
 
         if (!string.IsNullOrEmpty(seq.ApiKey))
-        {
             exporter.Headers = $"X-Seq-ApiKey={seq.ApiKey}";
-        }
     }
 }

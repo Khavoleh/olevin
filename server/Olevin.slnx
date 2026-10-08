@@ -10,4 +10,5 @@
     <File Path="global.json" />
   </Folder>
   <Project Path="Olevin.Api/Olevin.Api.csproj" />
+  <Project Path="Olevin.Tests/Olevin.Tests.csproj" />
 </Solution>

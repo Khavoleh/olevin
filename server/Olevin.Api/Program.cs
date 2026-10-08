@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using DotNetEnv;
 using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Infrastructure;
@@ -18,6 +19,9 @@ builder.AddTelemetry();
 
 builder.Host.UseWolverine(options => options.UseFluentValidation());
 builder.Services.AddWolverineHttp();
+builder.Services.ConfigureHttpJsonOptions(options =>
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter())
+);
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("Olevin"))
