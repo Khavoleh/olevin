@@ -15,12 +15,27 @@ services:
       - "5432:5432"
     volumes:
       - postgresql_data:/var/lib/postgresql
+      - ../db/create-atlas-db.sql:/docker-entrypoint-initdb.d/create-atlas-db.sql:ro
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U olevin -d olevin"]
       interval: 10s
       timeout: 5s
       retries: 5
       start_period: 10s
+
+  atlas:
+    image: arigaio/atlas:1.3.3
+    container_name: atlas
+    restart: "no"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    working_dir: /db
+    command: schema apply --env local --auto-approve
+    networks:
+      - olevin
+    volumes:
+      - ../db:/db:ro
 
   seq:
     image: datalust/seq:2026.1.17182
