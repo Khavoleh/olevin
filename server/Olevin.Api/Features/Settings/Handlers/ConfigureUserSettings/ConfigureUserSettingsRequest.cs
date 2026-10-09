@@ -9,9 +9,11 @@ namespace Olevin.Api.Features.Settings.Handlers.ConfigureUserSettings;
 /// <param name="Locale">The interface language.</param>
 /// <param name="SnapshotDay">The day of the month (1-31) the monthly snapshot is taken on.</param>
 /// <param name="Timezone">The IANA time zone name.</param>
+/// <param name="ResearchConsent">The user's research consent.</param>
 public sealed record ConfigureUserSettingsRequest(
     CurrencyCode BaseCurrency,
     LocaleCode Locale,
     short SnapshotDay,
-    string Timezone
+    string Timezone,
+    bool ResearchConsent
 );

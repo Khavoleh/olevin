@@ -34,6 +34,11 @@ public sealed class UserSetting
     public string Timezone { get; set; } = null!;
 
     /// <summary>
+    /// Whether the user consented to use of their data for research
+    /// </summary>
+    public bool ResearchConsent { get; set; }
+
+    /// <summary>
     /// When the settings were created.
     /// </summary>
     public DateTime CreatedAt { get; set; }

@@ -57,6 +57,7 @@ public static class ConfigureUserSettingsEndpoint
             Locale = request.Locale,
             SnapshotDay = request.SnapshotDay,
             Timezone = request.Timezone,
+            ResearchConsent = request.ResearchConsent,
         };
 
         return Response<bool>.Ok(true, HttpStatusCode.Created);

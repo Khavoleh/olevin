@@ -42,6 +42,10 @@ public sealed class UserSettingConfiguration : IEntityTypeConfiguration<UserSett
             .HasComment("IANA time zone name")
             .HasColumnName("timezone");
         builder
+            .Property(e => e.ResearchConsent)
+            .HasComment("Whether the user consented to use of their data for research")
+            .HasColumnName("research_consent");
+        builder
             .Property(setting => setting.CreatedAt)
             .HasDefaultValueSql("now()")
             .HasComment("When the settings were created")

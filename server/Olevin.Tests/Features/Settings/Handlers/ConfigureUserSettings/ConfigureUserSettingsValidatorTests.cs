@@ -9,7 +9,7 @@ public sealed class ConfigureUserSettingsValidatorTests
     private readonly ConfigureUserSettingsValidator Validator = new();
 
     private static ConfigureUserSettingsRequest Valid() =>
-        new(CurrencyCode.UAH, LocaleCode.UK, 15, "Europe/Kyiv");
+        new(CurrencyCode.UAH, LocaleCode.UK, 15, "Europe/Kyiv", true);
 
     [Fact]
     public void ValidRequest_IsAccepted() =>

@@ -77,6 +77,11 @@ table "user_settings" {
     type    = varchar(64)
     comment = "IANA time zone name"
   }
+  column "research_consent" {
+    type    = boolean
+    default = false
+    comment = "Whether the user consented to use of their data for research"
+  }
   column "created_at" {
     type    = timestamptz
     default = sql("now()")
