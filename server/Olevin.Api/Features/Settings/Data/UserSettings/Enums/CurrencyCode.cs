@@ -1,4 +1,4 @@
-namespace Olevin.Api.Features.Settings.Data.Users.Enums;
+namespace Olevin.Api.Features.Settings.Data.UserSettings.Enums;
 
 /// <summary>
 /// A currency a user can pick as the base one. Members match the labels of <c>settings.currency_code</c>.

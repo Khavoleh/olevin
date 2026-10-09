@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Features.Settings.Data.Users;
+using Olevin.Api.Features.Settings.Data.UserSettings;
 
 namespace Olevin.Api.Features.Settings.Data;
 
@@ -15,7 +16,15 @@ public sealed class SettingsDbContext(DbContextOptions<SettingsDbContext> option
     /// </summary>
     public DbSet<User> Users => Set<User>();
 
+    /// <summary>
+    /// Gets the user settings.
+    /// </summary>
+    public DbSet<UserSetting> UserSettings => Set<UserSetting>();
+
     /// <inheritdoc/>
-    protected override void OnModelCreating(ModelBuilder modelBuilder) =>
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
+        modelBuilder.ApplyConfiguration(new UserSettingConfiguration());
+    }
 }

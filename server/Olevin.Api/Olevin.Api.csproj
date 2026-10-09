@@ -21,7 +21,4 @@
     <PackageReference Include="WolverineFx.Http.FluentValidation" Version="6.45.0" />
     <PackageReference Include="WolverineFx.RuntimeCompilation" Version="6.45.0" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Features\Settings\Data2\" />
-  </ItemGroup>
 </Project>

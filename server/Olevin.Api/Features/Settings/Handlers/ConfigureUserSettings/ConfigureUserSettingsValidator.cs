@@ -1,12 +1,13 @@
 using System.Text.RegularExpressions;
 using FluentValidation;
 
-namespace Olevin.Api.Features.Settings.Handlers.CreateUser;
+namespace Olevin.Api.Features.Settings.Handlers.ConfigureUserSettings;
 
 /// <summary>
-/// Validates the settings of a new user.
+/// Validates the settings of a user.
 /// </summary>
-public sealed partial class CreateUserValidator : AbstractValidator<CreateUserRequest>
+public sealed partial class ConfigureUserSettingsValidator
+    : AbstractValidator<ConfigureUserSettingsRequest>
 {
     private const int MaxTimezoneLength = 64;
 
@@ -14,9 +15,9 @@ public sealed partial class CreateUserValidator : AbstractValidator<CreateUserRe
     private static partial Regex TimezoneFormat();
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="CreateUserValidator"/> class.
+    /// Initializes a new instance of the <see cref="ConfigureUserSettingsValidator"/> class.
     /// </summary>
-    public CreateUserValidator()
+    public ConfigureUserSettingsValidator()
     {
         RuleFor(request => request.BaseCurrency)
             .IsInEnum()

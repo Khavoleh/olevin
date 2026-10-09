@@ -1,4 +1,4 @@
-namespace Olevin.Api.Features.Settings.Data.Users.Enums;
+namespace Olevin.Api.Features.Settings.Data.UserSettings.Enums;
 
 /// <summary>
 /// An interface language. Members match the labels of <c>settings.locale_code</c>.

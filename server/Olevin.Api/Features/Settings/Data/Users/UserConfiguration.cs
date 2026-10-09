@@ -28,23 +28,6 @@ public sealed class UserConfiguration : IEntityTypeConfiguration<User>
             .HasComment("Logto sub claim")
             .HasColumnName("auth_sub");
         builder
-            .Property(user => user.BaseCurrency)
-            .HasComment("Default user's currency")
-            .HasColumnName("base_currency");
-        builder
-            .Property(user => user.Locale)
-            .HasComment("Interface language")
-            .HasColumnName("locale");
-        builder
-            .Property(user => user.SnapshotDay)
-            .HasComment("Day of the month the monthly snapshot is taken on (1-31)")
-            .HasColumnName("snapshot_day");
-        builder
-            .Property(user => user.Timezone)
-            .HasMaxLength(64)
-            .HasComment("IANA time zone name")
-            .HasColumnName("timezone");
-        builder
             .Property(user => user.CreatedAt)
             .HasDefaultValueSql("now()")
             .HasComment("When the profile was created")

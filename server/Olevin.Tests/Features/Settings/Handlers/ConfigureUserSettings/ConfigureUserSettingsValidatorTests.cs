@@ -1,14 +1,14 @@
 using FluentValidation.TestHelper;
-using Olevin.Api.Features.Settings.Data.Users.Enums;
-using Olevin.Api.Features.Settings.Handlers.CreateUser;
+using Olevin.Api.Features.Settings.Data.UserSettings.Enums;
+using Olevin.Api.Features.Settings.Handlers.ConfigureUserSettings;
 
-namespace Olevin.Tests.Features.Settings.Handlers.CreateUser;
+namespace Olevin.Tests.Features.Settings.Handlers.ConfigureUserSettings;
 
-public sealed class CreateUserValidatorTests
+public sealed class ConfigureUserSettingsValidatorTests
 {
-    private readonly CreateUserValidator Validator = new();
+    private readonly ConfigureUserSettingsValidator Validator = new();
 
-    private static CreateUserRequest Valid() =>
+    private static ConfigureUserSettingsRequest Valid() =>
         new(CurrencyCode.UAH, LocaleCode.UK, 15, "Europe/Kyiv");
 
     [Fact]

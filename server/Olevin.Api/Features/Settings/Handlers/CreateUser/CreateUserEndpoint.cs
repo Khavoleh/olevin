@@ -11,7 +11,7 @@ using Wolverine.Http;
 namespace Olevin.Api.Features.Settings.Handlers.CreateUser;
 
 /// <summary>
-/// Creates the profile of the signed-in user. Wolverine saves it in a transaction after the handler.
+/// Creates the profile of the signed-in user.
 /// </summary>
 [Tags("Settings")]
 public static class CreateUserEndpoint
@@ -19,7 +19,6 @@ public static class CreateUserEndpoint
     /// <summary>
     /// Handles <c>POST /settings/v1/users</c>.
     /// </summary>
-    /// <param name="request">The settings of the user.</param>
     /// <param name="principal">The signed-in user.</param>
     /// <param name="db">The settings database.</param>
     /// <param name="ct">The cancellation token.</param>
@@ -28,7 +27,6 @@ public static class CreateUserEndpoint
     [ProducesResponseType<Response<bool>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<bool>>(StatusCodes.Status409Conflict)]
     public static async Task<Response<bool>> Post(
-        CreateUserRequest request,
         ClaimsPrincipal principal,
         SettingsDbContext db,
         CancellationToken ct
@@ -39,15 +37,7 @@ public static class CreateUserEndpoint
         if (await db.Users.AnyAsync(user => user.AuthSub == authSub, ct))
             return Response<bool>.Fail(HttpStatusCode.Conflict, "The user already exists.");
 
-        User user = new()
-        {
-            Id = Guid.CreateVersion7(),
-            AuthSub = authSub,
-            BaseCurrency = request.BaseCurrency,
-            Locale = request.Locale,
-            SnapshotDay = request.SnapshotDay,
-            Timezone = request.Timezone,
-        };
+        User user = new() { Id = Guid.CreateVersion7(), AuthSub = authSub };
 
         db.Users.Add(user);
 

@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql.NameTranslation;
 using Olevin.Api.Features.Settings.Data;
-using Olevin.Api.Features.Settings.Data.Users.Enums;
+using Olevin.Api.Features.Settings.Data.UserSettings.Enums;
 using Olevin.Api.Infrastructure.Database;
 using Wolverine.EntityFrameworkCore;
 
