@@ -1,12 +1,15 @@
 using System.Text.Json.Serialization;
 using DotNetEnv;
-using Microsoft.EntityFrameworkCore;
-using Olevin.Api.Infrastructure;
+using Npgsql;
+using Olevin.Api.Features.Settings;
 using Olevin.Api.Infrastructure.Auth;
+using Olevin.Api.Infrastructure.Database;
 using Olevin.Api.Infrastructure.Telemetry;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
+using Wolverine.EntityFrameworkCore;
+using Wolverine.ErrorHandling;
 using Wolverine.FluentValidation;
 using Wolverine.Http;
 using Wolverine.Http.FluentValidation;
@@ -17,16 +20,27 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddTelemetry();
 
-builder.Host.UseWolverine(options => options.UseFluentValidation());
+builder.Host.UseWolverine(options =>
+{
+    options.UseFluentValidation();
+    options.UseEntityFrameworkCoreTransactions();
+    options.Policies.AutoApplyTransactions();
+    options
+        .Policies.OnException<NpgsqlException>(exception => exception.IsTransient)
+        .Or<TimeoutException>()
+        .RetryWithCooldown(
+            TimeSpan.FromMilliseconds(50),
+            TimeSpan.FromMilliseconds(100),
+            TimeSpan.FromMilliseconds(250)
+        );
+});
 builder.Services.AddWolverineHttp();
 builder.Services.ConfigureHttpJsonOptions(options =>
     options.SerializerOptions.Converters.Add(new JsonStringEnumConverter())
 );
 
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("Olevin"))
-);
-
+builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddSettings();
 builder.Services.AddLogtoAuthentication(builder.Configuration);
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();

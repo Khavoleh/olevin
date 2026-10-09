@@ -7,14 +7,15 @@ namespace Olevin.Api.Features.Snapshots.Handlers.CalculateSnapshots;
 /// <summary>
 /// Calculates the indexes, advice and changes for a series of monthly snapshots without storing them.
 /// </summary>
+[Tags("Snapshots")]
 public static class CalculateSnapshotsEndpoint
 {
     /// <summary>
-    /// Handles <c>POST /snapshots/calculate</c>.
+    /// Handles <c>POST /snapshots/v1/calculate</c>.
     /// </summary>
     /// <param name="request">The snapshots.</param>
     /// <returns>The score of every actual snapshot, in month order.</returns>
-    [WolverinePost("/snapshots/calculate")]
+    [WolverinePost("/snapshots/v1/calculate")]
     public static CalculateSnapshotsResponse Post(CalculateSnapshotsRequest request)
     {
         SnapshotRequest[] snapshots = [.. request.Snapshots.OrderBy(snapshot => snapshot.Month)];
