@@ -12,9 +12,9 @@ const SignIn = ({ language }: Readonly<SignInProps>) => {
 	const t = getI18n(language, SIGN_IN_I18N);
 
 	return (
-		<Card>
-			<h1 className="font-semibold text-2xl">{t("title")}</h1>
-			<p className="mt-2 text-text-muted">{t("description")}</p>
+		<Card className="m-auto">
+			<h1>{t("title")}</h1>
+			<p className="mt-2 text-fg-muted">{t("description")}</p>
 
 			<form action={signIn.bind(null, language)} className="mt-6">
 				<Button type="submit" className="w-full">

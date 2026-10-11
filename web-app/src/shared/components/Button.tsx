@@ -10,14 +10,6 @@ interface ButtonProps extends AriaButtonProps {
 	variant?: "primary" | "secondary";
 }
 
-/** Colors of each button variant, including the hover and pressed states. */
-const VARIANT_CLASSES: Record<NonNullable<ButtonProps["variant"]>, string> = {
-	primary:
-		"bg-primary text-on-primary data-hovered:bg-primary-hover data-pressed:bg-primary-pressed",
-	secondary:
-		"border border-border bg-surface text-text data-hovered:bg-muted data-pressed:bg-border",
-};
-
 /** Accessible button of the app in the primary or secondary style. */
 const Button = ({
 	variant = "primary",
@@ -29,8 +21,21 @@ const Button = ({
 			{...props}
 			className={composeRenderProps(
 				className,
-				(customClasses) =>
-					`inline-flex cursor-pointer items-center justify-center rounded-lg px-4 py-2 font-medium outline-none transition-colors data-disabled:cursor-default data-focus-visible:ring-2 data-focus-visible:ring-focus data-focus-visible:ring-offset-2 data-disabled:opacity-50 ${VARIANT_CLASSES[variant]} ${customClasses}`,
+				(
+					customClasses,
+					{ isHovered, isPressed, isFocusVisible, isDisabled },
+				) => {
+					const isPrimary = variant === "primary";
+					const colors = isPrimary
+						? `text-on-primary ${isPressed ? "bg-primary-pressed" : isHovered ? "bg-primary-hover" : "bg-primary"}`
+						: `border border-input text-fg ${isPressed ? "bg-surface-sunken" : isHovered ? "bg-surface-hover" : "bg-surface"}`;
+					const focus = isFocusVisible ? "ring-2 ring-ring ring-offset-2" : "";
+					const disabled = isDisabled
+						? "cursor-default opacity-50"
+						: "cursor-pointer";
+
+					return `inline-flex min-h-11 items-center justify-center rounded-md px-4 font-semibold outline-none transition-colors ${colors} ${focus} ${disabled} ${customClasses}`;
+				},
 			)}
 		/>
 	);

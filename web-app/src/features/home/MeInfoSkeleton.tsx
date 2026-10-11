@@ -2,7 +2,7 @@
 const MeInfoSkeleton = () => {
 	return (
 		<div className="mt-2 flex min-h-6 items-center" aria-hidden="true">
-			<span className="h-4 w-2/3 animate-pulse rounded bg-muted" />
+			<span className="h-4 w-2/3 animate-pulse rounded-sm bg-skeleton" />
 		</div>
 	);
 };

@@ -16,7 +16,7 @@ const Home = ({ language }: Readonly<HomeProps>) => {
 
 	return (
 		<Card>
-			<h1 className="font-semibold text-2xl">{t("title")}</h1>
+			<h1>{t("title")}</h1>
 
 			<Suspense fallback={<MeInfoSkeleton />}>
 				<MeInfo language={language} />

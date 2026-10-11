@@ -1,26 +1,321 @@
 @import "tailwindcss";
 
-@theme {
-	--color-background: oklch(98.5% 0.004 250);
-	--color-surface: oklch(100% 0 0);
-	--color-muted: oklch(96% 0.006 250);
-	--color-border: oklch(90% 0.01 250);
-	--color-text: oklch(25% 0.02 260);
-	--color-text-muted: oklch(50% 0.02 260);
-	--color-primary: oklch(52% 0.14 165);
-	--color-primary-hover: oklch(47% 0.13 165);
-	--color-primary-pressed: oklch(42% 0.12 165);
-	--color-on-primary: oklch(100% 0 0);
-	--color-focus: oklch(60% 0.17 250);
-	--color-danger: oklch(55% 0.2 27);
+/* ---------- 1. Fonts: Inter (text, numbers) and Lora (page headings) ---------- */
+/* latin-ext carries ₴ and ł, which the latin subset lacks. */
+
+@font-face {
+	font-family: "Inter";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/inter/inter-latin-normal.woff2") format("woff2");
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
 }
+
+@font-face {
+	font-family: "Inter";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/inter/inter-latin-ext-normal.woff2") format("woff2");
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: "Inter";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/inter/inter-cyrillic-normal.woff2") format("woff2");
+	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+	font-family: "Inter";
+	font-style: italic;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/inter/inter-latin-italic.woff2") format("woff2");
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Inter";
+	font-style: italic;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/inter/inter-latin-ext-italic.woff2") format("woff2");
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: "Inter";
+	font-style: italic;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/inter/inter-cyrillic-italic.woff2") format("woff2");
+	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+@font-face {
+	font-family: "Lora";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/lora/lora-latin.woff2") format("woff2");
+	unicode-range:
+		U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+	font-family: "Lora";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/lora/lora-latin-ext.woff2") format("woff2");
+	unicode-range:
+		U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+	font-family: "Lora";
+	font-style: normal;
+	font-weight: 400 700;
+	font-display: swap;
+	src: url("/fonts/lora/lora-cyrillic.woff2") format("woff2");
+	unicode-range: U+0301, U+0400-045F, U+0490-0491, U+04B0-04B1, U+2116;
+}
+
+/* ---------- 2. Primitives: raw values, they do not generate utilities ---------- */
+
+:root {
+	--white: oklch(100% 0 0); /* pure white */
+	--cream-50: oklch(97.96% 0.006 84.57); /* text on primary */
+	--ink-50: oklch(97% 0.012 291); /* page background */
+	--ink-100: oklch(96% 0.016 291); /* hover */
+	--ink-150: oklch(95.5% 0.016 291); /* sunken blocks */
+	--ink-200: oklch(93% 0.016 291); /* meter track */
+	--ink-300: oklch(90% 0.02 291); /* decorative borders */
+	--ink-400: oklch(85% 0.02 291); /* disabled field border */
+	--ink-500: oklch(70% 0.02 291); /* disabled text */
+	--ink-600: oklch(62% 0.03 291); /* field border */
+	--ink-700: oklch(52% 0.03 291); /* field border on hover */
+	--ink-800: oklch(48% 0.03 291); /* secondary text */
+	--ink-950: oklch(18% 0.02 291); /* primary text */
+	--violet-100: oklch(94% 0.03 291); /* selected */
+	--violet-500: oklch(55% 0.18 289); /* focus */
+	--violet-600: oklch(47.58% 0.127 289.2); /* brand */
+	--violet-700: oklch(43% 0.125 289.2); /* hover */
+	--violet-800: oklch(39% 0.12 289.2); /* pressed */
+	--green-50: oklch(95% 0.04 155);
+	--green-200: oklch(80% 0.08 155);
+	--green-500: oklch(64% 0.12 155);
+	--green-700: oklch(46% 0.1 155);
+	--amber-50: oklch(95% 0.045 80);
+	--amber-200: oklch(82% 0.1 75);
+	--amber-400: oklch(78% 0.14 75);
+	--amber-500: oklch(66% 0.135 68);
+	--amber-700: oklch(50% 0.1 65);
+	--amber-950: oklch(28% 0.06 70);
+	--red-50: oklch(95% 0.025 27);
+	--red-200: oklch(82% 0.07 27);
+	--red-500: oklch(63% 0.17 27);
+	--red-700: oklch(50% 0.16 27);
+	--red-800: oklch(45% 0.155 27);
+	--blue-50: oklch(95% 0.022 250);
+	--blue-200: oklch(82% 0.06 250);
+	--blue-700: oklch(48% 0.12 250);
+	--teal-600: oklch(52% 0.075 200);
+	--orange-600: oklch(58% 0.12 55);
+	--peach-300: oklch(77.27% 0.095 52.07);
+
+	/* layout sizes */
+	--layout-sidebar: 15.5rem; /* 248px, from lg */
+	--layout-rail: 5.5rem; /* 88px, md */
+	--tap-min: 2.75rem; /* 44px */
+}
+
+/* ---------- 3. Semantic tokens: they generate the utilities ---------- */
+
+@theme {
+	--color-*: initial;
+	--font-*: initial;
+	--font-weight-*: initial;
+	--radius-*: initial;
+	--shadow-*: initial;
+	--breakpoint-*: initial;
+
+	/* Surfaces */
+	--color-background: var(--ink-50); /* page background */
+	--color-surface: var(--white); /* cards, fields, tabs, dialogs */
+	--color-surface-sunken: var(--ink-150); /* table head, field addon, chips */
+	--color-surface-hover: var(--ink-100); /* hovered row and icon button */
+	--color-overlay: oklch(20% 0.03 291 / 0.45); /* scrim under a dialog */
+
+	/* Text */
+	--color-fg: var(--ink-950); /* primary text */
+	--color-fg-muted: var(--ink-800); /* hints, captions, placeholders */
+	--color-fg-disabled: var(--ink-500); /* disabled elements */
+
+	/* Borders and focus */
+	--color-border: var(--ink-300); /* card borders and dividers (decorative) */
+	--color-input: var(--ink-600); /* field, radio and segment border */
+	--color-input-hover: var(--ink-700); /* field border on hover */
+	--color-input-invalid: var(--color-danger); /* invalid field border */
+	--color-input-disabled: var(--ink-400); /* disabled field border */
+	--color-ring: var(--violet-500); /* 2px focus ring with 2px offset */
+
+	/* Brand */
+	--color-primary: var(--violet-600); /* main buttons, links, active tab */
+	--color-primary-hover: var(--violet-700); /* hover */
+	--color-primary-pressed: var(--violet-800); /* pressed */
+	--color-primary-soft: var(--violet-100); /* selected item, hint */
+	--color-on-primary: var(--cream-50); /* text on primary */
+	--color-accent: var(--peach-300); /* decoration only, never text or lines */
+
+	/* Status */
+	--color-success: var(--green-700); /* success text and icon */
+	--color-success-soft: var(--green-50); /* message background */
+	--color-success-border: var(--green-200); /* message border */
+	--color-warning: var(--amber-700); /* warning text and icon */
+	--color-warning-soft: var(--amber-50); /* message background */
+	--color-warning-border: var(--amber-200); /* message border */
+	--color-warning-solid: var(--amber-400); /* filled badge */
+	--color-on-warning-solid: var(--amber-950); /* text on a filled badge */
+	--color-danger: var(--red-700); /* errors, delete button */
+	--color-danger-hover: var(--red-800); /* delete button on hover */
+	--color-danger-soft: var(--red-50); /* error background */
+	--color-danger-border: var(--red-200); /* error border */
+	--color-on-danger: var(--white); /* text on the delete button */
+	--color-info: var(--blue-700); /* informational text */
+	--color-info-soft: var(--blue-50); /* hint background */
+	--color-info-border: var(--blue-200); /* hint border */
+
+	/* Index zones */
+	--color-zone-stress: var(--color-danger); /* stress zone text */
+	--color-zone-stress-soft: var(--color-danger-soft); /* chip, chart band */
+	--color-zone-stress-graphic: var(--red-500); /* gauge arc 0–39 */
+	--color-zone-unstable: var(--color-warning); /* unstable zone text */
+	--color-zone-unstable-soft: var(--color-warning-soft); /* chip, chart band */
+	--color-zone-unstable-graphic: var(--amber-500); /* gauge arc 40–69 */
+	--color-zone-calm: var(--color-success); /* calm zone text */
+	--color-zone-calm-soft: var(--color-success-soft); /* chip, chart band */
+	--color-zone-calm-graphic: var(--green-500); /* gauge arc 70–100 */
+
+	/* Change */
+	--color-positive: var(--color-success); /* index increase, advice gain */
+	--color-negative: var(--color-danger); /* decrease of the index */
+
+	/* Charts and meters */
+	--color-chart-line: var(--color-primary); /* trend line */
+	--color-chart-area: oklch(47.58% 0.127 289.2 / 0.12); /* line area */
+	--color-chart-grid: var(--color-border); /* grid (decorative) */
+	--color-chart-axis: var(--color-fg-muted); /* axis labels */
+	--color-chart-series-1: var(--color-primary); /* first series */
+	--color-chart-series-2: var(--teal-600); /* second series */
+	--color-chart-series-3: var(--orange-600); /* third series */
+	--color-meter: var(--color-primary); /* meter and progress fill */
+	--color-meter-track: var(--ink-200); /* meter track */
+	--color-skeleton: var(--ink-150); /* loading skeletons */
+
+	/* Fonts */
+	--font-sans:
+		"Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+	--font-heading: "Lora", ui-serif, Georgia, serif;
+
+	--font-weight-normal: 400;
+	--font-weight-medium: 500;
+	--font-weight-semibold: 600;
+	--font-weight-bold: 700;
+
+	/* Text sizes: size / line height */
+	--text-xs: 0.75rem; /* 12 / 16: axis labels, month names */
+	--text-xs--line-height: 1rem;
+	--text-sm: 0.8125rem; /* 13 / 20: hints, secondary text */
+	--text-sm--line-height: 1.25rem;
+	--text-base: 0.9375rem; /* 15 / 22: body text */
+	--text-base--line-height: 1.375rem;
+	--text-input: 1rem; /* 16 / 24: form fields, no zoom on iOS */
+	--text-input--line-height: 1.5rem;
+	--text-lg: 1.0625rem; /* 17 / 24: card titles, advice amounts */
+	--text-lg--line-height: 1.5rem;
+	--text-xl: 1.25rem; /* 20 / 28: section titles */
+	--text-xl--line-height: 1.75rem;
+	--text-2xl: 1.625rem; /* 26 / 32: h1 on a phone */
+	--text-2xl--line-height: 2rem;
+	--text-3xl: 1.875rem; /* 30 / 36: h1 from md */
+	--text-3xl--line-height: 2.25rem;
+	--text-display: 2.875rem; /* 46 / 46: index number, tabular-nums */
+	--text-display--line-height: 1;
+	--text-display--letter-spacing: -0.02em;
+
+	--tracking-label: 0.06em; /* uppercase captions */
+
+	--radius-sm: 0.375rem; /* 6px: chips in a table */
+	--radius-md: 0.625rem; /* 10px: buttons, fields, segments */
+	--radius-lg: 0.875rem; /* 14px: history rows, questionnaire items */
+	--radius-xl: 1rem; /* 16px: cards, dialog */
+	--radius-2xl: 1.375rem; /* 22px: bottom sheet on a phone */
+
+	--shadow-card: 0 1px 2px oklch(30% 0.05 291 / 0.06);
+	--shadow-raised: 0 4px 14px oklch(47.58% 0.127 289.2 / 0.35); /* "+" button */
+	--shadow-overlay: 0 12px 40px oklch(20% 0.05 291 / 0.18); /* dialog */
+
+	--breakpoint-md: 48rem; /* 768px: narrow rail */
+	--breakpoint-lg: 64rem; /* 1024px: sidebar */
+
+	--container-content: 70rem; /* 1120px: max-w-content */
+	--container-flow: 37.5rem; /* 600px: onboarding card */
+	--container-flow-wide: 45rem; /* 720px: questionnaire */
+	--container-profile: 47.5rem; /* 760px: profile */
+
+	--ease-standard: cubic-bezier(0.2, 0, 0, 1);
+}
+
+/* ---------- 4. Base styles ---------- */
 
 @layer base {
 	html {
 		color-scheme: light;
+		-webkit-text-size-adjust: 100%;
 	}
 
 	body {
-		@apply bg-background text-text antialiased;
+		@apply bg-background font-sans text-base text-fg antialiased;
 	}
+
+	h1 {
+		@apply text-balance font-heading font-semibold text-2xl md:text-3xl;
+	}
+
+	input,
+	select,
+	textarea {
+		@apply text-input;
+	}
+
+	::placeholder {
+		color: var(--color-fg-muted);
+		opacity: 1;
+	}
+
+	:focus-visible {
+		outline: 2px solid var(--color-ring);
+		outline-offset: 2px;
+	}
+
+	/* biome-ignore-start lint/complexity/noImportantStyles: must win over any component animation */
+	@media (prefers-reduced-motion: reduce) {
+		*,
+		::before,
+		::after {
+			animation-duration: 0.01ms !important;
+			transition-duration: 0.01ms !important;
+		}
+	}
+	/* biome-ignore-end lint/complexity/noImportantStyles: must win over any component animation */
 }

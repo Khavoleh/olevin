@@ -9,7 +9,7 @@ interface CardProps {
 const Card = ({ children, className = "" }: Readonly<CardProps>) => {
 	return (
 		<section
-			className={`w-full max-w-md rounded-2xl border border-border bg-surface p-6 shadow-sm ${className}`}
+			className={`w-full max-w-md rounded-xl border border-border bg-surface p-5 shadow-card lg:p-6 ${className}`}
 		>
 			{children}
 		</section>

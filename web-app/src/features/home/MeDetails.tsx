@@ -24,7 +24,7 @@ const MeDetails = ({
 	});
 
 	return (
-		<p className="mt-2 min-h-6 break-all text-text-muted" aria-live="polite">
+		<p className="mt-2 min-h-6 break-all text-fg-muted" aria-live="polite">
 			{data && `${userIdLabel}: ${data.subject}`}
 			{isError && <span className="text-danger">{errorText}</span>}
 			{!data && !isError && loadingText}

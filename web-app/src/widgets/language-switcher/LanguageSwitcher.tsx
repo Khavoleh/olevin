@@ -33,7 +33,7 @@ const LanguageSwitcher = ({ language }: Readonly<LanguageSwitcherProps>) => {
 					void setLanguage(selected);
 				}
 			}}
-			className="inline-flex rounded-lg border border-border bg-surface p-0.5"
+			className="inline-flex rounded-md border border-input bg-surface p-0.5"
 		>
 			{LANGUAGES_CONFIG.map((item) => (
 				<ToggleButton
@@ -41,7 +41,14 @@ const LanguageSwitcher = ({ language }: Readonly<LanguageSwitcherProps>) => {
 					id={item.code}
 					aria-label={item.name}
 					lang={item.code}
-					className="cursor-pointer rounded-md px-3 py-1 font-medium text-sm text-text-muted outline-none transition-colors data-selected:bg-primary data-hovered:not-data-selected:bg-muted data-selected:text-on-primary data-focus-visible:ring-2 data-focus-visible:ring-focus"
+					className={({ isSelected, isHovered, isFocusVisible }) => {
+						const colors = isSelected
+							? "bg-primary text-on-primary"
+							: `text-fg-muted ${isHovered ? "bg-surface-hover" : ""}`;
+						const focus = isFocusVisible ? "ring-2 ring-ring" : "";
+
+						return `min-h-10 cursor-pointer rounded-sm px-3 font-medium text-sm outline-none transition-colors ${colors} ${focus}`;
+					}}
 				>
 					{item.label}
 				</ToggleButton>
