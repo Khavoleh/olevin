@@ -1,0 +1,128 @@
+---
+name: architecture
+description: Enforce Feature-Sliced Design (FSD) layer rules — downward-only imports, barrel-only cross-slice access, and strict `index.ts` placement — in the Olevin Next.js web app (`web-app/`). Use this skill the moment any of these questions arise: "Where does this new file go?", "Can I import X from Y?", "Should this be a feature, widget, or shared?", "Does this slice need a barrel?", "Does this belong in `src/app` or in a feature?", or "How do I move this without breaking depcruise?" Always use it before creating a route, component, Server Action, helper, constant, icon, or i18n file — don't guess the layer. Also trigger on refactors that cross slice boundaries or when `pnpm depcruise` is failing. Examples: adding a new `src/features/trend/` slice, adding a page under `src/app/[lang]/(app)/`, lifting a helper to shared, creating a sub-component inside an existing feature.
+---
+
+# Architecture
+
+Keep the codebase on a layered **Feature-Sliced Design (FSD)** architecture: one-way dependency chain, small modular slices, code pushed to the lowest layer that fits.
+
+## Layer purpose (top → bottom)
+
+- **app** — Next.js routing: `page.tsx`, `layout.tsx`, `route.ts`, metadata, `generateStaticParams`, plus `src/proxy.ts`. Thin: read `params`, compose features and widgets, nothing else.
+- **features** — a feature (unit of user-facing functionality). Not necessarily a whole page; prefer small, focused features.
+- **widgets** — reusable elements **with** business logic.
+- **shared** — reusable elements **without** business logic (UI primitives, helpers, constants, types, config). The leaf layer.
+
+```
+app → features → widgets → shared
+```
+
+## Hard rules
+
+1. **Downward imports only.** Never import a higher layer from a lower one; never reach sideways into another slice's internals.
+2. **Cross-slice/cross-layer imports go through the slice's public barrel (`index.ts`)** — never a deep internal path. The barrel is the public API; everything else is private.
+3. **No circular dependencies.**
+4. Prefer path aliases over long relative `../../..` chains.
+5. **Routes stay thin.** A `page.tsx` awaits `params` and renders one feature; a `layout.tsx` renders a shell widget or a feature's frame. UI, data fetching, Server Actions and translations live in the slice, not in `src/app`.
+
+## Where `index.ts` lives — the exact rule
+
+`index.ts` exists at **exactly these levels**, nowhere else:
+
+| Location                         | Purpose                                                              |
+| -------------------------------- | -------------------------------------------------------------------- |
+| `src/features/<slice>/index.ts`  | Public API for a feature slice                                       |
+| `src/widgets/<slice>/index.ts`   | Public API for a widget slice                                        |
+| `src/shared/<category>/index.ts` | Public API for a shared category (components, helpers, constants, …) |
+
+**Never add `index.ts` to any inner/nested folder**, and never to `src/app`. Sub-components and sub-folders inside a slice are private implementation details imported with direct relative paths by their parent files.
+
+## Feature / widget slice structure
+
+Each slice is a self-contained folder at the layer root. Everything inside stays private behind the single top-level barrel:
+
+```
+src/features/home/
+  Home.tsx               ← root component (entry point for the slice)
+  index.ts               ← barrel: export { default } from './Home'
+  home-i18n.ts           ← slice-local translations
+  MeInfo.tsx             ← sub-component (server)
+  MeDetails.tsx          ← sub-component ("use client")
+  MeInfoSkeleton.tsx
+  sign-out.ts            ← Server Action ("use server") used only by this slice
+  me/                    ← group of related logic — NO index.ts here
+    fetch-me.ts
+    get-me.ts
+    me-query-key.ts
+```
+
+`Home.tsx` imports its parts via direct relative paths:
+
+```ts
+import MeInfo from "./MeInfo";
+import { signOut } from "./sign-out";
+```
+
+Nothing outside `src/features/home/` ever imports from inside it — only through `index.ts`.
+
+The barrel exports the default component, plus **named** exports only for what a route genuinely needs (e.g. `features/onboarding` also exports `FlowShell` for the step layout and `getOnboardingStep`/`ONBOARDING_STEPS` for `generateStaticParams` and `notFound()`). Don't export anything "just in case".
+
+## Shared category structure
+
+Each category in `src/shared/` has one `index.ts` that re-exports everything by name. Inside, files may be grouped into topic sub-folders, and an item that needs more than one file (implementation + test) gets its own sub-folder — **none** of these sub-folders has an `index.ts`; the category barrel exports from them directly.
+
+```
+src/shared/helpers/
+  api/                   ← topic group — NO index.ts
+    api-error.ts
+    api-fetch/           ← multi-file item — NO index.ts
+      api-fetch.ts
+      api-fetch.unit.ts
+  get-i18n/
+    get-i18n.ts
+    get-i18n.unit.ts
+  index.ts               ← re-exports everything
+```
+
+```ts
+// src/shared/helpers/index.ts
+export { ApiError } from "./api/api-error";
+export { apiFetch } from "./api/api-fetch/api-fetch";
+export { getI18n } from "./get-i18n/get-i18n";
+```
+
+Helpers that are internal to a category (e.g. `get-api-resource.ts`, `get-api-url.ts`) are simply left out of the barrel.
+
+**Don't create a category folder for a single occupant.** Add the category or group folder only once a second item appears; until then place the single file directly at the slice/shared root.
+
+## Push down on shared access
+
+When **two or more** slices need the same thing (component, helper, constant, type, icon, copy), **don't duplicate and don't sideways-import** — move it down to the lowest layer that fits:
+
+- pure / no business logic → **shared**
+- reused and carries business logic → **widget**
+- still specific to one feature's sub-parts → keep in that feature but lift to its top level
+
+Promote only what's actually shared; keep single-use code local.
+
+## Verify
+
+Run the project's dependency-boundary linter after changing imports or moving files.
+
+---
+
+## In this repo (Olevin web app)
+
+- **Linter:** `.dependency-cruiser.mjs` (`pnpm depcruise`, part of `pnpm validate`); violations are errors.
+- **Aliases:** `@shared/*`, `@widgets/*`, `@features/*` (configured in `tsconfig.json` + `vitest.config.ts` — keep both in sync). `src/app` has no alias; route files import the layers by alias.
+- **What depcruise enforces:**
+  - `src/shared/**` imports only `src/shared/**`.
+  - `src/widgets/**` → `src/widgets/**` and `src/shared/<category>/index.ts`.
+  - `src/features/**` → `src/features/**`, `src/widgets/**`, `src/shared/<category>/index.ts`.
+  - `src/app/**` and `src/proxy.ts` → `src/app/**` and only the barrels `src/{features,widgets,shared}/<slice>/index.ts`.
+  - Shipped code (`src/**` except `*.unit.ts`) must not import `devDependencies`.
+- **What depcruise does _not_ catch:** a slice reaching into a sibling slice's internals on the same layer (`features → src/features/**`, `widgets → src/widgets/**` are allowed by path). Keep sibling access barrel-only by hand: `import LegalLinks from "@widgets/legal-links"` ✅ — `"@widgets/legal-links/LegalLinks"` ❌. Features don't import other features; share via a widget or shared instead.
+- **Routes:** every page sits under `src/app/[lang]/` in a route group — `(app)` (signed-in, `AppShell`), `(public)` (`PublicShell`), or its own segment with a feature frame (`onboarding/[step]` with `FlowShell`). Non-localized handlers (`callback/route.ts`, `health/route.ts`) sit at `src/app/` root. Route component names: `<Name>Page`, `<Name>Layout`.
+- **Existing slices:** features `home`/`onboarding`/`privacy`/`profile`/`sign-in`/`snapshot-form`/`snapshots`/`terms`/`trend`; widgets `app-shell`/`language-switcher`/`legal-links`/`public-shell`; shared categories `components`/`constants`/`helpers`/`i18n`/`interfaces`.
+- **File naming:** components `PascalCase.tsx`; logic, Server Actions, i18n, constants `kebab-case.ts`; tests `*.unit.ts` beside the source. Static files (fonts, images) go to `public/`; app icons (`icon.svg`, `apple-icon.png`, `favicon.ico`) to `src/app/`.
