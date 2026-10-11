@@ -2,8 +2,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql.NameTranslation;
 using Olevin.Api.Features.Settings.Data;
-using Olevin.Api.Features.Settings.Data.UserSettings.Enums;
+using Olevin.Api.Features.Settings.Data.UserSettings;
 using Olevin.Api.Infrastructure.Database;
+using Olevin.Api.Shared;
 using Wolverine.EntityFrameworkCore;
 
 namespace Olevin.Api.Features.Settings;
@@ -14,6 +15,7 @@ namespace Olevin.Api.Features.Settings;
 public static class SettingsServices
 {
     private const string Schema = "settings";
+    private const string CurrencySchema = "financial_wellness";
 
     /// <summary>
     /// Keeps the members of the enums as they are, since they match the labels in the database.
@@ -33,7 +35,7 @@ public static class SettingsServices
                     provider.GetRequiredService<IOptions<DbOptions>>().Value.Olevin,
                     npgsql =>
                     {
-                        npgsql.MapEnum<CurrencyCode>("currency_code", Schema, Labels);
+                        npgsql.MapEnum<CurrencyCode>("currency_code", CurrencySchema, Labels);
                         npgsql.MapEnum<LocaleCode>("locale_code", Schema, Labels);
                     }
                 )

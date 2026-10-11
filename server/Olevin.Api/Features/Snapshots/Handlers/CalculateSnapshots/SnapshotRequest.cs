@@ -1,4 +1,5 @@
 using Olevin.Api.Features.Snapshots.Currency;
+using Olevin.Api.Shared;
 
 namespace Olevin.Api.Features.Snapshots.Handlers.CalculateSnapshots;
 

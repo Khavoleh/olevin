@@ -1,6 +1,7 @@
 using System.Text.Json.Serialization;
 using DotNetEnv;
 using Npgsql;
+using Olevin.Api.Features.FinancialWellness;
 using Olevin.Api.Features.Settings;
 using Olevin.Api.Infrastructure.Auth;
 using Olevin.Api.Infrastructure.Database;
@@ -41,6 +42,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddSettings();
+builder.Services.AddFinancialWellness();
 builder.Services.AddLogtoAuthentication(builder.Configuration);
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();

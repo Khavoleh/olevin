@@ -1,5 +1,5 @@
 using Olevin.Api.Features.Settings.Data.Users;
-using Olevin.Api.Features.Settings.Data.UserSettings.Enums;
+using Olevin.Api.Shared;
 
 namespace Olevin.Api.Features.Settings.Data.UserSettings;
 

@@ -1,6 +1,6 @@
 using FluentValidation.TestHelper;
-using Olevin.Api.Features.Snapshots.Currency;
 using Olevin.Api.Features.Snapshots.Handlers.CalculateSnapshots;
+using Olevin.Api.Shared;
 using Olevin.Tests.TestData;
 
 namespace Olevin.Tests.Features.Snapshots.Handlers.CalculateSnapshots;

@@ -40,8 +40,7 @@ Features/Settings/
     UserSettings/
       UserSetting.cs
       UserSettingConfiguration.cs
-      Enums/
-        CurrencyCode.cs
+      LocaleCode.cs
   Handlers/
     CreateUser/
       CreateUserEndpoint.cs      ← endpoint and handler in ONE file
@@ -53,7 +52,7 @@ Features/Settings/
 
 - **`Handlers/<UseCase>/`** — one folder per endpoint: `<UseCase>Endpoint.cs` (the endpoint _is_ the handler — no separate Command/Handler classes), `<UseCase>Request.cs`, `<UseCase>Response.cs`, `<UseCase>Validator.cs`, `<UseCase>Mapping.cs`, plus nested request/response records it needs (`IncomeRequest`, `ScoreResponse`). Things used by one use case stay in its folder.
 - **Feature root / topic folders** — domain logic used by several use cases of the feature: at the root (`SnapshotScorer.cs`, `SnapshotValidationRules.cs`) or grouped by topic (`Snapshots/Changes/`, `Snapshots/Currency/`).
-- **`Data/`** — only when the feature stores data: its own `<Feature>DbContext`, one sub-folder per entity (entity + configuration + `Enums/`).
+- **`Data/`** — only when the feature stores data: its own `<Feature>DbContext`, one sub-folder per entity (entity + configuration + its enums, as files next to the entity).
 - **`<Feature>Services.cs`** — `Add<Feature>(this IServiceCollection)` registered in `Program.cs`, only when the feature has DI to register.
 - **`Contracts/`** — only when another feature calls this one (see rule 2).
 - A folder under `Features/` should have at least one endpoint.
@@ -82,7 +81,7 @@ When **two or more** features need the same thing (calculation, value object, co
 - technical wiring (a new external service, options, middleware) → **`Infrastructure/<Concern>/`**
 - an operation that belongs to another feature (its data, its rules) → that feature's **`Contracts/`** handler
 
-Promote only what's actually shared; keep single-use code local. Each feature owning its own copy of a small enum that maps its own DB enum (e.g. `CurrencyCode` in Settings and in Snapshots) is acceptable — don't merge them just to deduplicate.
+Promote only what's actually shared; keep single-use code local. `CurrencyCode` is an example: it is used by Settings, Snapshots and Financial Wellness, so it lives in `Shared/CurrencyCode.cs`.
 
 ## Verify
 

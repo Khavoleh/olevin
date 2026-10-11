@@ -1,3 +1,5 @@
+using Olevin.Api.Shared;
+
 namespace Olevin.Api.Features.Snapshots.Currency;
 
 /// <summary>

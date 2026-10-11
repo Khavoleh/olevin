@@ -1,15 +1,10 @@
-namespace Olevin.Api.Features.Settings.Data.UserSettings.Enums;
+namespace Olevin.Api.Shared;
 
 /// <summary>
-/// A currency a user can pick as the base one. Members match the labels of <c>settings.currency_code</c>.
+/// A currency supported by the application. Members match the labels of <c>financial_wellness.currency_code</c>.
 /// </summary>
 public enum CurrencyCode
 {
-    /// <summary>
-    /// Ukrainian hryvnia.
-    /// </summary>
-    UAH,
-
     /// <summary>
     /// US dollar.
     /// </summary>
@@ -24,6 +19,11 @@ public enum CurrencyCode
     /// Canadian dollar.
     /// </summary>
     CAD,
+
+    /// <summary>
+    /// Ukrainian hryvnia.
+    /// </summary>
+    UAH,
 
     /// <summary>
     /// Polish złoty.

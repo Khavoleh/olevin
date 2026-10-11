@@ -1,5 +1,6 @@
 using Olevin.Api.Features.Snapshots.Currency;
 using Olevin.Api.Features.Snapshots.Handlers.CalculateSnapshots;
+using Olevin.Api.Shared;
 using Olevin.Api.Shared.Index.Indicators;
 
 namespace Olevin.Tests.TestData;

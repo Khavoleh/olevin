@@ -2,8 +2,9 @@ env "local" {
   src = [
     "file://schemas/public.hcl",
     "file://schemas/settings.hcl",
+    "file://schemas/financial_wellness.hcl",
   ]
   url = "postgres://olevin:olevin@postgresql:5432/olevin?sslmode=disable"
   dev = "postgres://olevin:olevin@postgresql:5432/atlas?sslmode=disable"
-  schemas = ["public", "settings"]
+  schemas = ["public", "settings", "financial_wellness"]
 }

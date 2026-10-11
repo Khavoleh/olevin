@@ -2,11 +2,6 @@ schema "settings" {
   comment = "Application user's settings schema"
 }
 
-enum "currency_code" {
-  schema = schema.settings
-  values = ["UAH", "USD", "EUR", "CAD", "PLN"]
-}
-
 enum "locale_code" {
   schema = schema.settings
   values = ["UK", "EN"]

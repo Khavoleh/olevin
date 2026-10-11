@@ -1,4 +1,5 @@
 using Olevin.Api.Features.Snapshots.Currency;
+using Olevin.Api.Shared;
 using Olevin.Api.Shared.Index;
 using Olevin.Api.Shared.Index.Indicators;
 using Olevin.Api.Shared.Index.Model;

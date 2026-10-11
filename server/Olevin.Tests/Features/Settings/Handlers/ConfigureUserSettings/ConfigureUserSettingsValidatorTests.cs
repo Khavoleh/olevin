@@ -1,6 +1,7 @@
 using FluentValidation.TestHelper;
-using Olevin.Api.Features.Settings.Data.UserSettings.Enums;
+using Olevin.Api.Features.Settings.Data.UserSettings;
 using Olevin.Api.Features.Settings.Handlers.ConfigureUserSettings;
+using Olevin.Api.Shared;
 
 namespace Olevin.Tests.Features.Settings.Handlers.ConfigureUserSettings;
 
