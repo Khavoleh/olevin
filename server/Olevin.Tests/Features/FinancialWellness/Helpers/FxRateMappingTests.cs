@@ -1,10 +1,10 @@
-using Olevin.Api.Features.FinancialWellness.Seeders;
+using Olevin.Api.Features.FinancialWellness.Helpers;
 using Olevin.Api.Infrastructure.ExchangeRate;
 using Olevin.Api.Shared;
 
-namespace Olevin.Tests.Features.FinancialWellness.Seeders;
+namespace Olevin.Tests.Features.FinancialWellness.Helpers;
 
-public sealed class FxRateSeederTests
+public sealed class FxRateMappingTests
 {
     // 2026-10-12T10:00:00Z
     private const long UpdatedAt = 1791799200;
@@ -26,7 +26,7 @@ public sealed class FxRateSeederTests
     public void Rate_IsTheAmountOfCurrencyPerDollar() =>
         Assert.Equal(
             [1m, 0.8m, 40m],
-            FxRateSeeder
+            FxRateMapping
                 .ToFxRates(Response(), [CurrencyCode.USD, CurrencyCode.EUR, CurrencyCode.UAH])
                 .Select(rate => rate.UnitsPerBase)
         );
@@ -34,7 +34,7 @@ public sealed class FxRateSeederTests
     [Fact]
     public void RateDate_IsTheDateOfTheApiUpdate() =>
         Assert.All(
-            FxRateSeeder.ToFxRates(Response(), [CurrencyCode.EUR]),
+            FxRateMapping.ToFxRates(Response(), [CurrencyCode.EUR]),
             rate => Assert.Equal(new DateOnly(2026, 10, 12), rate.RateDate)
         );
 
@@ -42,24 +42,24 @@ public sealed class FxRateSeederTests
     public void OnlyRequestedCurrencies_AreCreated() =>
         Assert.Equal(
             [CurrencyCode.UAH],
-            FxRateSeeder.ToFxRates(Response(), [CurrencyCode.UAH]).Select(r => r.Currency)
+            FxRateMapping.ToFxRates(Response(), [CurrencyCode.UAH]).Select(r => r.Currency)
         );
 
     [Fact]
     public void CurrencyMissingInResponse_Throws() =>
         Assert.Throws<InvalidOperationException>(() =>
-            FxRateSeeder.ToFxRates(Response(), [CurrencyCode.PLN])
+            FxRateMapping.ToFxRates(Response(), [CurrencyCode.PLN])
         );
 
     [Fact]
     public void FailedResult_Throws() =>
         Assert.Throws<InvalidOperationException>(() =>
-            FxRateSeeder.ToFxRates(Response() with { Result = "error" }, [CurrencyCode.EUR])
+            FxRateMapping.ToFxRates(Response() with { Result = "error" }, [CurrencyCode.EUR])
         );
 
     [Fact]
     public void NonDollarBase_Throws() =>
         Assert.Throws<InvalidOperationException>(() =>
-            FxRateSeeder.ToFxRates(Response() with { BaseCode = "EUR" }, [CurrencyCode.EUR])
+            FxRateMapping.ToFxRates(Response() with { BaseCode = "EUR" }, [CurrencyCode.EUR])
         );
 }

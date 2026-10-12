@@ -27,7 +27,8 @@ Prefer the tools already in the project; add a dependency only when it clearly e
 
 **`Olevin.Api` (runtime):**
 
-- **HTTP + handlers + messaging:** `WolverineFx.Http` (via `WolverineFx.Http.FluentValidation`), `WolverineFx.RuntimeCompilation`. Wolverine is the endpoint framework _and_ the in-process message bus — use it for cross-feature calls (`Contracts/`), background/async work and retries. Don't add MediatR, MassTransit, Hangfire or Polly.
+- **HTTP + handlers + messaging:** `WolverineFx.Http` (via `WolverineFx.Http.FluentValidation`), `WolverineFx.RuntimeCompilation`. Wolverine is the endpoint framework _and_ the in-process message bus — use it for cross-feature calls (`Contracts/`), async work and retries. Don't add MediatR, MassTransit, Hangfire or Polly.
+- **Scheduled jobs:** `Coravel` (`AddScheduler`/`UseScheduler`, invocables in `Features/<Feature>/Jobs/`, e.g. `UpdateFxRatesJob`). It only schedules in-process; it has no persistence, so a job must be idempotent and safe to skip.
 - **Validation:** FluentValidation (through `WolverineFx.Http.FluentValidation`) — no DataAnnotations validation.
 - **Data:** `Npgsql.EntityFrameworkCore.PostgreSQL` + `WolverineFx.EntityFrameworkCore` (transactions); `Microsoft.EntityFrameworkCore.Design` (design-time only). Schema is managed by **Atlas** in `infrastructure/db`, not EF migrations. Don't add Dapper or another ORM.
 - **Auth:** `Microsoft.AspNetCore.Authentication.JwtBearer` against Logto (`Infrastructure/Auth`).

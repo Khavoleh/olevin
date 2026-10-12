@@ -6,6 +6,7 @@ using Olevin.Api.Features.Settings;
 using Olevin.Api.Infrastructure.Auth;
 using Olevin.Api.Infrastructure.Database;
 using Olevin.Api.Infrastructure.ExchangeRate;
+using Olevin.Api.Infrastructure.Jobs;
 using Olevin.Api.Infrastructure.Telemetry;
 using Scalar.AspNetCore;
 using Serilog;
@@ -45,12 +46,15 @@ builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddExchangeRateApi(builder.Configuration);
 builder.Services.AddSettings();
 builder.Services.AddFinancialWellness();
+builder.Services.AddJobs();
 builder.Services.AddLogtoAuthentication(builder.Configuration);
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
 builder.Services.AddOpenApi();
 
 WebApplication app = builder.Build();
+
+app.Services.UseFinancialWellnessJobs();
 
 app.UseExceptionHandler();
 app.UseSerilogRequestLogging();

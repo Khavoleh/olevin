@@ -47,6 +47,18 @@
           "Microsoft.Extensions.Primitives": "10.0.0"
         }
       },
+      "Coravel": {
+        "type": "Transitive",
+        "resolved": "6.0.2",
+        "contentHash": "/XZiRId4Ilar/OqjGKdxkZWfW97ekeT0wgiWNjGdqf8pPxiK508//Zkc0xrKMDOqchFT7B/oqAoQ+Vrx1txpPQ==",
+        "dependencies": {
+          "Microsoft.Extensions.Caching.Memory": "3.1.0",
+          "Microsoft.Extensions.Configuration.Binder": "6.0.0",
+          "Microsoft.Extensions.DependencyInjection": "6.0.1",
+          "Microsoft.Extensions.Hosting.Abstractions": "3.1.0",
+          "Microsoft.Extensions.Logging.Abstractions": "3.1.0"
+        }
+      },
       "Cronos": {
         "type": "Transitive",
         "resolved": "0.11.0",
@@ -1349,6 +1361,7 @@
       "olevin.api": {
         "type": "Project",
         "dependencies": {
+          "Coravel": "[6.0.2, )",
           "DotNetEnv": "[3.2.0, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.12, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.12, )",
