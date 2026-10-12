@@ -17,7 +17,9 @@ public sealed class FxRateConfiguration : IEntityTypeConfiguration<FxRate>
             "fx_rates",
             "financial_wellness",
             table =>
-                table.HasComment("Daily exchange rates of currencies to the base currency (USD)")
+                table.HasComment(
+                    "Daily exchange rates of currencies against the base currency (USD)"
+                )
         );
 
         builder
@@ -25,10 +27,10 @@ public sealed class FxRateConfiguration : IEntityTypeConfiguration<FxRate>
             .HasComment("Currency the rate is quoted for")
             .HasColumnName("currency");
         builder
-            .Property(rate => rate.RateToBase)
+            .Property(rate => rate.UnitsPerBase)
             .HasPrecision(18, 8)
-            .HasComment("Amount of base currency (USD) for one unit of currency")
-            .HasColumnName("rate_to_base");
+            .HasComment("Amount of the currency for one unit of the base currency (USD)")
+            .HasColumnName("units_per_base");
         builder
             .Property(rate => rate.RateDate)
             .HasDefaultValueSql("current_date")

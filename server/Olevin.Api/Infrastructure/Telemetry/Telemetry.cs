@@ -1,3 +1,5 @@
+using Npgsql;
+using Olevin.Api.Infrastructure.ExchangeRate;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -7,10 +9,15 @@ using Serilog;
 namespace Olevin.Api.Infrastructure.Telemetry;
 
 /// <summary>
-/// Logs through Serilog, traces and metrics through OpenTelemetry; everything goes to Seq.
+/// Logs through Serilog, traces and metrics (including database calls) through OpenTelemetry; everything goes to Seq.
 /// </summary>
 public static class Telemetry
 {
+    /// <summary>
+    /// The name of the activity source for the spans the application creates itself, such as the startup seeding.
+    /// </summary>
+    public const string ActivitySourceName = "Olevin.Api";
+
     /// <summary>
     /// Adds Serilog logging and OpenTelemetry tracing and metrics exported to Seq.
     /// </summary>
@@ -39,7 +46,12 @@ public static class Telemetry
             .WithTracing(tracing =>
                 tracing
                     .AddAspNetCoreInstrumentation()
-                    .AddHttpClientInstrumentation()
+                    .AddHttpClientInstrumentation(options =>
+                        options.EnrichWithHttpRequestMessage = (activity, _) =>
+                            ExchangeRateRedaction.RedactSpan(activity)
+                    )
+                    .AddNpgsql()
+                    .AddSource(ActivitySourceName)
                     .AddSource("Wolverine")
                     .AddOtlpExporter(exporter =>
                         ExportToSeq(exporter, seq, "ingest/otlp/v1/traces")
@@ -50,6 +62,7 @@ public static class Telemetry
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation()
                     .AddRuntimeInstrumentation()
+                    .AddMeter("Npgsql")
                     .AddMeter("Wolverine")
                     .AddOtlpExporter(exporter =>
                         ExportToSeq(exporter, seq, "ingest/otlp/v1/metrics")

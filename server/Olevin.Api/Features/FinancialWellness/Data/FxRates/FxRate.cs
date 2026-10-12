@@ -3,7 +3,7 @@ using Olevin.Api.Shared;
 namespace Olevin.Api.Features.FinancialWellness.Data.FxRates;
 
 /// <summary>
-/// The exchange rate of a currency to the base currency (USD) on a date, a row of <c>financial_wellness.fx_rates</c>.
+/// The exchange rate of a currency against the base currency (USD) on a date, a row of <c>financial_wellness.fx_rates</c>.
 /// </summary>
 public sealed class FxRate
 {
@@ -18,7 +18,7 @@ public sealed class FxRate
     public DateOnly RateDate { get; set; }
 
     /// <summary>
-    /// Amount of base currency (USD) for one unit of currency.
+    /// Amount of the currency for one unit of the base currency (USD), as the exchange rate API quotes it.
     /// </summary>
-    public decimal RateToBase { get; set; }
+    public decimal UnitsPerBase { get; set; }
 }

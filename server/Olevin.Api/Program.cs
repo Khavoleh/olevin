@@ -5,6 +5,7 @@ using Olevin.Api.Features.FinancialWellness;
 using Olevin.Api.Features.Settings;
 using Olevin.Api.Infrastructure.Auth;
 using Olevin.Api.Infrastructure.Database;
+using Olevin.Api.Infrastructure.ExchangeRate;
 using Olevin.Api.Infrastructure.Telemetry;
 using Scalar.AspNetCore;
 using Serilog;
@@ -41,6 +42,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 );
 
 builder.Services.AddDatabase(builder.Configuration);
+builder.Services.AddExchangeRateApi(builder.Configuration);
 builder.Services.AddSettings();
 builder.Services.AddFinancialWellness();
 builder.Services.AddLogtoAuthentication(builder.Configuration);
