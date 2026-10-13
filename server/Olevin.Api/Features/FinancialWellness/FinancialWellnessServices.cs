@@ -36,7 +36,11 @@ public static class FinancialWellnessServices
             (provider, options) =>
                 options.UseNpgsql(
                     provider.GetRequiredService<IOptions<DbOptions>>().Value.Olevin,
-                    npgsql => npgsql.MapEnum<CurrencyCode>("currency_code", Schema, Labels)
+                    npgsql =>
+                    {
+                        npgsql.MapEnum<CurrencyCode>("currency_code", Schema, Labels);
+                        npgsql.MapEnum<CalendarMonth>("calendar_month", Schema, Labels);
+                    }
                 )
         );
 

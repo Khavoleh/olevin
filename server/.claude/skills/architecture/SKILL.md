@@ -51,7 +51,7 @@ Features/Settings/
 ```
 
 - **`Handlers/<UseCase>/`** — one folder per endpoint: `<UseCase>Endpoint.cs` (the endpoint _is_ the handler — no separate Command/Handler classes), `<UseCase>Request.cs`, `<UseCase>Response.cs`, `<UseCase>Validator.cs`, `<UseCase>Mapping.cs`, plus nested request/response records it needs (`IncomeRequest`, `ScoreResponse`). Things used by one use case stay in its folder.
-- **Feature root / topic folders** — domain logic used by several use cases of the feature: at the root (`SnapshotScorer.cs`, `SnapshotValidationRules.cs`) or grouped by topic (`Snapshots/Changes/`, `Snapshots/Currency/`).
+- **Feature root / topic folders** — domain logic used by several use cases of the feature: at the root or grouped by topic (`FinancialWellness/Snapshots/` with `SnapshotScorer.cs` and its `Changes/`, `Currency/`; `FinancialWellness/Advice/`).
 - **`Data/`** — only when the feature stores data: its own `<Feature>DbContext`, one sub-folder per entity (entity + configuration + its enums, as files next to the entity).
 - **`<Feature>Services.cs`** — `Add<Feature>(this IServiceCollection)` registered in `Program.cs`, only when the feature has DI to register.
 - **`Contracts/`** — only when another feature calls this one (see rule 2).
@@ -62,7 +62,7 @@ Features/Settings/
 ```
 Shared/
   Response.cs                    ← used by every feature's endpoints
-  Index/                         ← the index model, used by Snapshots and Advice
+  Index/                         ← the index model (fuzzy Mamdani, indicators, linear index, zones)
     IndexConstants.cs
     Fuzzy/  Indicators/  Model/
 Infrastructure/
@@ -81,7 +81,7 @@ When **two or more** features need the same thing (calculation, value object, co
 - technical wiring (a new external service, options, middleware) → **`Infrastructure/<Concern>/`**
 - an operation that belongs to another feature (its data, its rules) → that feature's **`Contracts/`** handler
 
-Promote only what's actually shared; keep single-use code local. `CurrencyCode` is an example: it is used by Settings, Snapshots and Financial Wellness, so it lives in `Shared/CurrencyCode.cs`.
+Promote only what's actually shared; keep single-use code local. `CurrencyCode` is an example: it is used by Settings and Financial Wellness, so it lives in `Shared/CurrencyCode.cs`.
 
 ## Verify
 
@@ -96,7 +96,7 @@ grep -rn "using Olevin.Api.Features" Olevin.Api/Shared Olevin.Api/Infrastructure
 ## In this repo (Olevin API)
 
 - Solution `server/Olevin.slnx`: `Olevin.Api` (ASP.NET Core, Wolverine HTTP) + `Olevin.Tests` (xUnit). Shared MSBuild settings in `Directory.Build.props`.
-- **Existing features:** `Settings` (users and user settings, `settings` schema, endpoints `POST /settings/v1/user`, `POST /settings/v1/user-settings`), `Snapshots` (stateless `POST /snapshots/v1/calculate`; `Changes/`, `Currency/`), `Advice` (sensitivity analysis and advice — logic only, no endpoint yet).
+- **Existing features:** `Settings` (users and user settings, `settings` schema, endpoints `POST /settings/v1/user`, `POST /settings/v1/user-settings`), `FinancialWellness` (one large feature, `financial_wellness` schema: `fx_rates`, `snapshots`, `estimated_snapshots`; FX job and seeder; `Snapshots/` — scorer, `Changes/`, `Currency/`; `Advice/` — sensitivity analysis and advice, no endpoint yet; stateless `POST /snapshots/v1/calculate`).
 - **Shared:** `Response<T>` envelope, `Index/` (fuzzy Mamdani model, indicators, linear index, zones, `IndexConstants.ModelVersion`).
 - **No architecture test or analyzer enforces the rules above** — the grep in _Verify_ and review are the only guard. No feature uses `Contracts/` yet; the first cross-feature call introduces it.
 - **Database ownership:** one Postgres schema per feature that stores data (`settings` → `SettingsDbContext`). The schema itself lives outside `server/`, in `infrastructure/db/schemas/<schema>.hcl` (Atlas) — see `backend-expert`.

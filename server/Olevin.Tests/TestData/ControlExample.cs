@@ -1,5 +1,5 @@
-using Olevin.Api.Features.Snapshots.Currency;
-using Olevin.Api.Features.Snapshots.Handlers.CalculateSnapshots;
+using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
+using Olevin.Api.Features.FinancialWellness.Handlers.CalculateSnapshots;
 using Olevin.Api.Shared;
 using Olevin.Api.Shared.Index.Indicators;
 
