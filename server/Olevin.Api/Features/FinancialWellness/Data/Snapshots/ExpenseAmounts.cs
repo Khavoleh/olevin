@@ -2,7 +2,6 @@ namespace Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 
 /// <summary>
 /// The expenses of the month by category as entered, the <c>expenses</c> part of <c>snapshots.amounts</c>.
-/// A category that was not entered is <see cref="Money.Zero"/> in the base currency.
 /// </summary>
 /// <param name="Food">Food.</param>
 /// <param name="Housing">Housing.</param>

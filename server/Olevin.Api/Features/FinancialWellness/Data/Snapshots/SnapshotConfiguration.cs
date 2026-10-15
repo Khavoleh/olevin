@@ -58,10 +58,6 @@ public sealed class SnapshotConfiguration : IEntityTypeConfiguration<Snapshot>
             .HasComment("Date of the exchange rates the amounts are converted at")
             .HasColumnName("fx_date");
         builder
-            .Property(snapshot => snapshot.BaseCurrency)
-            .HasComment("Currency the results were calculated in")
-            .HasColumnName("base_currency");
-        builder
             .Property(snapshot => snapshot.SelfRating)
             .HasComment("Self-rated financial calm (1-5)")
             .HasColumnName("self_rating");

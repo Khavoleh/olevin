@@ -31,13 +31,13 @@ Fast, deterministic **unit** tests for logic, validation and pure endpoints. Put
 
 - **Project:** `Olevin.Tests` (xUnit v3, Microsoft.Testing.Platform runner set in `global.json`). `Xunit` is a global using; `CS1591` (XML docs) is suppressed for tests, the rest of the analyzers, style rules and CSharpier still apply.
 - **Unit tests only** — no API/HTTP or database tests.
-- **Layout mirrors the source:** `Olevin.Api/Features/FinancialWellness/Snapshots/SnapshotScorer.cs` → `Olevin.Tests/Features/FinancialWellness/Snapshots/SnapshotScorerTests.cs`; namespace `Olevin.Tests.<same path>`. Classes `public sealed class <Type>Tests`.
+- **Layout mirrors the source:** `Olevin.Api/Features/FinancialWellness/Slices/Snapshots/Helpers/SnapshotScorer.cs` → `Olevin.Tests/Features/FinancialWellness/Slices/Snapshots/Helpers/SnapshotScorerTests.cs`; namespace `Olevin.Tests.<same path>`. Classes `public sealed class <Type>Tests`.
 - **Patterns in use:**
-  - Pure endpoint called directly: `CalculateSnapshotsEndpoint.Post(ControlExample.Request())` (`CalculateSnapshotsEndpointTests`).
+  - Pure endpoint called directly (no web host): `<UseCase>Endpoint.Post(request)` when it has no dependencies to inject.
   - Validators with `FluentValidation.TestHelper`: `Validator.TestValidate(Valid() with { SnapshotDay = day }).ShouldHaveValidationErrorFor(r => r.SnapshotDay)` (`ConfigureUserSettingsValidatorTests`).
   - Data-driven: `[Theory]` + `[InlineData]`, or `[MemberData]` with `TheoryData<T>`.
   - Doubles: `Assert.Equal(expected, actual, Precision)` with a `private const double Precision` per class.
-  - Names: `SnapshotDay_OutsideTheBounds_IsRejected`, `BaseCurrency_ChangesTheAmountsButNotTheIndex`; single-assert tests are expression-bodied.
+  - Names: `SnapshotDay_OutsideTheBounds_IsRejected`, `TooManyReserves_AreRejected`; single-assert tests are expression-bodied.
   - Shared fixtures in `Olevin.Tests/TestData/` (`ControlExample` — the control example of the method); per-area fixtures next to their tests (`SyntheticProfiles`, `ControlExampleAdvice`).
 - **Index model guards:** `ControlExampleTests`, `CalibrationTests`, `ReferenceProfilesTests`, `OlevinModelTests`. If one fails after a model change, the change altered results — confirm it's intended, update the expected values deliberately and bump `IndexConstants.ModelVersion`; never loosen the precision to make it pass.
 - **DB-touching endpoints** (`CreateUserEndpoint`, `ConfigureUserSettingsEndpoint`) aren't tested directly; their validators are. Keep decisions that need tests out of the DbContext code.

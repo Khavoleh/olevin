@@ -1,7 +1,8 @@
+using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
-using Olevin.Api.Features.FinancialWellness.Handlers.CalculateSnapshots;
+using Olevin.Api.Features.FinancialWellness.Helpers.Index.Indicators;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Shared;
-using Olevin.Api.Shared.Index.Indicators;
 
 namespace Olevin.Tests.TestData;
 
@@ -59,41 +60,28 @@ internal static class ControlExample
     }
 
     /// <summary>
-    /// The same months as a request: April and May are onboarding estimates, June to August are actual, September
-    /// has reserves of 2 000 USD and 106 000 UAH and an income split into salary and other income.
+    /// The same six months with their calendar months, April to September 2026.
     /// </summary>
-    public static CalculateSnapshotsRequest Request()
-    {
-        DateOnly[] months = [.. Enumerable.Range(4, 6).Select(m => new DateOnly(2026, m, 1))];
-        SnapshotRequest[] snapshots = new SnapshotRequest[6];
+    public static SnapshotFigures[] Snapshots() =>
+        [
+            .. Months()
+                .Select(
+                    (figures, i) =>
+                        new SnapshotFigures(
+                            new SnapshotMonth(2026, (CalendarMonth)((int)CalendarMonth.April + i)),
+                            figures
+                        )
+                ),
+        ];
 
-        for (int i = 0; i < 2; i++)
-            snapshots[i] = EstimatedRequest(months[i], Expenses[i], Saved[i]);
-
-        for (int i = 2; i < 5; i++)
-        {
-            snapshots[i] = new SnapshotRequest(
-                months[i],
-                false,
-                null,
-                null,
-                Uah(Saved[i]),
-                new IncomeRequest(Uah(60_000), null),
-                new ExpensesRequest(null, null, null, null, null, null, Uah(Expenses[i])),
-                [Uah(150_000)],
-                Uah(18_000),
-                3
-            );
-        }
-
-        snapshots[5] = new SnapshotRequest(
-            months[5],
-            false,
-            UsdRates,
-            null,
-            Uah(4_000),
-            new IncomeRequest(Uah(55_000), Uah(5_000)),
-            new ExpensesRequest(
+    /// <summary>
+    /// The amounts of September as they are stored: reserves of 2 000 USD and 106 000 UAH and an income split into
+    /// salary and other income.
+    /// </summary>
+    public static SnapshotAmounts SeptemberAmounts() =>
+        new(
+            [Uah(55_000), Uah(5_000)],
+            new ExpenseAmounts(
                 Uah(September.Food),
                 Uah(September.Housing),
                 Uah(September.Health),
@@ -102,32 +90,13 @@ internal static class ControlExample
                 Uah(September.Transport),
                 Uah(September.Other)
             ),
+            Uah(4_000),
             [new Money(2_000, CurrencyCode.USD), Uah(106_000)],
-            Uah(18_000),
-            4
+            [Uah(18_000)]
         );
 
-        return new CalculateSnapshotsRequest(CurrencyCode.UAH, snapshots);
-    }
-
-    public static Dictionary<CurrencyCode, decimal> UsdRates =>
-        new() { [CurrencyCode.USD] = (decimal)UsdRate };
-
-    public static SnapshotRequest EstimatedRequest(DateOnly month, double expenses, double saved)
-    {
-        return new SnapshotRequest(
-            month,
-            true,
-            null,
-            Uah(expenses),
-            Uah(saved),
-            null,
-            null,
-            null,
-            null,
-            null
-        );
-    }
+    public static Dictionary<CurrencyCode, decimal> UnitsPerUsd =>
+        new() { [CurrencyCode.UAH] = (decimal)UsdRate };
 
     public static Money Uah(double amount) => new((decimal)amount, CurrencyCode.UAH);
 }

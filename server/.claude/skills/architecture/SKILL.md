@@ -10,7 +10,7 @@ Keep the API on a **vertical-slice** architecture: each feature is a self-contai
 ## Areas (top → bottom)
 
 - **`Program.cs`** — composition root: registers infrastructure and features (`builder.Services.AddX(...)`), middleware and endpoint mapping. No logic of its own.
-- **`Features/<Feature>/`** — a feature (a business area with its own endpoints and, usually, its own data). Prefer small, focused features.
+- **`Features/<Feature>/`** — a feature: a business area that owns one Postgres schema. It holds the schema's `Data/`, helpers shared by its slices, and `Slices/` with the capabilities that have endpoints.
 - **`Shared/<Area>/`** — domain code used by **two or more** features (no endpoints, no DbContext).
 - **`Infrastructure/<Concern>/`** — technical cross-cutting wiring (auth, database settings, telemetry): an `AddX` extension method plus its `XOptions`. No business logic.
 
@@ -22,17 +22,20 @@ Program.cs → Features → Shared
 ## Hard rules
 
 1. **One-way dependencies.** `Shared` and `Infrastructure` never reference `Features`. `Infrastructure` never references `Shared` business code.
-2. **Features don't reference each other's internals.** When feature A must call feature B, B gets a `Contracts/` folder holding **only** the handler (and its message) that receives that call; A sends the message, never touches B's entities, DbContext or helpers.
+2. **Features don't reference each other's internals.** When feature A must call feature B, the B slice that owns the data gets a `Contracts/<Operation>/` folder inside it (e.g. `Slices/UserSettings/Contracts/`, `GetUserSettingsRequest` + `GetUserSettingsHandler`) holding **only** what that call needs: `<Operation>Request`, `<Operation>Handler` and one flat returned DTO (`UserSettingsDto`: `UserId`, `UserCreatedAt` and the settings — no nested DTOs), which the handler fills with the Mapperly projection of `<Operation>Mapping`. A sends the request, never touches B's entities, DbContext or helpers; the contract itself uses no type of another feature and exposes none of B's `Data/` types, only its own records (and `Shared/` types such as `CurrencyCode`).
 3. **Feature-only code stays in the feature.** Move it to `Shared/<Area>/` only when a second feature starts using it.
-4. **Namespace = folder path** (`Olevin.Api.Features.Settings.Handlers.CreateUser`); one top-level type per file, file named after the type.
-5. **Propose structural moves first.** Creating a new feature, moving code to Shared, or adding a Contracts folder — describe the move and get approval before doing it.
+4. **Namespace = folder path** (`Olevin.Api.Features.Settings.Slices.Users.Handlers.CreateUser`); one top-level type per file, file named after the type.
+5. **Propose structural moves first.** Creating a new feature or slice, moving code to Shared, or adding a Contracts folder — describe the move and get approval before doing it.
+6. **Slices of one feature don't reference each other.** Dependencies inside a feature go one way: `Slices/<Slice>` → `Helpers/` and `Data/`. What two slices both need moves to the feature's `Helpers/`; `Helpers/` and `Data/` never reference `Slices/`.
 
 ## Feature structure
+
+A feature is **one Postgres schema** (`settings`, `financial_wellness`). Inside it, the schema's data and the shared helpers sit at the feature level, and every user-facing capability is a **slice** under `Slices/` (`Snapshots`, `Advices`, later `History`, `Trend`, `IndexChanges`) with its own handlers. Handlers of different capabilities never share one flat `Handlers/` folder.
 
 ```
 Features/Settings/
   SettingsServices.cs            ← AddSettings(): DbContext and other DI of the feature
-  Data/
+  Data/                          ← the schema: one DbContext, one sub-folder per entity
     SettingsDbContext.cs         ← the feature's DbContext, one Postgres schema
     Users/
       User.cs                    ← entity
@@ -41,33 +44,45 @@ Features/Settings/
       UserSetting.cs
       UserSettingConfiguration.cs
       LocaleCode.cs
-  Handlers/
-    CreateUser/
-      CreateUserEndpoint.cs      ← endpoint and handler in ONE file
-    ConfigureUserSettings/
-      ConfigureUserSettingsEndpoint.cs
-      ConfigureUserSettingsRequest.cs
-      ConfigureUserSettingsValidator.cs
+  Helpers/                       ← code shared by several slices (omit while there is none)
+  Slices/
+    Users/
+      Handlers/                  ← one use case: its files lie directly in Handlers/
+        CreateUserEndpoint.cs    ← endpoint and handler in ONE file
+    UserSettings/
+      Contracts/                 ← only when another feature calls this slice; one operation → files directly
+        GetUserSettingsRequest.cs
+        GetUserSettingsHandler.cs
+        GetUserSettingsMapping.cs
+        UserSettingsDto.cs
+      Handlers/
+        ConfigureUserSettingsEndpoint.cs
+        ConfigureUserSettingsRequest.cs
+        ConfigureUserSettingsValidator.cs
 ```
 
-- **`Handlers/<UseCase>/`** — one folder per endpoint: `<UseCase>Endpoint.cs` (the endpoint _is_ the handler — no separate Command/Handler classes), `<UseCase>Request.cs`, `<UseCase>Response.cs`, `<UseCase>Validator.cs`, `<UseCase>Mapping.cs`, plus nested request/response records it needs (`IncomeRequest`, `ScoreResponse`). Things used by one use case stay in its folder.
-- **Feature root / topic folders** — domain logic used by several use cases of the feature: at the root or grouped by topic (`FinancialWellness/Snapshots/` with `SnapshotScorer.cs` and its `Changes/`, `Currency/`; `FinancialWellness/Advice/`).
+**A folder is created only when it holds several folders.** `Handlers/`, `Contracts/`, `Jobs/` and the like are grouping folders: while there is one use case (one operation, one job) its files lie directly in the grouping folder, and the grouping folder itself disappears when it would hold a single file with nothing to group (`Slices/FxRates/UpdateFxRatesJob.cs`). When the second use case appears, each use case gets its own `<UseCase>/` folder (`Handlers/CreateFirstSnapshotEndpoint.cs` today; with a second handler it becomes `Handlers/CreateFirstSnapshot/` + `Handlers/<Second>/`); the first one moves into its folder at that moment.
+
+- **`Slices/<Slice>/`** — one business capability of the feature, named after it (`Snapshots`, `Advices`). It has the same structure a feature used to have: `Handlers/<UseCase>/`, and — when the slice has logic of its own — files at its root or its own `Helpers/`. Code used by one slice stays in it; code used by two or more moves to the feature's `Helpers/`.
+- **`Handlers/`** — with several endpoints, one `Handlers/<UseCase>/` folder per endpoint (with one endpoint its files lie directly in `Handlers/`): `<UseCase>Endpoint.cs` (the endpoint _is_ the handler — no separate Command/Handler classes), `<UseCase>Request.cs`, `<UseCase>Response.cs`, `<UseCase>Validator.cs`, `<UseCase>Mapping.cs`, plus nested request/response records it needs (`EstimateRequest`, `ScoreResponse`). Things used by one use case stay in its folder.
+- **Folders are named by what the files are.** Inside a slice, group files by kind and name the folder after the kind: `Models/` (records and classes that carry data), `Requests/`, `Responses/`, `Enums/`, `Mappings/`, `Validators/`; logic that is not a kind goes into the slice's own `Helpers/` (`Slices/Snapshots/Helpers/` = `FxRateLookup`, `SnapshotScorer`), not into a topic folder. A kind folder is created when it holds two or more files; a single file stays at the slice root. Name a folder differently from the types inside it (plural or topic name): a namespace named like a type breaks name lookup (CS0118).
+- **Two of a kind → a sub-folder.** When a folder holds two or more files of the same kind, group them (`Requests/`, `Responses/`, `Mappings/`): `Slices/Snapshots/Handlers/Requests/` = `CreateFirstSnapshotRequest` + `EstimateRequest`, `Slices/Snapshots/Handlers/Validators/` = `CreateFirstSnapshotValidator` + `EstimateRequestValidator`.
+- **Feature `Helpers/`** — only what **two or more slices** really share (`Helpers/Index/` — the index model used by `Snapshots` and `Advices`). Everything that belongs to one slice lives in that slice, even if several of its handlers use it (`Slices/Snapshots/Models/`, `Mappings/`, `Requests/`, `Validators/`, `Helpers/`); a feature `Helpers/` is not a place for slice code that has no other home. `Helpers/` holds nothing slice-specific.
 - **`Data/`** — only when the feature stores data: its own `<Feature>DbContext`, one sub-folder per entity (entity + configuration + its enums, as files next to the entity).
+- **Jobs and seeders** — background work and seed data are a slice of their own named after the thing they maintain (`Slices/FxRates/` = `UpdateFxRatesJob` + `FxRateSeeder`); they are not kept in `Jobs/` / `Seeders/` folders at the feature level.
 - **`<Feature>Services.cs`** — `Add<Feature>(this IServiceCollection)` registered in `Program.cs`, only when the feature has DI to register.
-- **`Contracts/`** — only when another feature calls this one (see rule 2).
-- A folder under `Features/` should have at least one endpoint.
+- **`Slices/<Slice>/Contracts/`** — only when another feature calls this slice (see rule 2); it sits in the slice that owns the data and logic, next to its `Handlers/`, not at the feature level. With one operation its files lie directly in `Contracts/`; with several, one `<Operation>/` folder each.
+- A slice should have at least one endpoint (a slice whose endpoints are not written yet is the only exception).
 
 ## Shared / Infrastructure structure
 
 ```
 Shared/
   Response.cs                    ← used by every feature's endpoints
-  Index/                         ← the index model (fuzzy Mamdani, indicators, linear index, zones)
-    IndexConstants.cs
-    Fuzzy/  Indicators/  Model/
+  CurrencyCode.cs                ← used by Settings and Financial Wellness
 Infrastructure/
   Auth/       Auth.cs (AddLogtoAuthentication, GetSubject) + LogtoOptions.cs
-  Database/   DatabaseServices.cs (AddDatabase) + DbOptions.cs
+  Database/   DatabaseServices.cs (AddDatabase) + DbOptions.cs + MessagePersistence.cs (Wolverine inbox/outbox)
   Telemetry/  Telemetry.cs (AddTelemetry) + SeqOptions.cs
 ```
 
@@ -79,7 +94,7 @@ When **two or more** features need the same thing (calculation, value object, co
 
 - domain logic / types without endpoints or storage → **`Shared/<Area>/`**
 - technical wiring (a new external service, options, middleware) → **`Infrastructure/<Concern>/`**
-- an operation that belongs to another feature (its data, its rules) → that feature's **`Contracts/`** handler
+- an operation that belongs to another feature (its data, its rules) → that feature's slice **`Contracts/`** handler
 
 Promote only what's actually shared; keep single-use code local. `CurrencyCode` is an example: it is used by Settings and Financial Wellness, so it lives in `Shared/CurrencyCode.cs`.
 
@@ -96,7 +111,7 @@ grep -rn "using Olevin.Api.Features" Olevin.Api/Shared Olevin.Api/Infrastructure
 ## In this repo (Olevin API)
 
 - Solution `server/Olevin.slnx`: `Olevin.Api` (ASP.NET Core, Wolverine HTTP) + `Olevin.Tests` (xUnit). Shared MSBuild settings in `Directory.Build.props`.
-- **Existing features:** `Settings` (users and user settings, `settings` schema, endpoints `POST /settings/v1/user`, `POST /settings/v1/user-settings`), `FinancialWellness` (one large feature, `financial_wellness` schema: `fx_rates`, `snapshots`, `estimated_snapshots`; FX job and seeder; `Snapshots/` — scorer, `Changes/`, `Currency/`; `Advice/` — sensitivity analysis and advice, no endpoint yet; stateless `POST /snapshots/v1/calculate`).
-- **Shared:** `Response<T>` envelope, `Index/` (fuzzy Mamdani model, indicators, linear index, zones, `IndexConstants.ModelVersion`).
-- **No architecture test or analyzer enforces the rules above** — the grep in _Verify_ and review are the only guard. No feature uses `Contracts/` yet; the first cross-feature call introduces it.
+- **Existing features:** `Settings` (users and user settings, `settings` schema; slices `Users` — `POST /settings/v1/user`, `UserSettings` — `POST /settings/v1/user-settings`; `Slices/UserSettings/Contracts` (`GetUserSettings`) gives other features the whole user with their settings), `FinancialWellness` (`financial_wellness` schema: `fx_rates`, `snapshots`, `estimated_snapshots`; slices: `Slices/FxRates/` — `UpdateFxRatesJob`, `FxRateSeeder`, `FxRateMapping`; `Slices/Snapshots/` — `Handlers/CreateFirstSnapshot*` (`POST /financial-wellness/v1/first-snapshot`, onboarding; its `Requests/` = `CreateFirstSnapshotRequest`, `EstimateRequest`), plus the slice's own `Models/` (`SnapshotMonth`, `SnapshotFigures`, `SnapshotScore`, `SnapshotRates`, `ExchangeRates`), `ExpensesRequest`, `Mappings/` (`SnapshotMapping`, `SnapshotAmountsMapping`), `Validators/` (`MoneyValidator`, `ExpensesRequestValidator`), `Helpers/` (`FxRateLookup` — the stored rates a snapshot is converted at, `SnapshotScorer`); `Slices/Advices/` — sensitivity analysis and advice, no endpoint yet; planned: `History`, `Trend`, `IndexChanges`; `Helpers/Index/` — the index model shared by `Snapshots` and `Advices` (fuzzy Mamdani, indicators, linear index, zones, `IndexConstants.ModelVersion`)).
+- **Shared:** `Response<T>` envelope, `CurrencyCode`, `Data/JsonbConversion`.
+- **No architecture test or analyzer enforces the rules above** — the grep in _Verify_ and review are the only guard. The first cross-feature call is `Settings/Slices/UserSettings/Contracts` (`GetUserSettings`): the caller sends it with `IMessageBus.InvokeAsync<T>`, the handler is a static `<Operation>Handler.Handle`, read-only handlers carry `[NonTransactional]`, and the handler returns the response record directly, `null` when there is nothing to return (`InvokeAsync<UserSettingsDto?>` gives `null` without an error; no wrapper record).
 - **Database ownership:** one Postgres schema per feature that stores data (`settings` → `SettingsDbContext`). The schema itself lives outside `server/`, in `infrastructure/db/schemas/<schema>.hcl` (Atlas) — see `backend-expert`.

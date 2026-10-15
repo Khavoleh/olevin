@@ -38,7 +38,8 @@ public static class SettingsServices
                         npgsql.MapEnum<CurrencyCode>("currency_code", CurrencySchema, Labels);
                         npgsql.MapEnum<LocaleCode>("locale_code", Schema, Labels);
                     }
-                )
+                ),
+            MessagePersistence.Schema
         );
 
         return services;

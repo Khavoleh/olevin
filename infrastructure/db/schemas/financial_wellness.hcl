@@ -70,10 +70,6 @@ table "snapshots" {
     type    = date
     comment = "Date of the exchange rates the amounts are converted at"
   }
-  column "base_currency" {
-    type    = enum.currency_code
-    comment = "Currency the results were calculated in"
-  }
   column "self_rating" {
     type    = smallint
     comment = "Self-rated financial calm (1-5)"

@@ -1,5 +1,3 @@
-using Olevin.Api.Shared;
-
 namespace Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 
 /// <summary>
@@ -32,11 +30,6 @@ public sealed class Snapshot
     /// Date of the exchange rates the amounts are converted at.
     /// </summary>
     public DateOnly FxDate { get; set; }
-
-    /// <summary>
-    /// Currency the results were calculated in.
-    /// </summary>
-    public CurrencyCode BaseCurrency { get; set; }
 
     /// <summary>
     /// Self-rated financial calm (1-5).

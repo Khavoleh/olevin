@@ -3,8 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Npgsql.NameTranslation;
 using Olevin.Api.Features.FinancialWellness.Data;
-using Olevin.Api.Features.FinancialWellness.Jobs;
-using Olevin.Api.Features.FinancialWellness.Seeders;
+using Olevin.Api.Features.FinancialWellness.Slices.FxRates;
 using Olevin.Api.Infrastructure.Database;
 using Olevin.Api.Shared;
 using Wolverine.EntityFrameworkCore;
@@ -41,7 +40,8 @@ public static class FinancialWellnessServices
                         npgsql.MapEnum<CurrencyCode>("currency_code", Schema, Labels);
                         npgsql.MapEnum<CalendarMonth>("calendar_month", Schema, Labels);
                     }
-                )
+                ),
+            MessagePersistence.Schema
         );
 
         services.AddHostedService<FxRateSeeder>();

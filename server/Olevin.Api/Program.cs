@@ -26,6 +26,7 @@ builder.AddTelemetry();
 builder.Host.UseWolverine(options =>
 {
     options.UseFluentValidation();
+    options.PersistMessagesInDatabase(builder.Configuration);
     options.UseEntityFrameworkCoreTransactions();
     options.Policies.AutoApplyTransactions();
     options
