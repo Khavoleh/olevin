@@ -48,6 +48,7 @@ Produce API code that looks and behaves like the rest of the server — a stable
 
 - Follow the analyzers and the formatter, not personal taste — the build treats warnings as errors.
 - Every public type and member has an XML doc comment that explains _what_ and _why_ in plain language.
+- Comments are clear and concise: a `<summary>` is one short sentence about what the member does; `<param>`/`<returns>` are a few words. Add the _why_ only when it isn't obvious from the code and fits in one more sentence. Don't retell the algorithm, list every case, restate the business rules of other members or explain the history of a decision — that belongs in the code, the tests or the commit message.
 
 ## Before done
 
@@ -62,7 +63,7 @@ Build (analyzers, docs, formatting) and run the tests; for endpoint changes, cal
   - `public static class <UseCase>Endpoint` with `[Tags("<Feature>")]`; `public static async Task<Response<T>> Post(...)` (or `Get`/`Put`/`Delete`) with `[WolverinePost("/<feature>/v1/<resource>")]` and one `[ProducesResponseType<Response<T>>(StatusCodes.StatusXxx)]` per outcome.
   - Return `Response<T>.Ok(data, HttpStatusCode.Created)` / `Response<T>.Fail(HttpStatusCode.Conflict, "The settings already exist.")` (`Shared/Response.cs`); the envelope sets the HTTP status. Endpoints return `Response<T>`.
   - Parameters: request record, `ClaimsPrincipal principal`, the feature DbContext, `CancellationToken ct`. User: `principal.GetSubject()` (`Infrastructure/Auth/Auth.cs`) → `users.auth_sub`.
-  - Validators: `public sealed class <UseCase>Validator : AbstractValidator<<UseCase>Request>`, picked up automatically; messages like `"Snapshot day must be from 1 to 31."`. every request and every shared part has its own validator class, one per file (`Slices/Snapshots/Validators/`: `MoneyValidator`, `ExpensesRequestValidator`; `Handlers/Validators/`: `CreateFirstSnapshotValidator`, `EstimateRequestValidator`) and the parent connects them with `RuleFor(x => x.Part).NotNull().SetValidator(new PartValidator())`, so the error path is the nested one (`Expenses.Food.Amount`); no shared interface or base record for requests, and no validator of an interface or a base type — Wolverine would run it a second time; `[GeneratedRegex]` for patterns.
+  - Validators: `public sealed class <UseCase>Validator : AbstractValidator<<UseCase>Request>`, picked up automatically; messages like `"Snapshot day must be from 1 to 31."`. every request and every shared part has its own validator class, one per file (`Slices/Snapshots/Validators/`: `MoneyValidator`, `ExpensesRequestValidator`; `Handlers/CreateFirstSnapshot/Validators/`: `CreateFirstSnapshotValidator`, `EstimateRequestValidator`; list rules shared by requests via `MoneyListRules.MoneyList`) and the parent connects them with `RuleFor(x => x.Part).NotNull().SetValidator(new PartValidator())`, so the error path is the nested one (`Expenses.Food.Amount`); no shared interface or base record for requests, and no validator of an interface or a base type — Wolverine would run it a second time; `[GeneratedRegex]` for patterns.
   - JSON: System.Text.Json with `JsonStringEnumConverter` — enums as names (`"UAH"`, `"EN"`).
   - Auth: fallback policy requires an authenticated user; only `/health`, `/openapi`, `/scalar` call `.AllowAnonymous()`.
 - **Data:**
@@ -78,6 +79,7 @@ Build (analyzers, docs, formatting) and run the tests; for endpoint changes, cal
   - No braces when an `if`/`for`/`foreach`/`while` body is one line and the condition fits on one line; keep braces when anything wraps, and on all branches of an if/else chain if one needs them.
   - Single-line methods and local functions are expression-bodied (`=>`); CSharpier decides where the expression goes — don't fight it.
   - Private fields and constants are PascalCase, no `_`/`s_` prefix (`private readonly ... Rates`).
+  - Comment size, e.g. `CreateSnapshotRules`: `/// The snapshot rules for the month.` — not a paragraph that lists every allowed month and why.
   - XML docs on every public member (`GenerateDocumentationFile` + warnings as errors → missing docs fail the build): `<summary>`, `<param>`, `<returns>`, `<inheritdoc/>` for overrides; endpoint summaries say `Handles <c>POST /route</c>.` and list each status in `<returns>`.
   - Format: `csharpier format .` in `server/` (global tool) — the build only checks.
 - **Run locally:** infrastructure via `docker compose -f infrastructure/deployment/docker-compose.local.yml up -d`; API `dotnet run --project Olevin.Api` → `http://localhost:5001`, through Caddy at `https://api.localhost` (Scalar: `https://api.localhost/scalar`). The web app calls it server-side with the user's Logto access token (`web-app/src/shared/helpers/api`) — a contract change needs the matching Zod schema change there.

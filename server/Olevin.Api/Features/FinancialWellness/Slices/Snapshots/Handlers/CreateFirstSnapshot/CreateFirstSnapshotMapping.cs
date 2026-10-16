@@ -1,12 +1,12 @@
 using Olevin.Api.Features.FinancialWellness.Data.EstimatedSnapshots;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Indicators;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.Requests;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Requests;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Shared;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
 
 /// <summary>
 /// Maps the estimates of the onboarding to the stored rows and to the figures of the core.

@@ -3,7 +3,7 @@ using Olevin.Api.Shared;
 namespace Olevin.Api.Features.FinancialWellness.Data.EstimatedSnapshots;
 
 /// <summary>
-/// Rough months entered at onboarding before the first snapshot. Each new snapshot replaces the oldest one. A row of
+/// Rough months entered at onboarding before the first snapshot; never removed. A row of
 /// <c>financial_wellness.estimated_snapshots</c>.
 /// </summary>
 public sealed class EstimatedSnapshot

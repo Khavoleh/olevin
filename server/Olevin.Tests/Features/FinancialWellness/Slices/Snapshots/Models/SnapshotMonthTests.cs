@@ -35,6 +35,20 @@ public sealed class SnapshotMonthTests
             new SnapshotMonth(2026, CalendarMonth.October).Previous()
         );
 
+    [Fact]
+    public void Next_OfDecember_IsJanuaryOfTheNextYear() =>
+        Assert.Equal(
+            new SnapshotMonth(2027, CalendarMonth.January),
+            new SnapshotMonth(2026, CalendarMonth.December).Next()
+        );
+
+    [Fact]
+    public void Next_InTheMiddleOfTheYear_KeepsTheYear() =>
+        Assert.Equal(
+            new SnapshotMonth(2026, CalendarMonth.November),
+            new SnapshotMonth(2026, CalendarMonth.October).Next()
+        );
+
     [Theory]
     [InlineData(2026, CalendarMonth.October, 15, 15)]
     [InlineData(2026, CalendarMonth.February, 31, 28)]

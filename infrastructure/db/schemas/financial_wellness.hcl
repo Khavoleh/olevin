@@ -148,11 +148,78 @@ table "snapshots" {
     on_delete   = CASCADE
     on_update   = NO_ACTION
   }
+
+  check "snapshots_year_range" {
+    expr = "year BETWEEN 2000 AND 9999"
+  }
+  check "snapshots_self_rating_range" {
+    expr = "self_rating BETWEEN 1 AND 5"
+  }
+  check "snapshots_savings_rate_range" {
+    expr = "savings_rate BETWEEN -0.2 AND 0.4"
+  }
+  check "snapshots_reserve_months_range" {
+    expr = "reserve_months BETWEEN 0 AND 9"
+  }
+  check "snapshots_debt_to_income_range" {
+    expr = "debt_to_income BETWEEN 0 AND 0.6"
+  }
+  check "snapshots_expense_variation_range" {
+    expr = "expense_variation BETWEEN 0 AND 0.5"
+  }
+  check "snapshots_savings_regularity_range" {
+    expr = "savings_regularity BETWEEN 0 AND 1"
+  }
+  check "snapshots_cash_flow_range" {
+    expr = "cash_flow BETWEEN 0 AND 100"
+  }
+  check "snapshots_buffer_range" {
+    expr = "buffer BETWEEN 0 AND 100"
+  }
+  check "snapshots_i_fuzzy_range" {
+    expr = "i_fuzzy BETWEEN 0 AND 100"
+  }
+  check "snapshots_i_lin_range" {
+    expr = "i_lin BETWEEN 0 AND 100"
+  }
+  check "snapshots_i_final_range" {
+    expr = "i_final BETWEEN 0 AND 100"
+  }
+  check "snapshots_model_version_format" {
+    expr = "model_version ~ '^[0-9]+(\\.[0-9]+)*$'"
+  }
+  check "snapshots_amounts_shape" {
+    expr = <<-SQL
+      jsonb_typeof(amounts) = 'object'
+      AND amounts ?& ARRAY['income', 'expenses', 'saved', 'reserves', 'debt_payments']
+      AND jsonb_typeof(amounts -> 'income') = 'array'
+      AND jsonb_typeof(amounts -> 'expenses') = 'object'
+      AND jsonb_typeof(amounts -> 'saved') = 'object'
+      AND jsonb_typeof(amounts -> 'reserves') = 'array'
+      AND jsonb_typeof(amounts -> 'debt_payments') = 'array'
+    SQL
+  }
+  check "snapshots_amounts_entries_max" {
+    expr = <<-SQL
+      CASE
+        WHEN jsonb_typeof(amounts -> 'income') = 'array'
+          AND jsonb_typeof(amounts -> 'reserves') = 'array'
+          AND jsonb_typeof(amounts -> 'debt_payments') = 'array'
+        THEN jsonb_array_length(amounts -> 'income') <= 10
+          AND jsonb_array_length(amounts -> 'reserves') <= 10
+          AND jsonb_array_length(amounts -> 'debt_payments') <= 10
+        ELSE true
+      END
+    SQL
+  }
+  check "snapshots_amounts_amount_range" {
+    expr = "NOT jsonb_path_exists(amounts, '$.**.amount ? (@.type() != \"number\" || @ < 0 || @ > 1000000000000)')"
+  }
 }
 
 table "estimated_snapshots" {
   schema  = schema.financial_wellness
-  comment = "Rough months entered at onboarding before the first snapshot. Each new snapshot replaces the oldest one"
+  comment = "Rough months entered at onboarding before the first snapshot; never removed"
 
   column "id" {
     type    = uuid
@@ -216,5 +283,15 @@ table "estimated_snapshots" {
     ref_columns = [table.users.column.id]
     on_delete   = CASCADE
     on_update   = NO_ACTION
+  }
+
+  check "estimated_snapshots_year_range" {
+    expr = "year BETWEEN 2000 AND 9999"
+  }
+  check "estimated_snapshots_expenses_amount_range" {
+    expr = "expenses_amount BETWEEN 0 AND 1000000000000"
+  }
+  check "estimated_snapshots_saved_amount_range" {
+    expr = "saved_amount BETWEEN 0 AND 1000000000000"
   }
 }

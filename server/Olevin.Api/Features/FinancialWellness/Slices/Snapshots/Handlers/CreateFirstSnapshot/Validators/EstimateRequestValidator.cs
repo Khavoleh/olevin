@@ -1,8 +1,8 @@
 using FluentValidation;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.Requests;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Requests;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Validators;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.Validators;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Validators;
 
 /// <summary>
 /// Validates a rough month of the onboarding:.

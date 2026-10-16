@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.Requests;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Requests;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Helpers;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
@@ -14,18 +14,18 @@ using Olevin.Api.Shared;
 using Wolverine;
 using Wolverine.Http;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
 
 /// <summary>
 /// Creates the first snapshot of the signed-in user during onboarding, together with the estimates of the 2 months
 /// before it.
 /// </summary>
-[Tags("FinancialWellness")]
+[Tags("Snapshots")]
 public static class CreateFirstSnapshotEndpoint
 {
     /// <summary>
-    /// Handles <c>POST /financial-wellness/v1/first-snapshot</c>. The snapshot is for the current month in the
-    /// user's time zone.
+    /// Handles <c>POST /financial-wellness/v1/snapshots/onboarding</c>. The snapshot is for the current month in
+    /// the user's time zone.
     /// </summary>
     /// <param name="request">The first snapshot and the estimates.</param>
     /// <param name="principal">The signed-in user.</param>
@@ -37,7 +37,7 @@ public static class CreateFirstSnapshotEndpoint
     /// The identifier of the created snapshot (201), a not found (404) when the user or their settings don't exist,
     /// or a conflict (409) when the user already has snapshots.
     /// </returns>
-    [WolverinePost("/financial-wellness/v1/first-snapshot")]
+    [WolverinePost("/financial-wellness/v1/snapshots/onboarding")]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]

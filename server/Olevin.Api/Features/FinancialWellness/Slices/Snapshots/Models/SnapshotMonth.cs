@@ -35,6 +35,15 @@ public sealed record SnapshotMonth(short Year, CalendarMonth Month)
             : new SnapshotMonth(Year, Month - 1);
 
     /// <summary>
+    /// Gets the month after this one.
+    /// </summary>
+    /// <returns>The next month, in the next year for December.</returns>
+    public SnapshotMonth Next() =>
+        Month == CalendarMonth.December
+            ? new SnapshotMonth((short)(Year + 1), CalendarMonth.January)
+            : new SnapshotMonth(Year, Month + 1);
+
+    /// <summary>
     /// Gets the snapshot day of the user in this month, which is the date of its exchange rates.
     /// </summary>
     /// <param name="snapshotDay">The day of the month (1-31) from the user's settings.</param>

@@ -6,7 +6,7 @@ using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 
 /// <summary>
-/// Creates the stored <see cref="Snapshot"/> from the amounts and the score of the core.
+/// Creates and scores the stored <see cref="Snapshot"/>.
 /// </summary>
 public static class SnapshotMapping
 {
@@ -29,10 +29,7 @@ public static class SnapshotMapping
         SnapshotScore score
     )
     {
-        IndicatorVector indicators = score.Inputs.Indicators;
-        IndexResult index = score.Index;
-
-        return new Snapshot
+        Snapshot snapshot = new()
         {
             Id = Guid.CreateVersion7(),
             UserId = userId,
@@ -40,18 +37,34 @@ public static class SnapshotMapping
             Year = month.Year,
             FxDate = fxDate,
             SelfRating = (short)selfRating,
-            SavingsRate = indicators.SavingsRate,
-            ReserveMonths = indicators.Reserve,
-            DebtToIncome = indicators.DebtToIncome,
-            ExpenseVariation = indicators.ExpenseVariation,
-            SavingsRegularity = indicators.SavingsRegularity,
-            CashFlow = index.CashFlow,
-            Buffer = index.Buffer,
-            FuzzyIndex = index.FuzzyIndex,
-            LinearIndex = index.Linear,
-            FinalIndex = index.Final,
             Amounts = amounts,
-            ModelVersion = score.ModelVersion,
         };
+
+        ApplyScore(snapshot, score);
+
+        return snapshot;
+    }
+
+    /// <summary>
+    /// Replaces the calculated values of a snapshot with a new score.
+    /// </summary>
+    /// <param name="snapshot">The snapshot.</param>
+    /// <param name="score">The new score.</param>
+    public static void ApplyScore(Snapshot snapshot, SnapshotScore score)
+    {
+        IndicatorVector indicators = score.Inputs.Indicators;
+        IndexResult index = score.Index;
+
+        snapshot.SavingsRate = indicators.SavingsRate;
+        snapshot.ReserveMonths = indicators.Reserve;
+        snapshot.DebtToIncome = indicators.DebtToIncome;
+        snapshot.ExpenseVariation = indicators.ExpenseVariation;
+        snapshot.SavingsRegularity = indicators.SavingsRegularity;
+        snapshot.CashFlow = index.CashFlow;
+        snapshot.Buffer = index.Buffer;
+        snapshot.FuzzyIndex = index.FuzzyIndex;
+        snapshot.LinearIndex = index.Linear;
+        snapshot.FinalIndex = index.Final;
+        snapshot.ModelVersion = score.ModelVersion;
     }
 }

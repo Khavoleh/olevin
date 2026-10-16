@@ -1,6 +1,6 @@
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.Requests;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Requests;
 
 /// <summary>
 /// A rough month before the first snapshot, entered at onboarding.

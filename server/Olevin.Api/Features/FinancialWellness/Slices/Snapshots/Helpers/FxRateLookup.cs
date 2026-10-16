@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Features.FinancialWellness.Data;
+using Olevin.Api.Features.FinancialWellness.Data.FxRates;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Shared;
 
@@ -51,6 +52,35 @@ public static class FxRateLookup
             .ToDictionaryAsync(rate => rate.Currency, rate => rate.UnitsPerBase, ct);
 
         return new SnapshotRates(fxDate, new ExchangeRates(unitsPerUsd));
+    }
+
+    /// <summary>
+    /// Loads the rates of every currency on the dates.
+    /// </summary>
+    /// <param name="db">The financial wellness database.</param>
+    /// <param name="dates">The rate dates.</param>
+    /// <param name="ct">The cancellation token.</param>
+    /// <returns>The rates by date.</returns>
+    public static async Task<Dictionary<DateOnly, ExchangeRates>> LoadAsync(
+        FinancialWellnessDbContext db,
+        IEnumerable<DateOnly> dates,
+        CancellationToken ct
+    )
+    {
+        List<DateOnly> wanted = [.. dates.Distinct()];
+
+        List<FxRate> rates = await db
+            .FxRates.Where(rate => wanted.Contains(rate.RateDate))
+            .ToListAsync(ct);
+
+        return rates
+            .GroupBy(rate => rate.RateDate)
+            .ToDictionary(
+                group => group.Key,
+                group => new ExchangeRates(
+                    group.ToDictionary(rate => rate.Currency, rate => rate.UnitsPerBase)
+                )
+            );
     }
 
     /// <summary>

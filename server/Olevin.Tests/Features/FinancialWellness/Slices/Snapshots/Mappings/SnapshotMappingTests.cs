@@ -64,4 +64,24 @@ public sealed class SnapshotMappingTests
 
     [Fact]
     public void EveryMapping_GetsANewId() => Assert.NotEqual(Map().Id, Map().Id);
+
+    [Fact]
+    public void ApplyScore_ReplacesTheCalculatedPartOnly()
+    {
+        SnapshotScore august = SnapshotScorer.Score(ControlExample.Snapshots())[^2];
+        Snapshot snapshot = Map();
+        Guid id = snapshot.Id;
+
+        SnapshotMapping.ApplyScore(snapshot, august);
+
+        Assert.Equal(august.Inputs.Indicators.ExpenseVariation, snapshot.ExpenseVariation);
+        Assert.Equal(august.Inputs.Indicators.SavingsRegularity, snapshot.SavingsRegularity);
+        Assert.Equal(august.Index.Buffer, snapshot.Buffer);
+        Assert.Equal(august.Index.Final, snapshot.FinalIndex);
+        Assert.Equal(august.ModelVersion, snapshot.ModelVersion);
+        Assert.Equal(id, snapshot.Id);
+        Assert.Equal(CalendarMonth.September, snapshot.Month);
+        Assert.Equal(4, snapshot.SelfRating);
+        Assert.Same(Amounts, snapshot.Amounts);
+    }
 }

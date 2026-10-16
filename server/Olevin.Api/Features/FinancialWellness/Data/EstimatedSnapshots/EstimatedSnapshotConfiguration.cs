@@ -19,7 +19,7 @@ public sealed class EstimatedSnapshotConfiguration : IEntityTypeConfiguration<Es
             "financial_wellness",
             table =>
                 table.HasComment(
-                    "Rough months entered at onboarding before the first snapshot. Each new snapshot replaces the oldest one"
+                    "Rough months entered at onboarding before the first snapshot; never removed"
                 )
         );
 

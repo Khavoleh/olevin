@@ -13,7 +13,7 @@ namespace Olevin.Api.Features.Settings.Slices.Users.Handlers;
 /// <summary>
 /// Creates the profile of the signed-in user.
 /// </summary>
-[Tags("Settings")]
+[Tags("Users")]
 public static class CreateUserEndpoint
 {
     /// <summary>
