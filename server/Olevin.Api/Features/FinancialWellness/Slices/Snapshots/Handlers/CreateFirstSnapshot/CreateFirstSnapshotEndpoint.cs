@@ -131,9 +131,10 @@ public static class CreateFirstSnapshotEndpoint
             current,
             currentRates.FxDate,
             amounts,
-            selfRating,
-            score
+            selfRating
         );
+
+        SnapshotMapping.ApplyScore(snapshot, score);
 
         db.EstimatedSnapshots.AddRange(
             CreateFirstSnapshotMapping.ToEstimatedSnapshot(

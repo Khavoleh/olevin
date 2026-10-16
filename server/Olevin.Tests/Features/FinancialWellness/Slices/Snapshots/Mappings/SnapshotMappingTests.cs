@@ -15,15 +15,20 @@ public sealed class SnapshotMappingTests
 
     private static readonly SnapshotAmounts Amounts = ControlExample.SeptemberAmounts();
 
-    private static Snapshot Map() =>
-        SnapshotMapping.ToSnapshot(
+    private static Snapshot Map()
+    {
+        Snapshot snapshot = SnapshotMapping.ToSnapshot(
             Guid.CreateVersion7(),
             new SnapshotMonth(2026, CalendarMonth.September),
             new DateOnly(2026, 9, 25),
             Amounts,
-            4,
-            Score
+            4
         );
+
+        SnapshotMapping.ApplyScore(snapshot, Score);
+
+        return snapshot;
+    }
 
     [Fact]
     public void Indicators_AreTheClampedOnes()

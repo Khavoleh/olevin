@@ -76,11 +76,11 @@ public static class CreateSnapshotEndpoint
 
         DateTimeOffset now = time.GetUtcNow();
         SnapshotMonth month = new(request.Year, request.Month);
-        SnapshotMonth[] taken = [.. snapshots.Select(CreateSnapshotMapping.MonthOf)];
+        SnapshotMonth[] taken = [.. snapshots.Select(SnapshotHistoryMapping.MonthOf)];
 
         Response<Guid>? rejection = CreateSnapshotRules.RejectMonth(
             month,
-            CreateSnapshotRules.EarliestMonth(estimates.Select(CreateSnapshotMapping.MonthOf)),
+            CreateSnapshotRules.EarliestMonth(estimates.Select(SnapshotHistoryMapping.MonthOf)),
             SnapshotMonth.Current(now, userSettings.Timezone),
             taken
         );
@@ -90,7 +90,6 @@ public static class CreateSnapshotEndpoint
 
         CurrencyCode baseCurrency = userSettings.BaseCurrency;
         SnapshotAmounts amounts = CreateSnapshotMapping.ToAmounts(request);
-        int selfRating = request.SelfRating;
 
         SnapshotRates rates = await FxRateLookup.FindAsync(
             db,
@@ -98,58 +97,24 @@ public static class CreateSnapshotEndpoint
             [.. SnapshotAmountsMapping.Currencies(amounts), baseCurrency],
             ct
         );
-        Dictionary<DateOnly, ExchangeRates> storedRates = await FxRateLookup.LoadAsync(
-            db,
-            [
-                .. snapshots.Select(snapshot => snapshot.FxDate),
-                .. estimates.Select(estimate => estimate.FxDate),
-            ],
-            ct
-        );
-
-        SnapshotFigures[] history =
-        [
-            .. estimates.Select(estimate =>
-                CreateSnapshotMapping.ToFigures(
-                    estimate,
-                    storedRates[estimate.FxDate],
-                    baseCurrency
-                )
-            ),
-            .. snapshots.Select(snapshot =>
-                CreateSnapshotMapping.ToFigures(
-                    snapshot,
-                    storedRates[snapshot.FxDate],
-                    baseCurrency
-                )
-            ),
-            new(
-                month,
-                SnapshotAmountsMapping.ToFigures(amounts, rates.Rates, baseCurrency, selfRating)
-            ),
-        ];
-        Dictionary<SnapshotMonth, SnapshotScore> scores = SnapshotScorer
-            .Score([.. history.OrderBy(figures => (figures.Month.Year, figures.Month.Month))])
-            .ToDictionary(score => score.Month);
-
-        foreach (
-            Snapshot later in snapshots.Where(stored =>
-                (stored.Year, stored.Month).CompareTo((month.Year, month.Month)) > 0
-            )
-        )
-        {
-            SnapshotMapping.ApplyScore(later, scores[CreateSnapshotMapping.MonthOf(later)]);
-            later.UpdatedAt = now.UtcDateTime;
-        }
 
         Snapshot snapshot = SnapshotMapping.ToSnapshot(
             userId,
             month,
             rates.FxDate,
             amounts,
-            selfRating,
-            scores[month]
+            request.SelfRating
         );
+        Dictionary<SnapshotMonth, SnapshotScore> scores = await SnapshotRescorer.ScoreAsync(
+            db,
+            estimates,
+            [.. snapshots, snapshot],
+            baseCurrency,
+            ct
+        );
+
+        SnapshotRescorer.ApplyFrom(snapshots, month, scores, now.UtcDateTime);
+        SnapshotMapping.ApplyScore(snapshot, scores[month]);
 
         db.Snapshots.Add(snapshot);
 

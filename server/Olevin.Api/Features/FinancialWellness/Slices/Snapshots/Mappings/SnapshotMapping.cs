@@ -11,25 +11,22 @@ namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 public static class SnapshotMapping
 {
     /// <summary>
-    /// Creates a new snapshot with what the user has seen: the clamped indicators, the subsystems and the indexes.
+    /// Creates a new snapshot with the entered values only; <see cref="ApplyScore"/> fills the calculated ones.
     /// </summary>
     /// <param name="userId">The owning user identifier.</param>
     /// <param name="month">The month of the snapshot.</param>
     /// <param name="fxDate">The date of the rates the amounts were converted at.</param>
     /// <param name="amounts">The amounts as entered.</param>
     /// <param name="selfRating">The self-rating of calm from 1 to 5.</param>
-    /// <param name="score">The score of the snapshot.</param>
     /// <returns>The snapshot with a new identifier.</returns>
     public static Snapshot ToSnapshot(
         Guid userId,
         SnapshotMonth month,
         DateOnly fxDate,
         SnapshotAmounts amounts,
-        int selfRating,
-        SnapshotScore score
-    )
-    {
-        Snapshot snapshot = new()
+        int selfRating
+    ) =>
+        new()
         {
             Id = Guid.CreateVersion7(),
             UserId = userId,
@@ -39,11 +36,6 @@ public static class SnapshotMapping
             SelfRating = (short)selfRating,
             Amounts = amounts,
         };
-
-        ApplyScore(snapshot, score);
-
-        return snapshot;
-    }
 
     /// <summary>
     /// Replaces the calculated values of a snapshot with a new score.

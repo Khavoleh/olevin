@@ -1,14 +1,14 @@
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.EstimatedSnapshots;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateSnapshot;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Shared;
 using Olevin.Tests.TestData;
 
-namespace Olevin.Tests.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateSnapshot;
+namespace Olevin.Tests.Features.FinancialWellness.Slices.Snapshots.Mappings;
 
-public sealed class CreateSnapshotMappingTests
+public sealed class SnapshotHistoryMappingTests
 {
     private const double Precision = 1e-9;
 
@@ -27,7 +27,7 @@ public sealed class CreateSnapshotMappingTests
             SavedAmount = 6_000,
         };
 
-        SnapshotFigures figures = CreateSnapshotMapping.ToFigures(
+        SnapshotFigures figures = SnapshotHistoryMapping.ToFigures(
             estimate,
             Rates,
             CurrencyCode.UAH
@@ -50,7 +50,7 @@ public sealed class CreateSnapshotMappingTests
             Amounts = ControlExample.SeptemberAmounts(),
         };
 
-        SnapshotFigures figures = CreateSnapshotMapping.ToFigures(
+        SnapshotFigures figures = SnapshotHistoryMapping.ToFigures(
             snapshot,
             Rates,
             CurrencyCode.UAH
