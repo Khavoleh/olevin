@@ -1,4 +1,5 @@
 using Microsoft.EntityFrameworkCore;
+using Olevin.Api.Features.Settings.Data.CfpbResponses;
 using Olevin.Api.Features.Settings.Data.Users;
 using Olevin.Api.Features.Settings.Data.UserSettings;
 
@@ -21,10 +22,16 @@ public sealed class SettingsDbContext(DbContextOptions<SettingsDbContext> option
     /// </summary>
     public DbSet<UserSetting> UserSettings => Set<UserSetting>();
 
+    /// <summary>
+    /// Gets the CFPB Financial Well-Being Scale responses.
+    /// </summary>
+    public DbSet<CfpbResponse> CfpbResponses => Set<CfpbResponse>();
+
     /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserSettingConfiguration());
+        modelBuilder.ApplyConfiguration(new CfpbResponseConfiguration());
     }
 }

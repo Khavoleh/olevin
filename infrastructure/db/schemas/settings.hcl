@@ -109,3 +109,58 @@ table "user_settings" {
     expr = "timezone ~ '^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*$'"
   }
 }
+
+table "cfpb_responses" {
+  schema  = schema.settings
+  comment = "CFPB Financial Well-Being Scale answers given once at onboarding"
+
+  column "id" {
+    type    = uuid
+    default = sql("uuidv7()")
+    comment = "Response identifier"
+  }
+  column "user_id" {
+    type    = uuid
+    comment = "Owning user identifier"
+  }
+  column "answers" {
+    type    = sql("smallint[]")
+    comment = "Response values of the 10 statements in order"
+  }
+  column "is_62_plus" {
+    type    = boolean
+    comment = "Whether the respondent is 62 or older"
+  }
+  column "score" {
+    type    = smallint
+    comment = "Financial well-being score from the self-administered conversion table"
+  }
+  column "submitted_at" {
+    type    = timestamptz
+    default = sql("now()")
+    comment = "When the response was submitted"
+  }
+
+  primary_key {
+    columns = [column.id]
+  }
+
+  index "cfpb_responses_user_id_key" {
+    unique  = true
+    columns = [column.user_id]
+  }
+
+  foreign_key "cfpb_responses_user_id_fkey" {
+    columns     = [column.user_id]
+    ref_columns = [table.users.column.id]
+    on_delete   = CASCADE
+    on_update   = NO_ACTION
+  }
+
+  check "cfpb_responses_answers_shape" {
+    expr = "array_ndims(answers) = 1 AND cardinality(answers) = 10 AND array_position(answers, NULL) IS NULL AND 0 <= ALL(answers) AND 4 >= ALL(answers)"
+  }
+  check "cfpb_responses_score_range" {
+    expr = "score BETWEEN 14 AND 95"
+  }
+}
