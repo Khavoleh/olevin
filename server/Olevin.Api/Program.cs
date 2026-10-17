@@ -1,5 +1,6 @@
 using System.Text.Json.Serialization;
 using DotNetEnv;
+using MicroElements.AspNetCore.OpenApi.FluentValidation;
 using Npgsql;
 using Olevin.Api.Features.FinancialWellness;
 using Olevin.Api.Features.Settings;
@@ -40,8 +41,10 @@ builder.Host.UseWolverine(options =>
 });
 builder.Services.AddWolverineHttp();
 builder.Services.ConfigureHttpJsonOptions(options =>
-    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter())
-);
+{
+    options.SerializerOptions.NumberHandling = JsonNumberHandling.Strict;
+    options.SerializerOptions.Converters.Add(new JsonStringEnumConverter());
+});
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddExchangeRateApi(builder.Configuration);
@@ -51,7 +54,8 @@ builder.Services.AddJobs();
 builder.Services.AddLogtoAuthentication(builder.Configuration);
 builder.Services.AddProblemDetails();
 builder.Services.AddHealthChecks();
-builder.Services.AddOpenApi();
+builder.Services.AddFluentValidationRulesToOpenApi();
+builder.Services.AddOpenApi(options => options.AddFluentValidationRules());
 
 WebApplication app = builder.Build();
 

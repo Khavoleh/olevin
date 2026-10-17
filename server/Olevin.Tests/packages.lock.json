@@ -135,6 +135,23 @@
         "resolved": "2.79.1",
         "contentHash": "T4N6f318e7IrKgDc6lx58F5vvF6DJ0dXqDNZUF3CIofKqpkL00Vtk0nH+HSYdKB6uE77NuwLrTE1C/WdxTw0vg=="
       },
+      "MicroElements.AspNetCore.OpenApi.FluentValidation": {
+        "type": "Transitive",
+        "resolved": "7.2.2",
+        "contentHash": "yTUKFSqfUCWGZiHSAhoEBw9OPk2+7tZRXySP/M/aj7PxswJrTMb12f8jvQZ9dCfkOpmf5E+uASCrrFAlAAjeuA==",
+        "dependencies": {
+          "MicroElements.OpenApi.FluentValidation": "7.2.2",
+          "Microsoft.AspNetCore.OpenApi": "[10.0.0, 11.0.0)"
+        }
+      },
+      "MicroElements.OpenApi.FluentValidation": {
+        "type": "Transitive",
+        "resolved": "7.2.2",
+        "contentHash": "hbDGjmd4XGnEOmD4d8tIw/6Fsd9ybo6/L3bcyxfS7GhVMYa3hJeInrIS5e7kz4g6QTmfqBLfuh9TSVhamujZVw==",
+        "dependencies": {
+          "FluentValidation": "12.0.0"
+        }
+      },
       "Microsoft.ApplicationInsights": {
         "type": "Transitive",
         "resolved": "2.23.0",
@@ -1037,11 +1054,6 @@
           "Refit": "16.3.0"
         }
       },
-      "Riok.Mapperly": {
-        "type": "Transitive",
-        "resolved": "4.3.1",
-        "contentHash": "oSE+OVLHyiojrws0QVbQaAT2YKsYbyHqJXPdV7EhGseR/dYgeWS2x1T5qY5I4E+RJkJqMSG+FyZOq4SljWgJWQ=="
-      },
       "Scalar.AspNetCore": {
         "type": "Transitive",
         "resolved": "2.17.13",
@@ -1426,6 +1438,7 @@
         "dependencies": {
           "Coravel": "[6.0.2, )",
           "DotNetEnv": "[3.2.0, )",
+          "MicroElements.AspNetCore.OpenApi.FluentValidation": "[7.2.2, )",
           "Microsoft.AspNetCore.Authentication.JwtBearer": "[10.0.12, )",
           "Microsoft.AspNetCore.OpenApi": "[10.0.12, )",
           "Microsoft.Extensions.Http.Resilience": "[10.10.0, )",
@@ -1437,7 +1450,6 @@
           "OpenTelemetry.Instrumentation.Http": "[1.19.0, )",
           "OpenTelemetry.Instrumentation.Runtime": "[1.19.0, )",
           "Refit.HttpClientFactory": "[16.3.0, )",
-          "Riok.Mapperly": "[4.3.1, )",
           "Scalar.AspNetCore": "[2.17.13, )",
           "Serilog.AspNetCore": "[10.0.0, )",
           "Serilog.Enrichers.Environment": "[3.0.1, )",

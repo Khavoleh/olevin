@@ -11,7 +11,7 @@ public sealed partial class ConfigureUserSettingsValidator
 {
     private const int MaxTimezoneLength = 64;
 
-    [GeneratedRegex(@"^[A-Za-z0-9_+-]+(/[A-Za-z0-9_+-]+)*\z")]
+    [GeneratedRegex(@"^[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*$(?!\n)")]
     private static partial Regex TimezoneFormat();
 
     /// <summary>
