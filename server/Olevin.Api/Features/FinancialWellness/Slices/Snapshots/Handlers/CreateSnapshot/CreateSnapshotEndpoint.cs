@@ -35,7 +35,7 @@ public static class CreateSnapshotEndpoint
     /// The snapshot identifier (201), a bad request (400) for a month that is not allowed, a not found (404) without
     /// user settings, or a conflict (409) without onboarding or for a taken month.
     /// </returns>
-    [WolverinePost("/financial-wellness/v1/snapshots")]
+    [WolverinePost("/financial-wellness/v1/snapshots", OperationId = "CreateSnapshot")]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status400BadRequest)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]

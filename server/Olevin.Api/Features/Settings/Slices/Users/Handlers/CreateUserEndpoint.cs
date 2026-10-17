@@ -25,7 +25,7 @@ public static class CreateUserEndpoint
     /// <returns>
     /// The identifier of the created user (201), or a conflict (409) when the user already exists.
     /// </returns>
-    [WolverinePost("/settings/v1/user")]
+    [WolverinePost("/settings/v1/user", OperationId = "CreateUser")]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]
     public static async Task<Response<Guid>> Post(

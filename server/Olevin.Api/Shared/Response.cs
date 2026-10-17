@@ -1,19 +1,20 @@
 using System.Net;
 using System.Reflection;
+using System.Text.Json.Serialization;
 using Wolverine.Http;
 
 namespace Olevin.Api.Shared;
 
 /// <summary>
-/// The envelope every endpoint returns. The HTTP status is the same as <paramref name="Code"/>.
+/// The envelope every endpoint returns.
 /// </summary>
 /// <typeparam name="T">The type of the data.</typeparam>
-/// <param name="Code">The result code, an HTTP status code.</param>
+/// <param name="Code">The HTTP status code of the response, not a part of the body.</param>
 /// <param name="Error">The reason of the failure, or <see langword="null"/> on success.</param>
-/// <param name="Data">The result, or <see langword="null"/> on failure.</param>
+/// <param name="Data">The result, or the default value of <typeparamref name="T"/> on failure.</param>
 /// <param name="ValidationErrors">The failed validation rules, or <see langword="null"/> when the request is valid.</param>
 public sealed record Response<T>(
-    HttpStatusCode Code,
+    [property: JsonIgnore] HttpStatusCode Code,
     string? Error,
     T? Data,
     IReadOnlyList<string>? ValidationErrors

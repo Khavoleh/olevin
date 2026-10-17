@@ -36,7 +36,7 @@ public static class DeleteSnapshotEndpoint
     /// No content (204), a not found (404) without user settings or when the user has no such snapshot, or a
     /// conflict (409) for the only snapshot of the user.
     /// </returns>
-    [WolverineDelete("/financial-wellness/v1/snapshots/{id}")]
+    [WolverineDelete("/financial-wellness/v1/snapshots/{id}", OperationId = "DeleteSnapshot")]
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]

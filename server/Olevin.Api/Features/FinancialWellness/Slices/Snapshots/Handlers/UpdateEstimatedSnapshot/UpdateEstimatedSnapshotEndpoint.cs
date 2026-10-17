@@ -38,7 +38,10 @@ public static class UpdateEstimatedSnapshotEndpoint
     /// The estimate identifier (200), or a not found (404) without user settings or when the user has no such
     /// estimate.
     /// </returns>
-    [WolverinePut("/financial-wellness/v1/snapshots/estimates/{id}")]
+    [WolverinePut(
+        "/financial-wellness/v1/snapshots/estimates/{id}",
+        OperationId = "UpdateEstimatedSnapshot"
+    )]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
     public static async Task<Response<Guid>> Put(

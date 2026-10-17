@@ -37,7 +37,10 @@ public static class CreateFirstSnapshotEndpoint
     /// The identifier of the created snapshot (201), a not found (404) when the user or their settings don't exist,
     /// or a conflict (409) when the user already has snapshots.
     /// </returns>
-    [WolverinePost("/financial-wellness/v1/snapshots/onboarding")]
+    [WolverinePost(
+        "/financial-wellness/v1/snapshots/onboarding",
+        OperationId = "CreateFirstSnapshot"
+    )]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]

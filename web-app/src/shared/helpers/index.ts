@@ -1,5 +1,6 @@
 export { ApiError } from "./api/api-error";
 export { apiFetch } from "./api/api-fetch/api-fetch";
+export { apiRequest } from "./api/api-request";
 export { getApiToken } from "./api/get-api-token";
 export { getApiTokenRSC } from "./api/get-api-token-rsc";
 export { getIsAuthenticated } from "./auth/get-is-authenticated";

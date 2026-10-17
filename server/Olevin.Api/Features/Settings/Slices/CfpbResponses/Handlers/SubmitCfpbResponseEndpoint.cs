@@ -14,7 +14,7 @@ namespace Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers;
 /// <summary>
 /// Saves the CFPB Financial Well-Being Scale answers of the signed-in user during onboarding, once.
 /// </summary>
-[Tags("Settings")]
+[Tags("CfpbResponses")]
 public static class SubmitCfpbResponseEndpoint
 {
     /// <summary>
@@ -29,7 +29,7 @@ public static class SubmitCfpbResponseEndpoint
     /// a not found (404) when the user or their settings don't exist,
     /// or a conflict (409) when the user has already answered.
     /// </returns>
-    [WolverinePost("/settings/v1/cfpb-response")]
+    [WolverinePost("/settings/v1/cfpb-response", OperationId = "SubmitCfpbResponse")]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status403Forbidden)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]

@@ -29,7 +29,7 @@ public static class ConfigureUserSettingsEndpoint
     /// a not found (404) when the user does not exist,
     /// or a conflict (409) when the settings already exist.
     /// </returns>
-    [WolverinePost("/settings/v1/user-settings")]
+    [WolverinePost("/settings/v1/user-settings", OperationId = "ConfigureUserSettings")]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]

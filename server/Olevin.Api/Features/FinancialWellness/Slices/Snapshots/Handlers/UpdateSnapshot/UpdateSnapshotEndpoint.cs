@@ -37,7 +37,7 @@ public static class UpdateSnapshotEndpoint
     /// The snapshot identifier (200), or a not found (404) without user settings or when the user has no such
     /// snapshot.
     /// </returns>
-    [WolverinePut("/financial-wellness/v1/snapshots/{id}")]
+    [WolverinePut("/financial-wellness/v1/snapshots/{id}", OperationId = "UpdateSnapshot")]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
     public static async Task<Response<Guid>> Put(

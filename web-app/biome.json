@@ -41,5 +41,13 @@
 		"parser": {
 			"tailwindDirectives": true
 		}
-	}
+	},
+	"overrides": [
+		{
+			"includes": ["src/features/*/api/**"],
+			"linter": {
+				"enabled": false
+			}
+		}
+	]
 }
