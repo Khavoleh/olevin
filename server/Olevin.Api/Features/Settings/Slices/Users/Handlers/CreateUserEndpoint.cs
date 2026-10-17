@@ -22,11 +22,13 @@ public static class CreateUserEndpoint
     /// <param name="principal">The signed-in user.</param>
     /// <param name="db">The settings database.</param>
     /// <param name="ct">The cancellation token.</param>
-    /// <returns>The created user (201), or a conflict (409) when the user already exists.</returns>
+    /// <returns>
+    /// The identifier of the created user (201), or a conflict (409) when the user already exists.
+    /// </returns>
     [WolverinePost("/settings/v1/user")]
-    [ProducesResponseType<Response<bool>>(StatusCodes.Status201Created)]
-    [ProducesResponseType<Response<bool>>(StatusCodes.Status409Conflict)]
-    public static async Task<Response<bool>> Post(
+    [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]
+    public static async Task<Response<Guid>> Post(
         ClaimsPrincipal principal,
         SettingsDbContext db,
         CancellationToken ct
@@ -35,12 +37,12 @@ public static class CreateUserEndpoint
         string authSub = principal.GetSubject();
 
         if (await db.Users.AnyAsync(user => user.AuthSub == authSub, ct))
-            return Response<bool>.Fail(HttpStatusCode.Conflict, "The user already exists.");
+            return Response<Guid>.Fail(HttpStatusCode.Conflict, "The user already exists.");
 
         User user = new() { Id = Guid.CreateVersion7(), AuthSub = authSub };
 
         db.Users.Add(user);
 
-        return Response<bool>.Ok(true, HttpStatusCode.Created);
+        return Response<Guid>.Ok(user.Id, HttpStatusCode.Created);
     }
 }

@@ -25,14 +25,15 @@ public static class ConfigureUserSettingsEndpoint
     /// <param name="db">The settings database.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
-    /// The created settings (201), a not found (404) when the user does not exist,
+    /// The identifier of the user the settings were created for (201),
+    /// a not found (404) when the user does not exist,
     /// or a conflict (409) when the settings already exist.
     /// </returns>
     [WolverinePost("/settings/v1/user-settings")]
-    [ProducesResponseType<Response<bool>>(StatusCodes.Status201Created)]
-    [ProducesResponseType<Response<bool>>(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<Response<bool>>(StatusCodes.Status409Conflict)]
-    public static async Task<Response<bool>> Post(
+    [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
+    [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]
+    public static async Task<Response<Guid>> Post(
         ConfigureUserSettingsRequest request,
         ClaimsPrincipal principal,
         SettingsDbContext db,
@@ -46,10 +47,10 @@ public static class ConfigureUserSettingsEndpoint
             .FirstOrDefaultAsync(user => user.AuthSub == authSub, ct);
 
         if (user is null)
-            return Response<bool>.Fail(HttpStatusCode.NotFound, "The user does not exist.");
+            return Response<Guid>.Fail(HttpStatusCode.NotFound, "The user does not exist.");
 
         if (user.Setting is not null)
-            return Response<bool>.Fail(HttpStatusCode.Conflict, "The settings already exist.");
+            return Response<Guid>.Fail(HttpStatusCode.Conflict, "The settings already exist.");
 
         user.Setting = new UserSetting
         {
@@ -60,6 +61,6 @@ public static class ConfigureUserSettingsEndpoint
             ResearchConsent = request.ResearchConsent,
         };
 
-        return Response<bool>.Ok(true, HttpStatusCode.Created);
+        return Response<Guid>.Ok(user.Id, HttpStatusCode.Created);
     }
 }
