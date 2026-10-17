@@ -1,6 +1,6 @@
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 
 /// <summary>
 /// The expenses of a month by category.

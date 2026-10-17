@@ -1,4 +1,5 @@
 using FluentValidation;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Validators;
 

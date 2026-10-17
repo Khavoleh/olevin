@@ -1,8 +1,8 @@
 using FluentValidation.TestHelper;
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateSnapshot;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 using Olevin.Api.Shared;
 using Olevin.Tests.TestData;
 

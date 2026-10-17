@@ -1,5 +1,6 @@
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateSnapshot;
 

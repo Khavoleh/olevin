@@ -1,6 +1,7 @@
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Requests;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
 
 /// <summary>
 /// The first snapshot of a user, for the current month, with rough estimates of the 2 months before it.

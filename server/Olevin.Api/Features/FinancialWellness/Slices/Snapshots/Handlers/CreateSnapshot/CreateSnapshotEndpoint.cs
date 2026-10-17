@@ -89,7 +89,13 @@ public static class CreateSnapshotEndpoint
             return rejection;
 
         CurrencyCode baseCurrency = userSettings.BaseCurrency;
-        SnapshotAmounts amounts = CreateSnapshotMapping.ToAmounts(request);
+        SnapshotAmounts amounts = SnapshotAmountsMapping.ToAmounts(
+            request.Income,
+            request.Expenses,
+            request.Saved,
+            request.Reserves,
+            request.DebtPayments
+        );
 
         SnapshotRates rates = await FxRateLookup.FindAsync(
             db,

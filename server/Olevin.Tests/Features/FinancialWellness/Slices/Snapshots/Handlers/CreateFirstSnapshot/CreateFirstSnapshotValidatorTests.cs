@@ -1,12 +1,11 @@
 using FluentValidation.TestHelper;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Requests;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Validators;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 using Olevin.Api.Shared;
 using Olevin.Tests.TestData;
 
-namespace Olevin.Tests.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Validators;
+namespace Olevin.Tests.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
 
 public sealed class CreateFirstSnapshotValidatorTests
 {

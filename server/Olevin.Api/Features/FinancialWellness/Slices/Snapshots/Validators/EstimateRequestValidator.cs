@@ -1,11 +1,10 @@
 using FluentValidation;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Requests;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Validators;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Validators;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Validators;
 
 /// <summary>
-/// Validates a rough month of the onboarding:.
+/// Validates a rough month before the first snapshot.
 /// </summary>
 public sealed class EstimateRequestValidator : AbstractValidator<EstimateRequest>
 {

@@ -1,6 +1,7 @@
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Indicators;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 using Olevin.Api.Shared;
 
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;

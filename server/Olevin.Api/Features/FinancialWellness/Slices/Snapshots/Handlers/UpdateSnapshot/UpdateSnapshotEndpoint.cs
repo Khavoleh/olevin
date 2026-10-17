@@ -73,7 +73,13 @@ public static class UpdateSnapshotEndpoint
 
         SnapshotMonth month = SnapshotHistoryMapping.MonthOf(snapshot);
 
-        snapshot.Amounts = UpdateSnapshotMapping.ToAmounts(request);
+        snapshot.Amounts = SnapshotAmountsMapping.ToAmounts(
+            request.Income,
+            request.Expenses,
+            request.Saved,
+            request.Reserves,
+            request.DebtPayments
+        );
         snapshot.SelfRating = (short)request.SelfRating;
 
         Dictionary<SnapshotMonth, SnapshotScore> scores = await SnapshotRescorer.ScoreAsync(

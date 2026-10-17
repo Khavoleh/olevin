@@ -1,8 +1,7 @@
 using FluentValidation;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Requests;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Validators;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot.Validators;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
 
 /// <summary>
 /// Validates the first snapshot and its estimates.
