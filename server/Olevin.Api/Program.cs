@@ -9,6 +9,7 @@ using Olevin.Api.Infrastructure.Database;
 using Olevin.Api.Infrastructure.ExchangeRate;
 using Olevin.Api.Infrastructure.Jobs;
 using Olevin.Api.Infrastructure.Telemetry;
+using Olevin.Api.Infrastructure.Validation;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
@@ -16,7 +17,6 @@ using Wolverine.EntityFrameworkCore;
 using Wolverine.ErrorHandling;
 using Wolverine.FluentValidation;
 using Wolverine.Http;
-using Wolverine.Http.FluentValidation;
 
 Env.TraversePath().NoClobber().Load();
 
@@ -78,6 +78,6 @@ if (app.Environment.IsDevelopment())
 }
 
 app.MapHealthChecks("/health").AllowAnonymous();
-app.MapWolverineEndpoints(options => options.UseFluentValidationProblemDetailMiddleware());
+app.MapWolverineEndpoints(options => options.AddPolicy<ValidationPolicy>());
 
 await app.RunAsync();
