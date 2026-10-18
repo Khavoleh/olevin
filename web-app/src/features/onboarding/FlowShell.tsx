@@ -1,26 +1,28 @@
-import { CaretLeft } from "@phosphor-icons/react/dist/ssr";
+import { CaretLeftIcon } from "@phosphor-icons/react/dist/ssr";
 import { PAGE_URLS } from "@shared/constants";
 import { getI18n, getLanguageUrl } from "@shared/helpers";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { FLOW_SHELL_I18N } from "./flow-shell-i18n";
-import { ONBOARDING_STEPS } from "./onboarding-steps";
+import { ONBOARDING_STAGES } from "./constants/onboarding-stages";
+import { ONBOARDING_STEPS } from "./constants/onboarding-steps";
+import { FLOW_SHELL_I18N } from "./i18n/flow-shell-i18n";
 
 interface FlowShellProps {
 	language: string;
-	/** Number of the current step, starting from 1. */
 	step: number;
 	children: ReactNode;
 }
 
-/** Frame of the onboarding: progress bar and the back link on top, one step below, no app navigation. */
+/** Frame of the onboarding: progress and the back link. */
 const FlowShell = ({ language, step, children }: Readonly<FlowShellProps>) => {
 	const t = getI18n(language, FLOW_SHELL_I18N);
 	const totalSteps = ONBOARDING_STEPS.length;
-	const backHref =
-		step > 1
-			? getLanguageUrl(`${PAGE_URLS.ONBOARDING}/${step - 1}`, language)
-			: undefined;
+	const stage = Object.values(ONBOARDING_STAGES).find((steps) =>
+		steps.includes(step),
+	);
+	const backHref = stage?.includes(step - 1)
+		? getLanguageUrl(`${PAGE_URLS.ONBOARDING}/${step - 1}`, language)
+		: undefined;
 
 	return (
 		<div className="flex h-dvh flex-col">
@@ -32,7 +34,7 @@ const FlowShell = ({ language, step, children }: Readonly<FlowShellProps>) => {
 							aria-label={t("back")}
 							className="flex size-11 items-center justify-center rounded-md text-fg hover:bg-surface-hover"
 						>
-							<CaretLeft size={22} />
+							<CaretLeftIcon size={22} />
 						</Link>
 					)}
 				</div>

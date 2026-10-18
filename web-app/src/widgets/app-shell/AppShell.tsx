@@ -1,9 +1,9 @@
 import {
-	House,
-	ListBullets,
-	Plus,
-	TrendUp,
-	User,
+	HouseIcon,
+	ListBulletsIcon,
+	PlusIcon,
+	TrendUpIcon,
+	UserIcon,
 } from "@phosphor-icons/react/dist/ssr";
 import { Logo } from "@shared/components";
 import { PAGE_URLS } from "@shared/constants";
@@ -54,7 +54,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 					href={url(PAGE_URLS.NEW_SNAPSHOT)}
 					className="flex size-12 flex-none items-center justify-center gap-2 rounded-lg bg-primary font-semibold text-on-primary transition-colors hover:bg-primary-hover active:bg-primary-pressed lg:h-11 lg:w-full lg:justify-start lg:rounded-md lg:px-3.5"
 				>
-					<Plus size={20} />
+					<PlusIcon size={20} />
 					<span className="sr-only lg:not-sr-only">{t("new_snapshot")}</span>
 				</AppNavLink>
 
@@ -67,7 +67,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 						href={url(PAGE_URLS.HOME)}
 						className={SIDE_ITEM_CLASSES}
 					>
-						<House size={20} />
+						<HouseIcon size={20} />
 						<span>{t("overview")}</span>
 					</AppNavLink>
 					<AppNavLink
@@ -75,7 +75,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 						href={url(PAGE_URLS.TREND)}
 						className={SIDE_ITEM_CLASSES}
 					>
-						<TrendUp size={20} />
+						<TrendUpIcon size={20} />
 						<span>{t("trend")}</span>
 					</AppNavLink>
 					<AppNavLink
@@ -83,7 +83,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 						href={url(PAGE_URLS.SNAPSHOTS)}
 						className={SIDE_ITEM_CLASSES}
 					>
-						<ListBullets size={20} />
+						<ListBulletsIcon size={20} />
 						<span>{t("history")}</span>
 					</AppNavLink>
 				</nav>
@@ -94,7 +94,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 						href={url(PAGE_URLS.PROFILE)}
 						className={SIDE_ITEM_CLASSES}
 					>
-						<User size={20} />
+						<UserIcon size={20} />
 						<span>{t("profile")}</span>
 					</AppNavLink>
 					<LegalLinks
@@ -123,7 +123,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 					href={url(PAGE_URLS.HOME)}
 					className={TAB_ITEM_CLASSES}
 				>
-					<House size={22} />
+					<HouseIcon size={22} />
 					<span>{t("overview")}</span>
 				</AppNavLink>
 				<AppNavLink
@@ -131,7 +131,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 					href={url(PAGE_URLS.TREND)}
 					className={TAB_ITEM_CLASSES}
 				>
-					<TrendUp size={22} />
+					<TrendUpIcon size={22} />
 					<span>{t("trend")}</span>
 				</AppNavLink>
 				<AppNavLink
@@ -141,7 +141,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 					className="flex flex-col items-center gap-0.5 py-1 font-medium text-fg-muted text-xs aria-[current=page]:font-semibold aria-[current=page]:text-primary"
 				>
 					<span className="-mt-5 flex size-12 items-center justify-center rounded-full bg-primary text-on-primary shadow-raised">
-						<Plus size={24} />
+						<PlusIcon size={24} />
 					</span>
 					<span>{t("new_snapshot_short")}</span>
 				</AppNavLink>
@@ -150,7 +150,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 					href={url(PAGE_URLS.SNAPSHOTS)}
 					className={TAB_ITEM_CLASSES}
 				>
-					<ListBullets size={22} />
+					<ListBulletsIcon size={22} />
 					<span>{t("history")}</span>
 				</AppNavLink>
 				<AppNavLink
@@ -158,7 +158,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 					href={url(PAGE_URLS.PROFILE)}
 					className={TAB_ITEM_CLASSES}
 				>
-					<User size={22} />
+					<UserIcon size={22} />
 					<span>{t("profile")}</span>
 				</AppNavLink>
 			</nav>

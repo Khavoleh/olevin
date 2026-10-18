@@ -42,29 +42,38 @@ app → features → widgets → shared
 
 Each slice is a self-contained folder at the layer root. Everything inside stays private behind the single top-level barrel:
 
+The root component and `index.ts` sit at the slice root. Two or more files of the same kind go into a kind folder (`components/`, `constants/`, `helpers/`, `i18n/`, `api/` for Orval output); a lone file of its kind stays at the root. An item with its own test gets its own sub-folder inside the kind folder. None of these folders has an `index.ts`.
+
 ```
-src/features/home/
-  Home.tsx               ← root component (entry point for the slice)
-  index.ts               ← barrel: export { default } from './Home'
-  home-i18n.ts           ← slice-local translations
-  MeInfo.tsx             ← sub-component (server)
-  MeDetails.tsx          ← sub-component ("use client")
-  MeInfoSkeleton.tsx
-  sign-out.ts            ← Server Action ("use server") used only by this slice
-  me/                    ← group of related logic — NO index.ts here
-    fetch-me.ts
-    get-me.ts
-    me-query-key.ts
+src/features/onboarding/
+  Onboarding.tsx         ← root component (entry point for the slice)
+  index.ts               ← barrel
+  FlowShell.tsx          ← the only other component, so no components/ folder
+  api/                   ← Orval client of the `Onboarding` API tag
+  constants/
+    onboarding-stages.ts
+    onboarding-steps.ts
+  helpers/
+    get-onboarding-page/ ← item with a test
+      get-onboarding-page.ts
+      get-onboarding-page.unit.ts
+    get-onboarding-step/
+      get-onboarding-step.ts
+      get-onboarding-step.unit.ts
+    sync-onboarding-status.ts
+  i18n/
+    flow-shell-i18n.ts
+    onboarding-i18n.ts
 ```
 
-`Home.tsx` imports its parts via direct relative paths:
+`Onboarding.tsx` imports its parts via direct relative paths:
 
 ```ts
-import MeInfo from "./MeInfo";
-import { signOut } from "./sign-out";
+import { ONBOARDING_I18N } from "./i18n/onboarding-i18n";
+import { ONBOARDING_STEPS } from "./constants/onboarding-steps";
 ```
 
-Nothing outside `src/features/home/` ever imports from inside it — only through `index.ts`.
+Nothing outside `src/features/onboarding/` ever imports from inside it — only through `index.ts`.
 
 The barrel exports the default component, plus **named** exports only for what a route genuinely needs (e.g. `features/onboarding` also exports `FlowShell` for the step layout and `getOnboardingStep`/`ONBOARDING_STEPS` for `generateStaticParams` and `notFound()`). Don't export anything "just in case".
 

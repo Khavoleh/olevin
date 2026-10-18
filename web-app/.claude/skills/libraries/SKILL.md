@@ -32,7 +32,7 @@ Prefer the tools already in the project; add a dependency only when it clearly e
 - **Server data in the browser:** `@tanstack/react-query` (5) — server prefetch + `HydrationBoundary`, client `useQuery` with a Server Action as `queryFn`. Client from `makeQueryClient` / `getQueryClient` (shared helpers). Don't add SWR, axios or another fetch wrapper — `apiFetch` over native `fetch` is the API client.
 - **Validation:** `zod` (4) — API responses (`apiFetch` schema), env vars, form input. Import as `import { z } from "zod"`.
 - **Interactive UI:** `react-aria-components` — buttons, toggles, dialogs, menus, selects, date fields, forms. Use it before writing custom interactive components or adding another UI kit (no Radix, Headless UI, MUI, shadcn).
-- **Icons:** `@phosphor-icons/react` — `/dist/ssr` in Server Components. Don't add another icon set.
+- **Icons:** `@phosphor-icons/react` — `/dist/ssr` in Server Components. Import the `Icon`-suffixed names (`HouseIcon`, `CaretLeftIcon`); the bare names (`House`) are deprecated. Don't add another icon set.
 - **Client state:** `zustand` (5) — installed, not used yet. Reach for it only for client state shared by distant components that `useState`, props or the URL can't cover; never for server data (that's TanStack Query).
 - **Dates/numbers:** native `Intl` (`DateTimeFormat`, `NumberFormat`) — no date library so far; justify one before adding.
 - **Animation:** Tailwind transitions + CSS; no motion library.

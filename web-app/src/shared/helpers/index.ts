@@ -1,9 +1,8 @@
 export { ApiError } from "./api/api-error";
-export { apiFetch } from "./api/api-fetch/api-fetch";
 export { apiRequest } from "./api/api-request";
 export { getApiToken } from "./api/get-api-token";
-export { getApiTokenRSC } from "./api/get-api-token-rsc";
 export { getIsAuthenticated } from "./auth/get-is-authenticated";
+export { getIsOnboarded } from "./auth/get-is-onboarded";
 export { getLogtoConfig } from "./auth/get-logto-config";
 export { getI18n } from "./get-i18n/get-i18n";
 export { getLanguage } from "./language/get-language/get-language";

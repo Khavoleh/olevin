@@ -5,6 +5,7 @@ import {
 } from "@shared/constants";
 import {
 	getIsAuthenticated,
+	getIsOnboarded,
 	getLanguage,
 	getLanguageUrl,
 	getPathLanguage,
@@ -22,10 +23,7 @@ function redirectTo(request: NextRequest, pathname: string): NextResponse {
 	});
 }
 
-/**
- * Puts the language into the URL and lets only signed-in users into non-public pages.
- * Both checks run here, so the pages themselves stay static.
- */
+/** Adds the language to the URL and lets only signed-in, onboarded users into the app. */
 export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
 	const language = getPathLanguage(pathname);
@@ -41,14 +39,26 @@ export async function proxy(request: NextRequest) {
 
 	const page = pathname.slice(language.length + 1) || PAGE_URLS.HOME;
 
-	if (PUBLIC_PAGE_URLS.includes(page) || (await getIsAuthenticated(request))) {
+	if (PUBLIC_PAGE_URLS.includes(page)) {
 		return NextResponse.next();
 	}
 
-	return redirectTo(request, getLanguageUrl(PAGE_URLS.SIGN_IN, language));
+	if (!(await getIsAuthenticated(request))) {
+		return redirectTo(request, getLanguageUrl(PAGE_URLS.SIGN_IN, language));
+	}
+
+	const isOnboarding =
+		page === PAGE_URLS.ONBOARDING ||
+		page.startsWith(`${PAGE_URLS.ONBOARDING}/`);
+
+	if (isOnboarding || getIsOnboarded(request)) {
+		return NextResponse.next();
+	}
+
+	return redirectTo(request, getLanguageUrl(PAGE_URLS.ONBOARDING, language));
 }
 
-/** Requests the proxy runs for: everything except the API, Next.js internals, auth callback, health check and files. */
+/** Requests the proxy runs for everything except the API, Next.js internals, auth callback, health check and files. */
 export const config = {
 	matcher: ["/((?!api|_next|callback|health|.*\\..*).*)"],
 };

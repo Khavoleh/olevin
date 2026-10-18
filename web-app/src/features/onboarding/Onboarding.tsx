@@ -1,17 +1,16 @@
 import { getI18n } from "@shared/helpers";
-import { ONBOARDING_I18N } from "./onboarding-i18n";
-import { ONBOARDING_STEPS } from "./onboarding-steps";
+import { ONBOARDING_STEPS } from "./constants/onboarding-steps";
+import { ONBOARDING_I18N } from "./i18n/onboarding-i18n";
 
 interface OnboardingProps {
 	language: string;
-	/** Number of the current step, starting from 1. */
 	step: number;
 }
 
-/** Steps with a note under their name in the list of steps. */
-const STEPS_WITH_NOTE = [7, 8];
+/** Steps with a note under their name. */
+const STEPS_WITH_NOTE = [6, 7];
 
-/** Onboarding step: the list of steps next to the step on a tablet and wider, the step alone on a phone. */
+/** Onboarding step with the list of steps. */
 const Onboarding = ({ language, step }: Readonly<OnboardingProps>) => {
 	const t = getI18n(language, ONBOARDING_I18N);
 
@@ -62,7 +61,7 @@ const Onboarding = ({ language, step }: Readonly<OnboardingProps>) => {
 
 			<section
 				className={`grid min-w-0 content-start gap-4 ${
-					step === 7 ? "max-w-flow-wide" : "max-w-flow"
+					step === 6 ? "max-w-flow-wide" : "max-w-flow"
 				}`}
 			>
 				<h1>{t(`step_${step}`)}</h1>

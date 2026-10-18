@@ -6,7 +6,7 @@ import {
 import { notFound } from "next/navigation";
 import type { ReactNode } from "react";
 
-/** Builds the page of every step, so the steps are static. */
+/** Prerenders every step. */
 export const generateStaticParams = () =>
 	ONBOARDING_STEPS.map((step) => ({ step: String(step) }));
 
@@ -15,7 +15,7 @@ interface OnboardingLayoutProps {
 	params: Promise<{ lang: string; step: string }>;
 }
 
-/** Frame of the onboarding: progress and the back link, without the app navigation. */
+/** Layout of an onboarding step. */
 const OnboardingLayout = async ({
 	children,
 	params,

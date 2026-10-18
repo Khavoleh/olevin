@@ -5,7 +5,7 @@ interface OnboardingPageProps {
 	params: Promise<{ lang: string; step: string }>;
 }
 
-/** Route of one onboarding step. */
+/** Page of an onboarding step. */
 const OnboardingPage = async ({ params }: Readonly<OnboardingPageProps>) => {
 	const { lang, step: segment } = await params;
 	const step = getOnboardingStep(segment);
