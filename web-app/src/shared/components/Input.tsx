@@ -27,7 +27,7 @@ const Input = ({ className, ...props }: Readonly<AriaInputProps>) => {
 						(isHovered && STATE_CLASSES.hovered) ||
 						STATE_CLASSES.idle;
 
-					return `min-h-11 w-full rounded-md border bg-surface px-3 text-fg outline-none transition-colors ${border} ${customClasses ?? ""}`;
+					return `min-h-11 w-full rounded-md border bg-surface px-3 text-fg transition-colors ${border} ${customClasses ?? ""}`;
 				},
 			)}
 		/>

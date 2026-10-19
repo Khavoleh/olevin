@@ -10,9 +10,9 @@ import {
 	Popover,
 } from "react-aria-components";
 import FieldError from "../FieldError";
-import Input from "../Input";
 import Label from "../Label";
 import Text from "../Text";
+import ComboBoxInput from "./ComboBoxInput";
 
 interface ComboBoxProps<T extends object>
 	extends Omit<AriaComboBoxProps<T>, "className" | "children"> {
@@ -40,7 +40,7 @@ const ComboBox = <T extends object>({
 		<AriaComboBox {...props} className={`grid gap-1.5 ${className}`}>
 			<Label variant={labelVariant}>{label}</Label>
 			<div className="relative">
-				<Input className="pr-11" />
+				<ComboBoxInput />
 				<Button
 					aria-label={buttonLabel}
 					className="absolute inset-y-0 right-0 flex w-11 cursor-pointer items-center justify-center text-fg-muted outline-none"
@@ -54,7 +54,7 @@ const ComboBox = <T extends object>({
 				</Text>
 			)}
 			<FieldError>{errorMessage}</FieldError>
-			<Popover className="w-(--trigger-width) overflow-hidden rounded-lg border border-border bg-surface shadow-overlay">
+			<Popover className="w-(--trigger-width) overflow-hidden rounded-lg border border-border bg-surface shadow-overlay data-entering:animate-popover-in data-exiting:animate-popover-out data-[placement=top]:[--popover-shift:4px]">
 				<ListBox className="max-h-72 overflow-y-auto p-1 outline-none">
 					{children}
 				</ListBox>

@@ -179,7 +179,7 @@
 	--color-input-hover: var(--ink-700); /* field border on hover */
 	--color-input-invalid: var(--color-danger); /* invalid field border */
 	--color-input-disabled: var(--ink-400); /* disabled field border */
-	--color-ring: var(--violet-500); /* 2px focus ring with 2px offset */
+	--color-ring: var(--violet-500); /* 2px focus ring without offset */
 
 	/* Brand */
 	--color-primary: var(--violet-600); /* main buttons, links, active tab */
@@ -286,6 +286,23 @@
 	--container-profile: 47.5rem; /* 760px: profile */
 
 	--ease-standard: cubic-bezier(0.2, 0, 0, 1);
+
+	--animate-popover-in: popover-in 200ms var(--ease-standard);
+	--animate-popover-out: popover-out 200ms ease-in forwards;
+
+	@keyframes popover-in {
+		from {
+			opacity: 0;
+			translate: 0 var(--popover-shift, -4px);
+		}
+	}
+
+	@keyframes popover-out {
+		to {
+			opacity: 0;
+			translate: 0 var(--popover-shift, -4px);
+		}
+	}
 }
 
 /* ---------- 4. Base styles ---------- */
@@ -311,9 +328,23 @@
 		opacity: 1;
 	}
 
-	:focus-visible {
-		outline: 2px solid var(--color-ring);
-		outline-offset: 2px;
+	* {
+		outline: 2px solid transparent;
+		outline-offset: 0;
+		transition-property: outline-color;
+		transition-duration: var(--default-transition-duration);
+		transition-timing-function: var(--ease-standard);
+	}
+
+	:focus-visible,
+	[data-focus-visible] {
+		outline-color: var(--color-ring);
+	}
+
+	@media (forced-colors: active) {
+		:not(:focus-visible, [data-focus-visible]) {
+			outline-style: none;
+		}
 	}
 
 	/* biome-ignore-start lint/complexity/noImportantStyles: must win over any component animation */

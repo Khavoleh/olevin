@@ -14,22 +14,34 @@ const subscribeToClient = () => () => {};
 const getIsClient = () => true;
 const getIsServer = () => false;
 
-const getOffset = (timeZone: string) =>
-	new Intl.DateTimeFormat("en", { timeZone, timeZoneName: "longOffset" })
+const getTimezoneName = (
+	language: string,
+	timeZone: string,
+	timeZoneName: "longOffset" | "longGeneric",
+) =>
+	new Intl.DateTimeFormat(language, { timeZone, timeZoneName })
 		.formatToParts()
 		.find((part) => part.type === "timeZoneName")?.value ?? "";
 
-const getTimezoneOption = (id: string) => ({
-	id,
-	label: `${id.replaceAll("_", " ")} (${getOffset(id)})`,
-});
+const getTimezoneOption = (language: string, id: string) => {
+	const offset = getTimezoneName("en", id, "longOffset");
+	const name = getTimezoneName(language, id, "longGeneric");
 
-const getTimezoneOptions = () => {
+	return {
+		id,
+		label: `${id.replaceAll("_", " ")} (${offset})`,
+		description: name.startsWith("GMT") ? undefined : name,
+	};
+};
+
+const getTimezoneOptions = (language: string) => {
 	const zones = Intl.supportedValuesOf("timeZone").map(
 		(zone) => RENAMED_TIMEZONES[zone] ?? zone,
 	);
 
-	return [...new Set(zones)].sort().map(getTimezoneOption);
+	return [...new Set(zones)]
+		.sort()
+		.map((zone) => getTimezoneOption(language, zone));
 };
 
 interface TimezoneFieldProps {
@@ -53,11 +65,13 @@ const TimezoneField = ({
 		getIsServer,
 	);
 	const zones = useMemo(
-		() => (isClient ? getTimezoneOptions() : []),
-		[isClient],
+		() => (isClient ? getTimezoneOptions(language) : []),
+		[isClient, language],
 	);
 	const isListed = !timezone || zones.some((zone) => zone.id === timezone);
-	const options = isListed ? zones : [...zones, getTimezoneOption(timezone)];
+	const options = isListed
+		? zones
+		: [...zones, getTimezoneOption(language, timezone)];
 
 	return (
 		<ComboBox
@@ -78,7 +92,11 @@ const TimezoneField = ({
 			validationBehavior="aria"
 		>
 			{(option) => (
-				<ComboBoxItem id={option.id} textValue={option.label}>
+				<ComboBoxItem
+					id={option.id}
+					textValue={option.label}
+					description={option.description}
+				>
 					{option.label}
 				</ComboBoxItem>
 			)}

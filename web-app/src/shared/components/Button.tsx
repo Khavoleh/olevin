@@ -36,19 +36,15 @@ const Button = ({
 			{...props}
 			className={composeRenderProps(
 				className,
-				(
-					customClasses,
-					{ isHovered, isPressed, isFocusVisible, isDisabled },
-				) => {
+				(customClasses, { isHovered, isPressed, isDisabled }) => {
 					const { base, idle, hovered, pressed } = VARIANT_CLASSES[variant];
 					const background =
 						(isPressed && pressed) || (isHovered && hovered) || idle;
-					const focus = isFocusVisible ? "ring-2 ring-ring ring-offset-2" : "";
 					const disabled = isDisabled
 						? "cursor-default opacity-45"
 						: "cursor-pointer";
 
-					return `inline-flex min-h-11 items-center justify-center rounded-md px-4.5 font-semibold outline-none transition-colors ${base} ${background} ${focus} ${disabled} ${customClasses}`;
+					return `inline-flex min-h-11 items-center justify-center rounded-md px-4.5 font-semibold transition-colors ${base} ${background} ${disabled} ${customClasses}`;
 				},
 			)}
 		/>

@@ -22,14 +22,13 @@ const ToggleButton = ({
 			{...props}
 			className={composeRenderProps(
 				className,
-				(customClasses, { isSelected, isHovered, isFocusVisible }) => {
+				(customClasses, { isSelected, isHovered }) => {
 					const colors =
 						(isSelected && STATE_CLASSES.selected) ||
 						(isHovered && STATE_CLASSES.hovered) ||
 						STATE_CLASSES.idle;
-					const focus = isFocusVisible ? "ring-2 ring-ring" : "";
 
-					return `min-h-10 cursor-pointer rounded-sm px-3 font-semibold text-sm outline-none transition-colors ${colors} ${focus} ${customClasses ?? ""}`;
+					return `min-h-10 cursor-pointer rounded-[calc(var(--radius-md)-1px)] px-3 font-semibold text-sm transition-colors ${colors} ${customClasses ?? ""}`;
 				},
 			)}
 		/>

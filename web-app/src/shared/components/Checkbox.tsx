@@ -34,19 +34,19 @@ const Checkbox = ({
 }: Readonly<CheckboxProps>) => {
 	return (
 		<CheckboxField {...props} className={`grid gap-1 ${className}`}>
-			<CheckboxButton className="flex cursor-pointer items-start gap-3">
+			<CheckboxButton className="flex cursor-pointer items-start gap-3 outline-none">
 				{({ isSelected, isHovered, isFocusVisible }) => {
 					const box =
 						(isSelected && STATE_CLASSES.selected) ||
 						(isHovered && STATE_CLASSES.hovered) ||
 						STATE_CLASSES.idle;
-					const focus = isFocusVisible ? "ring-2 ring-ring ring-offset-2" : "";
 
 					return (
 						<>
 							<span
 								aria-hidden="true"
-								className={`mt-0.5 flex size-5 flex-none items-center justify-center rounded-sm border-2 transition-colors ${box} ${focus}`}
+								data-focus-visible={isFocusVisible || undefined}
+								className={`mt-0.5 flex size-5 flex-none items-center justify-center rounded-sm border-2 transition-colors ${box}`}
 							>
 								{isSelected && <CheckIcon size={14} weight="bold" />}
 							</span>

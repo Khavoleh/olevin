@@ -17,7 +17,7 @@ const ToggleButtonGroup = ({
 			className={composeRenderProps(
 				className,
 				(customClasses) =>
-					`inline-flex rounded-md border border-input bg-surface p-0.5 ${customClasses ?? ""}`,
+					`inline-flex rounded-md border border-input bg-surface ${customClasses ?? ""}`,
 			)}
 		/>
 	);

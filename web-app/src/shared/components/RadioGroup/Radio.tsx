@@ -22,17 +22,16 @@ const Radio = ({ children, ...props }: Readonly<RadioProps>) => {
 	return (
 		<RadioField {...props}>
 			<RadioButton
-				className={({ isSelected, isHovered, isFocusVisible, isDisabled }) => {
+				className={({ isSelected, isHovered, isDisabled }) => {
 					const colors =
 						(isSelected && STATE_CLASSES.selected) ||
 						(isHovered && STATE_CLASSES.hovered) ||
 						STATE_CLASSES.idle;
-					const focus = isFocusVisible ? "ring-2 ring-ring" : "";
 					const disabled = isDisabled
 						? "cursor-default opacity-45"
 						: "cursor-pointer";
 
-					return `flex min-h-11 items-center gap-3 rounded-md border px-4 py-2.5 transition-colors ${colors} ${focus} ${disabled}`;
+					return `flex min-h-11 items-center gap-3 rounded-md border px-4 py-2.5 transition-colors ${colors} ${disabled}`;
 				}}
 			>
 				{({ isSelected }) => (
