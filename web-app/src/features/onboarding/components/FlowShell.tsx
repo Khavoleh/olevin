@@ -25,8 +25,8 @@ const FlowShell = ({ language, step, children }: Readonly<FlowShellProps>) => {
 		: undefined;
 
 	return (
-		<div className="flex h-dvh flex-col">
-			<header className="flex items-center gap-3 border-border border-b bg-surface px-4 py-2">
+		<div className="flex min-h-dvh flex-col">
+			<header className="sticky top-0 z-10 flex items-center gap-3 border-border border-b bg-surface px-4 py-2">
 				<div className="size-11 flex-none">
 					{backHref && (
 						<Link
@@ -56,7 +56,7 @@ const FlowShell = ({ language, step, children }: Readonly<FlowShellProps>) => {
 				</span>
 			</header>
 
-			<main className="min-h-0 flex-1 overflow-y-auto px-4 pt-5 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] md:p-8">
+			<main className="flex-1 px-4 pt-5 pb-[calc(env(safe-area-inset-bottom)+1.5rem)] md:p-8">
 				{children}
 			</main>
 		</div>

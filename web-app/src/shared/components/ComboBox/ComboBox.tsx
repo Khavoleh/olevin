@@ -54,7 +54,7 @@ const ComboBox = <T extends object>({
 				</Text>
 			)}
 			<FieldError>{errorMessage}</FieldError>
-			<Popover className="w-(--trigger-width) overflow-hidden rounded-lg border border-border bg-surface shadow-overlay data-entering:animate-popover-in data-exiting:animate-popover-out data-[placement=top]:[--popover-shift:4px]">
+			<Popover className="z-20 w-(--trigger-width) overflow-hidden rounded-lg border border-border bg-surface shadow-overlay data-entering:animate-popover-in data-exiting:animate-popover-out data-[placement=top]:[--popover-shift:4px]">
 				<ListBox className="max-h-72 overflow-y-auto p-1 outline-none">
 					{children}
 				</ListBox>
