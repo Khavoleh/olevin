@@ -2,7 +2,14 @@
 
 import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { Button, Checkbox, Label, NumberField, Text } from "@shared/components";
+import {
+	Button,
+	Checkbox,
+	Label,
+	NumberField,
+	Text,
+	useFormErrorToast,
+} from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import LanguageSwitcher from "@widgets/language-switcher";
 import { useActionState, useEffect } from "react";
@@ -40,7 +47,8 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 		shouldValidate: "onBlur",
 		shouldRevalidate: "onInput",
 	});
-	const hasFormError = !!form.errors || !!fields.locale.errors;
+
+	useFormErrorToast(lastResult);
 
 	useEffect(() => {
 		void useOnboardingStore.persist.rehydrate()?.then(() => {
@@ -120,15 +128,6 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 					{t("research_consent_label")}
 				</Checkbox>
 			</div>
-
-			{hasFormError && (
-				<p
-					role="alert"
-					className="rounded-md border border-danger-border bg-danger-soft px-3 py-2 text-danger text-sm"
-				>
-					{t("save_error")}
-				</p>
-			)}
 
 			<Button
 				type="submit"

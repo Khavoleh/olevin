@@ -94,10 +94,10 @@ Each category in `src/shared/` has one `index.ts` that re-exports everything by 
 ```
 src/shared/helpers/
   api/                   ← topic group — NO index.ts
-    api-error.ts
-    api-fetch/           ← multi-file item — NO index.ts
-      api-fetch.ts
-      api-fetch.unit.ts
+    api-error/           ← multi-file item — NO index.ts
+      api-error.ts
+      api-error.unit.ts
+    api-request.ts
   get-i18n/
     get-i18n.ts
     get-i18n.unit.ts
@@ -106,8 +106,8 @@ src/shared/helpers/
 
 ```ts
 // src/shared/helpers/index.ts
-export { ApiError } from "./api/api-error";
-export { apiFetch } from "./api/api-fetch/api-fetch";
+export { ApiError } from "./api/api-error/api-error";
+export { apiRequest } from "./api/api-request";
 export { getI18n } from "./get-i18n/get-i18n";
 ```
 

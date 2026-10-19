@@ -24,7 +24,6 @@ export const SETTINGS_STEP_I18N: I18N = {
 			"I agree that my anonymised answers may be used for research",
 		research_consent_hint:
 			"If you agree, you will fill in a short questionnaire later.",
-		save_error: "Couldn't save the settings. Check them and try again.",
 		continue: "Continue",
 	},
 	uk: {
@@ -48,8 +47,6 @@ export const SETTINGS_STEP_I18N: I18N = {
 		research_consent_label:
 			"Погоджуюся, що мої знеособлені відповіді можуть використовуватися для досліджень",
 		research_consent_hint: "Якщо погодитеся, згодом заповните коротку анкету.",
-		save_error:
-			"Не вдалося зберегти налаштування. Перевірте їх і спробуйте ще раз.",
 		continue: "Далі",
 	},
 };

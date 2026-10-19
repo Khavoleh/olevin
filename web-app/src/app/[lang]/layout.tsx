@@ -1,3 +1,4 @@
+import { ToastRegion } from "@shared/components";
 import { getI18n, getLanguageStaticParams } from "@shared/helpers";
 import { APP_I18N } from "@shared/i18n";
 import type { Metadata, Viewport } from "next";
@@ -39,7 +40,10 @@ const RootLayout = async ({ children, params }: Readonly<RootLayoutProps>) => {
 
 	return (
 		<html lang={lang}>
-			<body>{children}</body>
+			<body>
+				{children}
+				<ToastRegion language={lang} />
+			</body>
 		</html>
 	);
 };

@@ -6,20 +6,20 @@ import { OnboardingStatus } from "../api/onboarding.schemas";
 
 /** Gets the onboarding status, creating the user on the first sign-in. */
 async function fetchOnboardingStatus(): Promise<OnboardingStatus> {
-	const { status, data } = await getOnboardingStatus();
+	const response = await getOnboardingStatus();
 
-	if (status !== 200) {
-		throw new ApiError(status);
+	if (response.status !== 200) {
+		throw new ApiError(response);
 	}
 
-	if (data.data !== OnboardingStatus.NotExist) {
-		return data.data;
+	if (response.data.data !== OnboardingStatus.NotExist) {
+		return response.data.data;
 	}
 
-	const { status: createStatus } = await createUser();
+	const createResponse = await createUser();
 
-	if (createStatus !== 201 && createStatus !== 409) {
-		throw new ApiError(createStatus);
+	if (createResponse.status !== 201 && createResponse.status !== 409) {
+		throw new ApiError(createResponse);
 	}
 
 	return OnboardingStatus.Settings;

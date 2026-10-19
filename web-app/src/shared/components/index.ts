@@ -14,5 +14,8 @@ export { default as Radio } from "./RadioGroup/Radio";
 export { default as RadioGroup } from "./RadioGroup/RadioGroup";
 export { default as Text } from "./Text";
 export { default as TextField } from "./TextField";
+export { default as showErrorToast } from "./Toast/show-error-toast";
+export { default as ToastRegion } from "./Toast/ToastRegion";
+export { default as useFormErrorToast } from "./Toast/use-form-error-toast";
 export { default as ToggleButton } from "./ToggleButtonGroup/ToggleButton";
 export { default as ToggleButtonGroup } from "./ToggleButtonGroup/ToggleButtonGroup";

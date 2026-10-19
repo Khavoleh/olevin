@@ -1,4 +1,4 @@
-import { ApiError } from "./api-error";
+import { ApiError } from "./api-error/api-error";
 import { getApiToken } from "./get-api-token";
 import { getApiUrl } from "./get-api-url";
 
@@ -13,7 +13,7 @@ export async function apiRequest<T>(
 	const token = await getApiToken();
 
 	if (!token) {
-		throw new ApiError(401);
+		throw new ApiError({ status: 401 });
 	}
 
 	const headers = new Headers(options.headers);

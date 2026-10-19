@@ -1,4 +1,4 @@
-export { ApiError } from "./api/api-error";
+export { ApiError } from "./api/api-error/api-error";
 export { apiRequest } from "./api/api-request";
 export { getApiToken } from "./api/get-api-token";
 export { getIsAuthenticated } from "./auth/get-is-authenticated";
