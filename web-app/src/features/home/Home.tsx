@@ -1,4 +1,4 @@
-import { Button, Card } from "@shared/components";
+import { Button, Card, Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import { HOME_I18N } from "./home-i18n";
 import { signOut } from "./sign-out";
@@ -13,7 +13,7 @@ const Home = ({ language }: Readonly<HomeProps>) => {
 
 	return (
 		<Card>
-			<h1>{t("title")}</h1>
+			<Heading level={1}>{t("title")}</Heading>
 
 			<form action={signOut} className="mt-6">
 				<Button type="submit" variant="secondary" className="w-full">

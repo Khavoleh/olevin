@@ -1,4 +1,4 @@
-import { Button, Card } from "@shared/components";
+import { Button, Card, Heading, Text } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import { signIn } from "./sign-in";
 import { SIGN_IN_I18N } from "./sign-in-i18n";
@@ -13,8 +13,10 @@ const SignIn = ({ language }: Readonly<SignInProps>) => {
 
 	return (
 		<Card className="m-auto">
-			<h1>{t("title")}</h1>
-			<p className="mt-2 text-fg-muted">{t("description")}</p>
+			<Heading level={1}>{t("title")}</Heading>
+			<Text variant="description" className="mt-2">
+				{t("description")}
+			</Text>
 
 			<form action={signIn.bind(null, language)} className="mt-6">
 				<Button type="submit" className="w-full">

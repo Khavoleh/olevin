@@ -9,5 +9,3 @@ export { getLanguage } from "./language/get-language/get-language";
 export { getLanguageStaticParams } from "./language/get-language-static-params";
 export { getLanguageUrl } from "./language/get-language-url/get-language-url";
 export { getPathLanguage } from "./language/get-path-language/get-path-language";
-export { getQueryClient } from "./query/get-query-client";
-export { makeQueryClient } from "./query/make-query-client";

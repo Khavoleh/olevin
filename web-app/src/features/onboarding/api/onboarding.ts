@@ -8,6 +8,7 @@
 import { apiRequest } from "@shared/helpers";
 import type {
 	ConfigureUserSettingsRequest,
+	ResponseOfCurrencyCode,
 	ResponseOfGuid,
 	ResponseOfOnboardingStatus,
 } from "./onboarding.schemas";
@@ -36,6 +37,44 @@ export const getOnboardingStatus = async (
 	options?: RequestInit,
 ): Promise<getOnboardingStatusResponse> => {
 	return apiRequest<getOnboardingStatusResponse>(getGetOnboardingStatusUrl(), {
+		...options,
+		method: "GET",
+	});
+};
+
+export type getBaseCurrencyResponse200 = {
+	data: ResponseOfCurrencyCode;
+	status: 200;
+};
+
+export type getBaseCurrencyResponse404 = {
+	data: ResponseOfCurrencyCode;
+	status: 404;
+};
+
+export type getBaseCurrencyResponseSuccess = getBaseCurrencyResponse200 & {
+	headers: Headers;
+};
+export type getBaseCurrencyResponseError = getBaseCurrencyResponse404 & {
+	headers: Headers;
+};
+
+export type getBaseCurrencyResponse =
+	| getBaseCurrencyResponseSuccess
+	| getBaseCurrencyResponseError;
+
+export const getGetBaseCurrencyUrl = () => {
+	return `/settings/v1/user-settings/base-currency`;
+};
+
+/**
+ * GET_settings_v1_user_settings_base_currency
+ * @summary Handles `GET /settings/v1/user-settings/base-currency`.
+ */
+export const getBaseCurrency = async (
+	options?: RequestInit,
+): Promise<getBaseCurrencyResponse> => {
+	return apiRequest<getBaseCurrencyResponse>(getGetBaseCurrencyUrl(), {
 		...options,
 		method: "GET",
 	});

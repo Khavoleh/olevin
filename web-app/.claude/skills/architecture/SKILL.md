@@ -48,8 +48,18 @@ The root component and `index.ts` sit at the slice root. Two or more files of th
 src/features/onboarding/
   Onboarding.tsx         ← root component (entry point for the slice)
   index.ts               ← barrel
-  FlowShell.tsx          ← the only other component, so no components/ folder
+  onboarding-store.ts    ← the only store, so it stays at the root
+  actions/               ← Server Actions
+    configure-settings.ts
+    get-saved-base-currency.ts
   api/                   ← Orval client of the `Onboarding` API tag
+  components/
+    FlowShell.tsx
+    RestoreBaseCurrency.tsx
+    SettingsStep/        ← component with its own sub-components
+      SettingsStep.tsx
+      CurrencyField.tsx
+      TimezoneField.tsx
   constants/
     onboarding-stages.ts
     onboarding-steps.ts
@@ -134,4 +144,6 @@ Run the project's dependency-boundary linter after changing imports or moving fi
 - **What depcruise does _not_ catch:** a slice reaching into a sibling slice's internals on the same layer (`features → src/features/**`, `widgets → src/widgets/**` are allowed by path). Keep sibling access barrel-only by hand: `import LegalLinks from "@widgets/legal-links"` ✅ — `"@widgets/legal-links/LegalLinks"` ❌. Features don't import other features; share via a widget or shared instead.
 - **Routes:** every page sits under `src/app/[lang]/` in a route group — `(app)` (signed-in, `AppShell`), `(public)` (`PublicShell`), or its own segment with a feature frame (`onboarding/[step]` with `FlowShell`). Non-localized handlers (`callback/route.ts`, `health/route.ts`) sit at `src/app/` root. Route component names: `<Name>Page`, `<Name>Layout`.
 - **Existing slices:** features `home`/`onboarding`/`privacy`/`profile`/`sign-in`/`snapshot-form`/`snapshots`/`terms`/`trend`; widgets `app-shell`/`language-switcher`/`legal-links`/`public-shell`; shared categories `components`/`constants`/`helpers`/`i18n`/`interfaces`.
+- **Global styles:** only `src/app/globals.css` (fonts, tokens, base styles). Slices don't ship CSS files: they style with utilities, and text comes from the typography components in `src/shared/components` (`Heading`, `Text`, `Label`, `FieldError`, `Link`).
+- **Component folders:** a component with its own sub-components gets a folder named after it (PascalCase), holding the component file and its sub-components, one default export per file and no `index.ts`. In shared: `components/RadioGroup/{RadioGroup,Radio}.tsx`, `ComboBox/{ComboBox,ComboBoxItem}.tsx`, `ToggleButtonGroup/{ToggleButtonGroup,ToggleButton}.tsx`, each file re-exported by the category barrel. In a slice: `components/SettingsStep/{SettingsStep,CurrencyField,TimezoneField}.tsx`, imported by the parent with a relative path. A component reused by several others (`Input` in every text field) stays a lone file at the category root.
 - **File naming:** components `PascalCase.tsx`; logic, Server Actions, i18n, constants `kebab-case.ts`; tests `*.unit.ts` beside the source. Static files (fonts, images) go to `public/`; app icons (`icon.svg`, `apple-icon.png`, `favicon.ico`) to `src/app/`.

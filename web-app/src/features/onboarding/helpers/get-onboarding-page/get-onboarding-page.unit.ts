@@ -7,8 +7,8 @@ describe("getOnboardingPage", () => {
 		const cases: [OnboardingStatus, string][] = [
 			[OnboardingStatus.NotExist, "/onboarding/1"],
 			[OnboardingStatus.Settings, "/onboarding/1"],
-			[OnboardingStatus.Onboarding, "/onboarding/4"],
-			[OnboardingStatus.CfpbResponse, "/onboarding/6"],
+			[OnboardingStatus.Onboarding, "/onboarding/2"],
+			[OnboardingStatus.CfpbResponse, "/onboarding/4"],
 		];
 
 		for (const [status, page] of cases) {

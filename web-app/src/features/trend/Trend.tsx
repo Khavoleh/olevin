@@ -1,3 +1,4 @@
+import { Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import { TREND_I18N } from "./trend-i18n";
 
@@ -9,7 +10,7 @@ interface TrendProps {
 const Trend = ({ language }: Readonly<TrendProps>) => {
 	const t = getI18n(language, TREND_I18N);
 
-	return <h1>{t("title")}</h1>;
+	return <Heading level={1}>{t("title")}</Heading>;
 };
 
 export default Trend;

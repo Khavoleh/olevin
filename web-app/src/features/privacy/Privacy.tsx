@@ -1,3 +1,4 @@
+import { Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import { PRIVACY_I18N } from "./privacy-i18n";
 
@@ -9,7 +10,7 @@ interface PrivacyProps {
 const Privacy = ({ language }: Readonly<PrivacyProps>) => {
 	const t = getI18n(language, PRIVACY_I18N);
 
-	return <h1>{t("title")}</h1>;
+	return <Heading level={1}>{t("title")}</Heading>;
 };
 
 export default Privacy;

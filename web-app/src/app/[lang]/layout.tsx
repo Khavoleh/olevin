@@ -2,7 +2,6 @@ import { getI18n, getLanguageStaticParams } from "@shared/helpers";
 import { APP_I18N } from "@shared/i18n";
 import type { Metadata, Viewport } from "next";
 import type { ReactNode } from "react";
-import Providers from "../providers";
 import "../globals.css";
 
 export const generateStaticParams = getLanguageStaticParams;
@@ -40,9 +39,7 @@ const RootLayout = async ({ children, params }: Readonly<RootLayoutProps>) => {
 
 	return (
 		<html lang={lang}>
-			<body>
-				<Providers>{children}</Providers>
-			</body>
+			<body>{children}</body>
 		</html>
 	);
 };

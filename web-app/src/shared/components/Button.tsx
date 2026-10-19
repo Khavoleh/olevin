@@ -10,6 +10,21 @@ interface ButtonProps extends AriaButtonProps {
 	variant?: "primary" | "secondary";
 }
 
+const VARIANT_CLASSES = {
+	primary: {
+		base: "text-on-primary",
+		idle: "bg-primary",
+		hovered: "bg-primary-hover",
+		pressed: "bg-primary-pressed",
+	},
+	secondary: {
+		base: "border border-input text-fg",
+		idle: "bg-surface",
+		hovered: "bg-surface-hover",
+		pressed: "bg-surface-sunken",
+	},
+};
+
 /** Accessible button of the app in the primary or secondary style. */
 const Button = ({
 	variant = "primary",
@@ -25,16 +40,15 @@ const Button = ({
 					customClasses,
 					{ isHovered, isPressed, isFocusVisible, isDisabled },
 				) => {
-					const isPrimary = variant === "primary";
-					const colors = isPrimary
-						? `text-on-primary ${isPressed ? "bg-primary-pressed" : isHovered ? "bg-primary-hover" : "bg-primary"}`
-						: `border border-input text-fg ${isPressed ? "bg-surface-sunken" : isHovered ? "bg-surface-hover" : "bg-surface"}`;
+					const { base, idle, hovered, pressed } = VARIANT_CLASSES[variant];
+					const background =
+						(isPressed && pressed) || (isHovered && hovered) || idle;
 					const focus = isFocusVisible ? "ring-2 ring-ring ring-offset-2" : "";
 					const disabled = isDisabled
-						? "cursor-default opacity-50"
+						? "cursor-default opacity-45"
 						: "cursor-pointer";
 
-					return `inline-flex min-h-11 items-center justify-center rounded-md px-4 font-semibold outline-none transition-colors ${colors} ${focus} ${disabled} ${customClasses}`;
+					return `inline-flex min-h-11 items-center justify-center rounded-md px-4.5 font-semibold outline-none transition-colors ${base} ${background} ${focus} ${disabled} ${customClasses}`;
 				},
 			)}
 		/>

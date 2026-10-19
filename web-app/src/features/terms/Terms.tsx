@@ -1,3 +1,4 @@
+import { Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import { TERMS_I18N } from "./terms-i18n";
 
@@ -9,7 +10,7 @@ interface TermsProps {
 const Terms = ({ language }: Readonly<TermsProps>) => {
 	const t = getI18n(language, TERMS_I18N);
 
-	return <h1>{t("title")}</h1>;
+	return <Heading level={1}>{t("title")}</Heading>;
 };
 
 export default Terms;

@@ -1,3 +1,4 @@
+import { Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import { SNAPSHOT_FORM_I18N } from "./snapshot-form-i18n";
 
@@ -11,7 +12,7 @@ interface SnapshotFormProps {
 const SnapshotForm = ({ language, month }: Readonly<SnapshotFormProps>) => {
 	const t = getI18n(language, SNAPSHOT_FORM_I18N);
 
-	return <h1>{t(month ? "title_edit" : "title_new")}</h1>;
+	return <Heading level={1}>{t(month ? "title_edit" : "title_new")}</Heading>;
 };
 
 export default SnapshotForm;

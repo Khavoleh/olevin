@@ -37,6 +37,37 @@ export interface ResponseOfOnboardingStatus {
 }
 
 /**
+ * A currency supported by the application. Members match the labels of `financial_wellness.currency_code`.
+ */
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
+
+export const CurrencyCode = {
+	USD: "USD",
+	EUR: "EUR",
+	CAD: "CAD",
+	UAH: "UAH",
+	PLN: "PLN",
+} as const;
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfCurrencyCode {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	/** The result, or the default value of T on failure. */
+	data: CurrencyCode;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * The envelope every endpoint returns.
  */
 export interface ResponseOfGuid {
@@ -53,19 +84,6 @@ export interface ResponseOfGuid {
 	 */
 	validationErrors: string[] | null;
 }
-
-/**
- * A currency supported by the application. Members match the labels of `financial_wellness.currency_code`.
- */
-export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
-
-export const CurrencyCode = {
-	USD: "USD",
-	EUR: "EUR",
-	CAD: "CAD",
-	UAH: "UAH",
-	PLN: "PLN",
-} as const;
 
 /**
  * An interface language. Members match the labels of `settings.locale_code`.

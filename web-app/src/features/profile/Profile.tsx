@@ -1,3 +1,4 @@
+import { Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import LanguageSwitcher from "@widgets/language-switcher";
 import { PROFILE_I18N } from "./profile-i18n";
@@ -12,7 +13,7 @@ const Profile = ({ language }: Readonly<ProfileProps>) => {
 
 	return (
 		<>
-			<h1>{t("title")}</h1>
+			<Heading level={1}>{t("title")}</Heading>
 			<div>
 				<LanguageSwitcher language={language} />
 			</div>

@@ -1,8 +1,8 @@
 "use client";
 
+import { ToggleButton, ToggleButtonGroup } from "@shared/components";
 import { LANGUAGES_SHORT } from "@shared/constants";
 import { getI18n } from "@shared/helpers";
-import { ToggleButton, ToggleButtonGroup } from "react-aria-components";
 import { LANGUAGE_SWITCHER_I18N } from "./language-switcher-i18n";
 import { setLanguage } from "./set-language";
 
@@ -33,7 +33,6 @@ const LanguageSwitcher = ({ language }: Readonly<LanguageSwitcherProps>) => {
 					void setLanguage(selected);
 				}
 			}}
-			className="inline-flex rounded-md border border-input bg-surface p-0.5"
 		>
 			{LANGUAGES_CONFIG.map((item) => (
 				<ToggleButton
@@ -41,14 +40,6 @@ const LanguageSwitcher = ({ language }: Readonly<LanguageSwitcherProps>) => {
 					id={item.code}
 					aria-label={item.name}
 					lang={item.code}
-					className={({ isSelected, isHovered, isFocusVisible }) => {
-						const colors = isSelected
-							? "bg-primary text-on-primary"
-							: `text-fg-muted ${isHovered ? "bg-surface-hover" : ""}`;
-						const focus = isFocusVisible ? "ring-2 ring-ring" : "";
-
-						return `min-h-10 cursor-pointer rounded-sm px-3 font-medium text-sm outline-none transition-colors ${colors} ${focus}`;
-					}}
 				>
 					{item.label}
 				</ToggleButton>

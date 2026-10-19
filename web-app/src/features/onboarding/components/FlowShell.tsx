@@ -3,9 +3,9 @@ import { PAGE_URLS } from "@shared/constants";
 import { getI18n, getLanguageUrl } from "@shared/helpers";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { ONBOARDING_STAGES } from "./constants/onboarding-stages";
-import { ONBOARDING_STEPS } from "./constants/onboarding-steps";
-import { FLOW_SHELL_I18N } from "./i18n/flow-shell-i18n";
+import { ONBOARDING_STAGES } from "../constants/onboarding-stages";
+import { ONBOARDING_STEPS } from "../constants/onboarding-steps";
+import { FLOW_SHELL_I18N } from "../i18n/flow-shell-i18n";
 
 interface FlowShellProps {
 	language: string;

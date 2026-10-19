@@ -1,6 +1,6 @@
+import { Link } from "@shared/components";
 import { PAGE_URLS, REPOSITORY_URL } from "@shared/constants";
 import { getI18n, getLanguageUrl } from "@shared/helpers";
-import Link from "next/link";
 import { LEGAL_LINKS_I18N } from "./legal-links-i18n";
 
 interface LegalLinksProps {
@@ -14,33 +14,26 @@ const LegalLinks = ({
 	className = "",
 }: Readonly<LegalLinksProps>) => {
 	const t = getI18n(language, LEGAL_LINKS_I18N);
-	const linkClasses = "hover:text-fg hover:underline";
 
 	return (
 		<nav
 			aria-label={t("legal")}
-			className={`flex flex-wrap gap-x-3 gap-y-1 text-fg-muted text-sm ${className}`}
+			className={`flex flex-wrap gap-x-3 gap-y-1 text-xs ${className}`}
 		>
-			<Link
-				href={getLanguageUrl(PAGE_URLS.PRIVACY, language)}
-				className={linkClasses}
-			>
+			<Link variant="subtle" href={getLanguageUrl(PAGE_URLS.PRIVACY, language)}>
 				{t("privacy")}
 			</Link>
-			<Link
-				href={getLanguageUrl(PAGE_URLS.TERMS, language)}
-				className={linkClasses}
-			>
+			<Link variant="subtle" href={getLanguageUrl(PAGE_URLS.TERMS, language)}>
 				{t("terms")}
 			</Link>
-			<a
+			<Link
+				variant="subtle"
 				href={REPOSITORY_URL}
 				target="_blank"
 				rel="noopener noreferrer"
-				className={linkClasses}
 			>
 				{t("source_code")}
-			</a>
+			</Link>
 		</nav>
 	);
 };
