@@ -12,7 +12,94 @@ import type {
 	ResponseOfCurrencyCode,
 	ResponseOfGuid,
 	ResponseOfOnboardingStatus,
+	SubmitCfpbResponseRequest,
 } from "./onboarding.schemas";
+
+export type submitCfpbResponseResponse201 = {
+	data: ResponseOfGuid;
+	status: 201;
+};
+
+export type submitCfpbResponseResponse400 = {
+	data: ResponseOfGuid;
+	status: 400;
+};
+
+export type submitCfpbResponseResponse403 = {
+	data: ResponseOfGuid;
+	status: 403;
+};
+
+export type submitCfpbResponseResponse404 = {
+	data: ResponseOfGuid;
+	status: 404;
+};
+
+export type submitCfpbResponseResponse409 = {
+	data: ResponseOfGuid;
+	status: 409;
+};
+
+export type submitCfpbResponseResponseSuccess =
+	submitCfpbResponseResponse201 & {
+		headers: Headers;
+	};
+export type submitCfpbResponseResponseError = (
+	| submitCfpbResponseResponse400
+	| submitCfpbResponseResponse403
+	| submitCfpbResponseResponse404
+	| submitCfpbResponseResponse409
+) & {
+	headers: Headers;
+};
+
+export type submitCfpbResponseResponse =
+	| submitCfpbResponseResponseSuccess
+	| submitCfpbResponseResponseError;
+
+export const getSubmitCfpbResponseUrl = () => {
+	return `/settings/v1/user/onboarding/cfpb-response`;
+};
+
+/**
+ * POST_settings_v1_user_onboarding_cfpb_response
+ * @summary Handles `POST /settings/v1/user/onboarding/cfpb-response`.
+ */
+export const submitCfpbResponse = async (
+	submitCfpbResponseRequest: SubmitCfpbResponseRequest,
+	options?: RequestInit,
+): Promise<submitCfpbResponseResponse> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return apiRequest<submitCfpbResponseResponse>(getSubmitCfpbResponseUrl(), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: JSON.stringify(submitCfpbResponseRequest),
+	});
+};
 
 export type getOnboardingStatusResponse200 = {
 	data: ResponseOfOnboardingStatus;
@@ -160,7 +247,7 @@ export const getCreateFirstSnapshotUrl = () => {
 };
 
 /**
- * It only reads the settings, so it opts out of the automatic transactions.
+ * POST_settings_v1_user_onboarding_first_snapshot
  * @summary Handles `POST /settings/v1/user/onboarding/first-snapshot`. The snapshot is for the current month in
 the user's time zone.
  */

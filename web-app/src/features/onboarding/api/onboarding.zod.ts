@@ -7,7 +7,57 @@
 import * as zod from "zod";
 
 /**
- * It only reads the settings, so it opts out of the automatic transactions.
+ * POST_settings_v1_user_onboarding_cfpb_response
+ * @summary Handles `POST /settings/v1/user/onboarding/cfpb-response`.
+ */
+export const SubmitCfpbResponseBody = zod
+	.object({
+		couldHandleMajorExpense: zod
+			.enum(["Completely", "VeryWell", "Somewhat", "VeryLittle", "NotAtAll"])
+			.describe("1. I could handle a major unexpected expense."),
+		securingFinancialFuture: zod
+			.enum(["Completely", "VeryWell", "Somewhat", "VeryLittle", "NotAtAll"])
+			.describe("2. I am securing my financial future."),
+		neverHaveThingsWanted: zod
+			.enum(["Completely", "VeryWell", "Somewhat", "VeryLittle", "NotAtAll"])
+			.describe(
+				"3. Because of my money situation, I feel like I will never have the things I want in life.",
+			),
+		enjoyLifeManagingMoney: zod
+			.enum(["Completely", "VeryWell", "Somewhat", "VeryLittle", "NotAtAll"])
+			.describe(
+				"4. I can enjoy life because of the way I'm managing my money.",
+			),
+		justGettingBy: zod
+			.enum(["Completely", "VeryWell", "Somewhat", "VeryLittle", "NotAtAll"])
+			.describe("5. I am just getting by financially."),
+		moneyWontLast: zod
+			.enum(["Completely", "VeryWell", "Somewhat", "VeryLittle", "NotAtAll"])
+			.describe(
+				"6. I am concerned that the money I have or will save won't last.",
+			),
+		giftStrainsFinances: zod
+			.enum(["Always", "Often", "Sometimes", "Rarely", "Never"])
+			.describe(
+				"7. Giving a gift for a wedding, birthday or other occasion would put a strain on my finances for the month.",
+			),
+		moneyLeftOver: zod
+			.enum(["Always", "Often", "Sometimes", "Rarely", "Never"])
+			.describe("8. I have money left over at the end of the month."),
+		behindWithFinances: zod
+			.enum(["Always", "Often", "Sometimes", "Rarely", "Never"])
+			.describe("9. I am behind with my finances."),
+		financesControlLife: zod
+			.enum(["Always", "Often", "Sometimes", "Rarely", "Never"])
+			.describe("10. My finances control my life."),
+		is62Plus: zod.boolean().describe("Whether the user is 62 or older."),
+	})
+	.describe(
+		"The answers of a user to the CFPB Financial Well-Being Scale, as chosen in the questionnaire.",
+	);
+
+/**
+ * POST_settings_v1_user_onboarding_first_snapshot
  * @summary Handles `POST /settings/v1/user/onboarding/first-snapshot`. The snapshot is for the current month in
 the user's time zone.
  */

@@ -1,4 +1,4 @@
-namespace Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers;
+namespace Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse;
 
 /// <summary>
 /// Codes the chosen options to response values.

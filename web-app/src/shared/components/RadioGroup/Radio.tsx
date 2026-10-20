@@ -8,7 +8,7 @@ import {
 } from "react-aria-components";
 
 interface RadioProps extends Omit<RadioFieldProps, "className" | "children"> {
-	variant?: "row" | "tile";
+	variant?: "row" | "tile" | "text-tile";
 	children: ReactNode;
 }
 
@@ -25,9 +25,15 @@ const VARIANT_CLASSES = {
 		hovered: "border-input-hover bg-surface-hover",
 		selected: "border-primary bg-primary text-on-primary",
 	},
+	"text-tile": {
+		base: "flex min-h-11 items-center justify-center px-2 py-2 text-center font-semibold text-sm leading-tight",
+		idle: "border-input bg-surface",
+		hovered: "border-input-hover bg-surface-hover",
+		selected: "border-primary bg-primary text-on-primary",
+	},
 };
 
-/** Option of a radio group: a bordered row with the radio mark, or a tile filled when selected. */
+/** Option of a radio group: a bordered row with the radio mark, or a tile with a number or a word filled when selected. */
 const Radio = ({
 	variant = "row",
 	children,

@@ -1,6 +1,6 @@
-using Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers.Enums;
+using Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse.Enums;
 
-namespace Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers;
+namespace Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse;
 
 /// <summary>
 /// The answers of a user to the CFPB Financial Well-Being Scale, as chosen in the questionnaire.

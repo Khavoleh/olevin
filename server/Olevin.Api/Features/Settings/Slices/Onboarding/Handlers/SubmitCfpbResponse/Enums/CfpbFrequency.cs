@@ -1,4 +1,4 @@
-namespace Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers.Enums;
+namespace Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse.Enums;
 
 /// <summary>
 /// How often a statement of the CFPB scale applies to the respondent (statements 7-10).

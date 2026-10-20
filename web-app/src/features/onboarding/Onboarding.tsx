@@ -1,6 +1,7 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { Heading, Text } from "@shared/components";
 import { getI18n } from "@shared/helpers";
+import CfpbStep from "./components/CfpbStep/CfpbStep";
 import EstimatesStep from "./components/EstimatesStep";
 import RestoreBaseCurrency from "./components/RestoreBaseCurrency";
 import SettingsStep from "./components/SettingsStep/SettingsStep";
@@ -96,6 +97,7 @@ const Onboarding = ({ language, step }: Readonly<OnboardingProps>) => {
 				{step === 1 && <SettingsStep language={language} />}
 				{step === 2 && <SnapshotStep language={language} />}
 				{step === 3 && <EstimatesStep language={language} />}
+				{step === 4 && <CfpbStep language={language} />}
 				{ONBOARDING_STAGES.Onboarding.includes(step) && (
 					<RestoreBaseCurrency language={language} />
 				)}

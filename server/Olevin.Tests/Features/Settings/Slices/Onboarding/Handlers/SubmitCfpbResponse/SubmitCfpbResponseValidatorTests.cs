@@ -1,8 +1,8 @@
 using FluentValidation.TestHelper;
-using Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers;
-using Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers.Enums;
+using Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse;
+using Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse.Enums;
 
-namespace Olevin.Tests.Features.Settings.Slices.CfpbResponses.Handlers;
+namespace Olevin.Tests.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse;
 
 public sealed class SubmitCfpbResponseValidatorTests
 {

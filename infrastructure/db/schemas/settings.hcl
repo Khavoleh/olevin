@@ -114,11 +114,6 @@ table "cfpb_responses" {
   schema  = schema.settings
   comment = "CFPB Financial Well-Being Scale answers given once at onboarding"
 
-  column "id" {
-    type    = uuid
-    default = sql("uuidv7()")
-    comment = "Response identifier"
-  }
   column "user_id" {
     type    = uuid
     comment = "Owning user identifier"
@@ -142,11 +137,6 @@ table "cfpb_responses" {
   }
 
   primary_key {
-    columns = [column.id]
-  }
-
-  index "cfpb_responses_user_id_key" {
-    unique  = true
     columns = [column.user_id]
   }
 

@@ -11,7 +11,7 @@ public sealed class CfpbResponseConfiguration : IEntityTypeConfiguration<CfpbRes
     /// <inheritdoc/>
     public void Configure(EntityTypeBuilder<CfpbResponse> builder)
     {
-        builder.HasKey(response => response.Id).HasName("cfpb_responses_pkey");
+        builder.HasKey(response => response.UserId).HasName("cfpb_responses_pkey");
 
         builder.ToTable(
             "cfpb_responses",
@@ -20,15 +20,9 @@ public sealed class CfpbResponseConfiguration : IEntityTypeConfiguration<CfpbRes
                 table.HasComment("CFPB Financial Well-Being Scale answers given once at onboarding")
         );
 
-        builder.HasIndex(response => response.UserId, "cfpb_responses_user_id_key").IsUnique();
-
-        builder
-            .Property(response => response.Id)
-            .HasDefaultValueSql("uuidv7()")
-            .HasComment("Response identifier")
-            .HasColumnName("id");
         builder
             .Property(response => response.UserId)
+            .ValueGeneratedNever()
             .HasComment("Owning user identifier")
             .HasColumnName("user_id");
         builder

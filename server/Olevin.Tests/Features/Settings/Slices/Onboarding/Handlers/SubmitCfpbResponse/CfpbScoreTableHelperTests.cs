@@ -1,6 +1,6 @@
-using Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers;
+using Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse;
 
-namespace Olevin.Tests.Features.Settings.Slices.CfpbResponses.Handlers;
+namespace Olevin.Tests.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse;
 
 /// <summary>
 /// The conversion of the CFPB total response value to the score.

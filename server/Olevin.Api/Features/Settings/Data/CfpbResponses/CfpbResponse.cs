@@ -8,11 +8,6 @@ namespace Olevin.Api.Features.Settings.Data.CfpbResponses;
 public sealed class CfpbResponse
 {
     /// <summary>
-    /// Response identifier.
-    /// </summary>
-    public Guid Id { get; set; }
-
-    /// <summary>
     /// Owning user identifier.
     /// </summary>
     public Guid UserId { get; set; }

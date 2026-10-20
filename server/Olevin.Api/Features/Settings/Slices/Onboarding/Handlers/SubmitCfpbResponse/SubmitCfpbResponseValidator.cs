@@ -1,7 +1,7 @@
 using System.Linq.Expressions;
 using FluentValidation;
 
-namespace Olevin.Api.Features.Settings.Slices.CfpbResponses.Handlers;
+namespace Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.SubmitCfpbResponse;
 
 /// <summary>
 /// Validates the answers to the CFPB Financial Well-Being Scale: every statement is answered with one of its options.

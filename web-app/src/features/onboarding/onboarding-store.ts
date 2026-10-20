@@ -5,7 +5,11 @@ import {
 } from "@widgets/money-field";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import type { CurrencyCode, ExpensesRequest } from "./api/onboarding.schemas";
+import type {
+	CurrencyCode,
+	ExpensesRequest,
+	SubmitCfpbResponseRequest,
+} from "./api/onboarding.schemas";
 
 /** Rough month before the first snapshot. */
 export interface EstimateDraft {
@@ -25,17 +29,24 @@ export interface SnapshotDraft {
 	twoMonthsAgo: EstimateDraft;
 }
 
+/** Chosen options of the CFPB questionnaire, as the radio values. */
+export type CfpbDraft = Partial<
+	Record<keyof SubmitCfpbResponseRequest, string>
+>;
+
 interface OnboardingState {
 	baseCurrency?: CurrencyCode;
 	snapshotDay: number;
 	timezone: string;
 	researchConsent: boolean;
 	snapshot: SnapshotDraft;
+	cfpbResponse: CfpbDraft;
 	setBaseCurrency: (baseCurrency: CurrencyCode) => void;
 	setSnapshotDay: (snapshotDay: number) => void;
 	setTimezone: (timezone: string) => void;
 	setResearchConsent: (researchConsent: boolean) => void;
 	setSnapshot: (snapshot: Partial<SnapshotDraft>) => void;
+	setCfpbResponse: (cfpbResponse: CfpbDraft) => void;
 }
 
 const EMPTY_SNAPSHOT: SnapshotDraft = {
@@ -65,12 +76,17 @@ export const useOnboardingStore = create<OnboardingState>()(
 			timezone: "",
 			researchConsent: false,
 			snapshot: EMPTY_SNAPSHOT,
+			cfpbResponse: {},
 			setBaseCurrency: (baseCurrency) => set({ baseCurrency }),
 			setSnapshotDay: (snapshotDay) => set({ snapshotDay: snapshotDay }),
 			setTimezone: (timezone) => set({ timezone }),
 			setResearchConsent: (researchConsent) => set({ researchConsent }),
 			setSnapshot: (snapshot) =>
 				set((state) => ({ snapshot: { ...state.snapshot, ...snapshot } })),
+			setCfpbResponse: (cfpbResponse) =>
+				set((state) => ({
+					cfpbResponse: { ...state.cfpbResponse, ...cfpbResponse },
+				})),
 		}),
 		{
 			name: "onboarding",
