@@ -2,7 +2,7 @@ using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Features.FinancialWellness.Data;
 using Wolverine.Attributes;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts.HasFirstSnapshot;
 
 /// <summary>
 /// Tells other features whether the user has the first snapshot.

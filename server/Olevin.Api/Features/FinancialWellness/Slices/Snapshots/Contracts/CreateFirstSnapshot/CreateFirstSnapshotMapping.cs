@@ -6,7 +6,7 @@ using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 using Olevin.Api.Shared;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts.CreateFirstSnapshot;
 
 /// <summary>
 /// Maps the estimates of the onboarding to the stored rows and to the figures of the core.
@@ -16,15 +16,15 @@ public static class CreateFirstSnapshotMapping
     /// <summary>
     /// Creates the stored amounts of the first snapshot.
     /// </summary>
-    /// <param name="request">The validated request.</param>
+    /// <param name="snapshot">The validated first snapshot.</param>
     /// <returns>The amounts as they are stored.</returns>
-    public static SnapshotAmounts ToAmounts(CreateFirstSnapshotRequest request) =>
+    public static SnapshotAmounts ToAmounts(FirstSnapshot snapshot) =>
         SnapshotAmountsMapping.ToAmounts(
-            request.Income,
-            request.Expenses,
-            request.Saved,
-            request.Reserves,
-            request.DebtPayments
+            snapshot.Income,
+            snapshot.Expenses,
+            snapshot.Saved,
+            snapshot.Reserves,
+            snapshot.DebtPayments
         );
 
     /// <summary>

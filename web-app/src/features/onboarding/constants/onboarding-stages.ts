@@ -6,5 +6,5 @@ export const ONBOARDING_STAGES: Record<OnboardingStatus, number[]> = {
 	Settings: [1],
 	Onboarding: [2, 3],
 	CfpbResponse: [4],
-	Completed: [5],
+	Completed: [],
 };

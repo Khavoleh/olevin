@@ -8,40 +8,58 @@ import {
 } from "react-aria-components";
 
 interface RadioProps extends Omit<RadioFieldProps, "className" | "children"> {
+	variant?: "row" | "tile";
 	children: ReactNode;
 }
 
-const STATE_CLASSES = {
-	idle: "border-input bg-surface",
-	hovered: "border-input-hover bg-surface",
-	selected: "border-primary bg-primary-soft",
+const VARIANT_CLASSES = {
+	row: {
+		base: "flex min-h-11 items-center gap-3 px-4 py-2.5",
+		idle: "border-input bg-surface",
+		hovered: "border-input-hover bg-surface",
+		selected: "border-primary bg-primary-soft",
+	},
+	tile: {
+		base: "flex min-h-12 items-center justify-center font-semibold text-lg tabular-nums",
+		idle: "border-input bg-surface",
+		hovered: "border-input-hover bg-surface-hover",
+		selected: "border-primary bg-primary text-on-primary",
+	},
 };
 
-/** Option of a radio group shown as a bordered row with the radio mark. */
-const Radio = ({ children, ...props }: Readonly<RadioProps>) => {
+/** Option of a radio group: a bordered row with the radio mark, or a tile filled when selected. */
+const Radio = ({
+	variant = "row",
+	children,
+	...props
+}: Readonly<RadioProps>) => {
+	const { base, idle, hovered, selected } = VARIANT_CLASSES[variant];
+
 	return (
 		<RadioField {...props}>
 			<RadioButton
 				className={({ isSelected, isHovered, isDisabled }) => {
 					const colors =
-						(isSelected && STATE_CLASSES.selected) ||
-						(isHovered && STATE_CLASSES.hovered) ||
-						STATE_CLASSES.idle;
+						(isSelected && selected) || (isHovered && hovered) || idle;
 					const disabled = isDisabled
 						? "cursor-default opacity-45"
 						: "cursor-pointer";
 
-					return `flex min-h-11 items-center gap-3 rounded-md border px-4 py-2.5 transition-colors ${colors} ${disabled}`;
+					return `${base} rounded-md border transition-colors ${colors} ${disabled}`;
 				}}
 			>
 				{({ isSelected }) => (
 					<>
-						<span
-							aria-hidden="true"
-							className={`size-5 flex-none rounded-full transition-[border-width] ${
-								isSelected ? "border-6 border-primary" : "border-2 border-input"
-							}`}
-						/>
+						{variant === "row" && (
+							<span
+								aria-hidden="true"
+								className={`size-5 flex-none rounded-full transition-[border-width] ${
+									isSelected
+										? "border-6 border-primary"
+										: "border-2 border-input"
+								}`}
+							/>
+						)}
 						{children}
 					</>
 				)}

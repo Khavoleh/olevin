@@ -1,8 +1,10 @@
 import { CheckIcon } from "@phosphor-icons/react/dist/ssr";
 import { Heading, Text } from "@shared/components";
 import { getI18n } from "@shared/helpers";
+import EstimatesStep from "./components/EstimatesStep";
 import RestoreBaseCurrency from "./components/RestoreBaseCurrency";
 import SettingsStep from "./components/SettingsStep/SettingsStep";
+import SnapshotStep from "./components/SnapshotStep/SnapshotStep";
 import { ONBOARDING_STAGES } from "./constants/onboarding-stages";
 import { ONBOARDING_STEPS } from "./constants/onboarding-steps";
 import { ONBOARDING_I18N } from "./i18n/onboarding-i18n";
@@ -13,7 +15,10 @@ interface OnboardingProps {
 }
 
 /** Steps with a note under their name. */
-const STEPS_WITH_NOTE = [4, 5];
+const STEPS_WITH_NOTE = [4];
+
+/** Steps with a wider form. */
+const WIDE_STEPS = [2, 4];
 
 /** Classes of an item in the list of steps and of its number, by the state of the step. */
 const STEP_CLASSES = {
@@ -81,7 +86,7 @@ const Onboarding = ({ language, step }: Readonly<OnboardingProps>) => {
 
 			<section
 				className={`grid min-w-0 content-start gap-4 ${
-					step === 4 ? "max-w-flow-wide" : "max-w-flow"
+					WIDE_STEPS.includes(step) ? "max-w-flow-wide" : "max-w-flow"
 				}`}
 			>
 				<div className="grid gap-1">
@@ -89,6 +94,8 @@ const Onboarding = ({ language, step }: Readonly<OnboardingProps>) => {
 					<Heading level={1}>{t(`step_${step}`)}</Heading>
 				</div>
 				{step === 1 && <SettingsStep language={language} />}
+				{step === 2 && <SnapshotStep language={language} />}
+				{step === 3 && <EstimatesStep language={language} />}
 				{ONBOARDING_STAGES.Onboarding.includes(step) && (
 					<RestoreBaseCurrency language={language} />
 				)}

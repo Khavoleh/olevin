@@ -14,14 +14,12 @@ import { getI18n } from "@shared/helpers";
 import LanguageSwitcher from "@widgets/language-switcher";
 import { useActionState, useEffect } from "react";
 import { configureSettings } from "../../actions/configure-settings";
+import { BLOCK_CLASSES } from "../../constants/block-classes";
 import { SETTINGS_SCHEMA } from "../../constants/settings-schema";
 import { SETTINGS_STEP_I18N } from "../../i18n/settings-step-i18n";
 import { useOnboardingStore } from "../../onboarding-store";
 import CurrencyField from "./CurrencyField";
 import TimezoneField from "./TimezoneField";
-
-const BLOCK_CLASSES =
-	"grid gap-2.5 rounded-lg border border-border bg-surface p-4";
 
 interface SettingsStepProps {
 	language: string;

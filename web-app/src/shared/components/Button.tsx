@@ -7,25 +7,37 @@ import {
 } from "react-aria-components";
 
 interface ButtonProps extends AriaButtonProps {
-	variant?: "primary" | "secondary";
+	variant?: "primary" | "secondary" | "ghost" | "icon";
 }
 
 const VARIANT_CLASSES = {
 	primary: {
-		base: "text-on-primary",
+		base: "px-4.5 text-on-primary",
 		idle: "bg-primary",
 		hovered: "bg-primary-hover",
 		pressed: "bg-primary-pressed",
 	},
 	secondary: {
-		base: "border border-input text-fg",
+		base: "border border-input px-4.5 text-fg",
 		idle: "bg-surface",
+		hovered: "bg-surface-hover",
+		pressed: "bg-surface-sunken",
+	},
+	ghost: {
+		base: "gap-1.5 px-4.5 text-primary",
+		idle: "bg-transparent",
+		hovered: "bg-primary-soft",
+		pressed: "bg-primary-soft",
+	},
+	icon: {
+		base: "w-11 flex-none text-fg-muted",
+		idle: "bg-transparent",
 		hovered: "bg-surface-hover",
 		pressed: "bg-surface-sunken",
 	},
 };
 
-/** Accessible button of the app in the primary or secondary style. */
+/** Accessible button of the app in the primary, secondary or ghost style, or a square icon button. */
 const Button = ({
 	variant = "primary",
 	className,
@@ -44,7 +56,7 @@ const Button = ({
 						? "cursor-default opacity-45"
 						: "cursor-pointer";
 
-					return `inline-flex min-h-11 items-center justify-center rounded-md px-4.5 font-semibold transition-colors ${base} ${background} ${disabled} ${customClasses}`;
+					return `inline-flex min-h-11 items-center justify-center rounded-md font-semibold transition-colors ${base} ${background} ${disabled} ${customClasses}`;
 				},
 			)}
 		/>

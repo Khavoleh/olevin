@@ -1,7 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts.HasFirstSnapshot;
 using Olevin.Api.Features.Settings.Data;
 using Olevin.Api.Features.Settings.Data.Users;
 using Olevin.Api.Infrastructure.Auth;

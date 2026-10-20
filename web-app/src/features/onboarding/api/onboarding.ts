@@ -8,6 +8,7 @@
 import { apiRequest } from "@shared/helpers";
 import type {
 	ConfigureUserSettingsRequest,
+	FirstSnapshot,
 	ResponseOfCurrencyCode,
 	ResponseOfGuid,
 	ResponseOfOnboardingStatus,
@@ -115,6 +116,87 @@ export const createUser = async (
 	return apiRequest<createUserResponse>(getCreateUserUrl(), {
 		...options,
 		method: "POST",
+	});
+};
+
+export type createFirstSnapshotResponse201 = {
+	data: ResponseOfGuid;
+	status: 201;
+};
+
+export type createFirstSnapshotResponse400 = {
+	data: ResponseOfGuid;
+	status: 400;
+};
+
+export type createFirstSnapshotResponse404 = {
+	data: ResponseOfGuid;
+	status: 404;
+};
+
+export type createFirstSnapshotResponse409 = {
+	data: ResponseOfGuid;
+	status: 409;
+};
+
+export type createFirstSnapshotResponseSuccess =
+	createFirstSnapshotResponse201 & {
+		headers: Headers;
+	};
+export type createFirstSnapshotResponseError = (
+	| createFirstSnapshotResponse400
+	| createFirstSnapshotResponse404
+	| createFirstSnapshotResponse409
+) & {
+	headers: Headers;
+};
+
+export type createFirstSnapshotResponse =
+	| createFirstSnapshotResponseSuccess
+	| createFirstSnapshotResponseError;
+
+export const getCreateFirstSnapshotUrl = () => {
+	return `/settings/v1/user/onboarding/first-snapshot`;
+};
+
+/**
+ * It only reads the settings, so it opts out of the automatic transactions.
+ * @summary Handles `POST /settings/v1/user/onboarding/first-snapshot`. The snapshot is for the current month in
+the user's time zone.
+ */
+export const createFirstSnapshot = async (
+	firstSnapshot: FirstSnapshot,
+	options?: RequestInit,
+): Promise<createFirstSnapshotResponse> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return apiRequest<createFirstSnapshotResponse>(getCreateFirstSnapshotUrl(), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: JSON.stringify(firstSnapshot),
 	});
 };
 

@@ -173,38 +173,3 @@ export interface CreateSnapshotRequest {
 	 */
 	selfRating: number;
 }
-
-/**
- * The first snapshot of a user, for the current month, with rough estimates of the 2 months before it.
- */
-export interface CreateFirstSnapshotRequest {
-	/**
-	 * The net income, possibly in several currencies.
-	 * @maxItems 10
-	 */
-	income: Money[];
-	/** The expenses by category, without debt payments. */
-	expenses: ExpensesRequest;
-	/** The amount saved during the month. */
-	saved: Money;
-	/**
-	 * The liquid reserves at the end of the month, possibly in several currencies.
-	 * @maxItems 10
-	 */
-	reserves: Money[];
-	/**
-	 * The monthly debt payments, possibly in several currencies.
-	 * @maxItems 10
-	 */
-	debtPayments: Money[];
-	/**
-	 * The self-rating of calm.
-	 * @minimum 1
-	 * @maximum 5
-	 */
-	selfRating: number;
-	/** The estimate of the month before the current one. */
-	previousMonth: EstimateRequest;
-	/** The estimate of the month before PreviousMonth. */
-	twoMonthsAgo: EstimateRequest;
-}

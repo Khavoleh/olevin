@@ -1,6 +1,4 @@
 using System.Net;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
@@ -9,26 +7,20 @@ using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 using Olevin.Api.Features.Settings.Slices.UserSettings.Contracts;
-using Olevin.Api.Infrastructure.Auth;
 using Olevin.Api.Shared;
 using Wolverine;
-using Wolverine.Http;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts.CreateFirstSnapshot;
 
 /// <summary>
-/// Creates the first snapshot of the signed-in user during onboarding, together with the estimates of the 2 months
-/// before it.
+/// Saves the first snapshot of a user during onboarding, together with the estimates of the 2 months before it.
 /// </summary>
-[Tags("Snapshots")]
-public static class CreateFirstSnapshotEndpoint
+public static class CreateFirstSnapshotHandler
 {
     /// <summary>
-    /// Handles <c>POST /financial-wellness/v1/snapshots/onboarding</c>. The snapshot is for the current month in
-    /// the user's time zone.
+    /// Handles <see cref="CreateFirstSnapshotRequest"/>. The snapshot is for the current month in the user's time zone.
     /// </summary>
-    /// <param name="request">The first snapshot and the estimates.</param>
-    /// <param name="principal">The signed-in user.</param>
+    /// <param name="request">The request.</param>
     /// <param name="db">The financial wellness database.</param>
     /// <param name="bus">The message bus, to read the user's settings.</param>
     /// <param name="time">The clock.</param>
@@ -37,16 +29,8 @@ public static class CreateFirstSnapshotEndpoint
     /// The identifier of the created snapshot (201), a not found (404) when the user or their settings don't exist,
     /// or a conflict (409) when the user already has snapshots.
     /// </returns>
-    [WolverinePost(
-        "/financial-wellness/v1/snapshots/onboarding",
-        OperationId = "CreateFirstSnapshot"
-    )]
-    [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
-    [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]
-    public static async Task<Response<Guid>> Post(
+    public static async Task<Response<Guid>> Handle(
         CreateFirstSnapshotRequest request,
-        ClaimsPrincipal principal,
         FinancialWellnessDbContext db,
         IMessageBus bus,
         TimeProvider time,
@@ -54,7 +38,7 @@ public static class CreateFirstSnapshotEndpoint
     )
     {
         UserSettingsDto? userSettings = await bus.InvokeAsync<UserSettingsDto?>(
-            new GetUserSettingsRequest(principal.GetSubject()),
+            new GetUserSettingsRequest(request.AuthSub),
             ct
         );
 
@@ -74,13 +58,14 @@ public static class CreateFirstSnapshotEndpoint
             );
         }
 
+        FirstSnapshot first = request.Snapshot;
         CurrencyCode baseCurrency = userSettings.BaseCurrency;
         SnapshotMonth current = SnapshotMonth.Current(time.GetUtcNow(), userSettings.Timezone);
         SnapshotMonth previous = current.Previous();
         SnapshotMonth twoMonthsAgo = previous.Previous();
-        EstimateRequest previousEstimate = request.PreviousMonth;
-        EstimateRequest twoMonthsAgoEstimate = request.TwoMonthsAgo;
-        SnapshotAmounts amounts = CreateFirstSnapshotMapping.ToAmounts(request);
+        EstimateRequest previousEstimate = first.PreviousMonth;
+        EstimateRequest twoMonthsAgoEstimate = first.TwoMonthsAgo;
+        SnapshotAmounts amounts = CreateFirstSnapshotMapping.ToAmounts(first);
         short snapshotDay = userSettings.SnapshotDay;
 
         SnapshotRates currentRates = await FxRateLookup.FindAsync(
@@ -102,7 +87,7 @@ public static class CreateFirstSnapshotEndpoint
             ct
         );
 
-        int selfRating = request.SelfRating;
+        int selfRating = first.SelfRating;
         SnapshotFigures[] history =
         [
             new(

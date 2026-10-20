@@ -4,12 +4,12 @@ import { getOnboardingStep } from "./get-onboarding-step";
 describe("getOnboardingStep", () => {
 	it("should return the number of an existing step", () => {
 		expect(getOnboardingStep("1")).toBe(1);
-		expect(getOnboardingStep("5")).toBe(5);
+		expect(getOnboardingStep("4")).toBe(4);
 	});
 
 	it("should return undefined for a step outside the flow", () => {
 		expect(getOnboardingStep("0")).toBeUndefined();
-		expect(getOnboardingStep("6")).toBeUndefined();
+		expect(getOnboardingStep("5")).toBeUndefined();
 	});
 
 	it("should return undefined for a segment that is not a plain number", () => {

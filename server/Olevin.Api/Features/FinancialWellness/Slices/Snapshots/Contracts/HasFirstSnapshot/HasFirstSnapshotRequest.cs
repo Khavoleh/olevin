@@ -1,4 +1,4 @@
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts.HasFirstSnapshot;
 
 /// <summary>
 /// Asks whether the user has the first snapshot with the estimates of the 2 months before it.

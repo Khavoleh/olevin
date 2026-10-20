@@ -1,17 +1,17 @@
 using FluentValidation.TestHelper;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
+using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts.CreateFirstSnapshot;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 using Olevin.Api.Shared;
 using Olevin.Tests.TestData;
 
-namespace Olevin.Tests.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateFirstSnapshot;
+namespace Olevin.Tests.Features.FinancialWellness.Slices.Snapshots.Contracts.CreateFirstSnapshot;
 
-public sealed class CreateFirstSnapshotValidatorTests
+public sealed class FirstSnapshotValidatorTests
 {
-    private readonly CreateFirstSnapshotValidator Validator = new();
+    private readonly FirstSnapshotValidator Validator = new();
 
-    private static CreateFirstSnapshotRequest Valid() =>
+    private static FirstSnapshot Valid() =>
         new(
             [ControlExample.Uah(55_000), ControlExample.Uah(5_000)],
             new ExpensesRequest(
@@ -137,7 +137,7 @@ public sealed class CreateFirstSnapshotValidatorTests
     [Fact]
     public void MissingEstimates_AreRejected()
     {
-        TestValidationResult<CreateFirstSnapshotRequest> result = Validator.TestValidate(
+        TestValidationResult<FirstSnapshot> result = Validator.TestValidate(
             Valid() with
             {
                 PreviousMonth = null!,
