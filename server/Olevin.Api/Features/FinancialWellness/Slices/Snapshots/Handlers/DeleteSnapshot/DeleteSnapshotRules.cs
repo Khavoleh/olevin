@@ -1,4 +1,4 @@
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
+using Olevin.Api.Features.FinancialWellness.Helpers;
 
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.DeleteSnapshot;
 

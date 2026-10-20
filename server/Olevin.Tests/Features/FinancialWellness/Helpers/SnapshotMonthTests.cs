@@ -1,7 +1,7 @@
 using Olevin.Api.Features.FinancialWellness.Data;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
+using Olevin.Api.Features.FinancialWellness.Helpers;
 
-namespace Olevin.Tests.Features.FinancialWellness.Slices.Snapshots.Models;
+namespace Olevin.Tests.Features.FinancialWellness.Helpers;
 
 public sealed class SnapshotMonthTests
 {

@@ -1,6 +1,6 @@
 using Olevin.Api.Features.FinancialWellness.Data;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
+namespace Olevin.Api.Features.FinancialWellness.Helpers;
 
 /// <summary>
 /// The month a snapshot belongs to.

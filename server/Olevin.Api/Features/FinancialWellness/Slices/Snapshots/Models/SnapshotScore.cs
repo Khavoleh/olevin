@@ -1,3 +1,4 @@
+using Olevin.Api.Features.FinancialWellness.Helpers;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Indicators;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Model;
 

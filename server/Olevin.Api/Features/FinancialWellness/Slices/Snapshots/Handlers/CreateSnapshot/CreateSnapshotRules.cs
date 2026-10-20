@@ -1,5 +1,5 @@
 using System.Net;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
+using Olevin.Api.Features.FinancialWellness.Helpers;
 using Olevin.Api.Shared;
 
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Handlers.CreateSnapshot;

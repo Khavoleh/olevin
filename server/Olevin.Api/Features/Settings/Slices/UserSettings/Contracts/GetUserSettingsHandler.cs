@@ -25,6 +25,11 @@ public static class GetUserSettingsHandler
     ) =>
         await db
             .UserSettings.Where(setting => setting.User.AuthSub == request.AuthSub)
-            .ProjectToDto()
+            .Select(setting => new UserSettingsDto(
+                setting.UserId,
+                setting.BaseCurrency,
+                setting.SnapshotDay,
+                setting.Timezone
+            ))
             .FirstOrDefaultAsync(ct);
 }
