@@ -12,7 +12,7 @@ const SignIn = ({ language }: Readonly<SignInProps>) => {
 	const t = getI18n(language, SIGN_IN_I18N);
 
 	return (
-		<Card className="m-auto">
+		<Card className="m-auto max-w-md">
 			<Heading level={1}>{t("title")}</Heading>
 			<Text variant="description" className="mt-2">
 				{t("description")}

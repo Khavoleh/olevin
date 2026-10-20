@@ -7,20 +7,40 @@ interface HomeProps {
 	language: string;
 }
 
-/** Home page of a signed-in user: the sign-out button. */
+/** Home page of a signed-in user: the overview cards and the sign-out button. */
 const Home = ({ language }: Readonly<HomeProps>) => {
 	const t = getI18n(language, HOME_I18N);
 
 	return (
-		<Card>
+		<>
 			<Heading level={1}>{t("title")}</Heading>
 
-			<form action={signOut} className="mt-6">
-				<Button type="submit" variant="secondary" className="w-full">
+			<div className="@container">
+				<div className="grid @4xl:grid-cols-12 grid-cols-1 gap-3 md:gap-4">
+					<Card className="@4xl:order-1 @4xl:col-span-5">
+						<Heading level={2}>{t("index")}</Heading>
+					</Card>
+					<Card className="@4xl:order-3 @4xl:col-span-7">
+						<Heading level={2}>{t("advice")}</Heading>
+					</Card>
+					<Card className="@4xl:order-2 @4xl:col-span-7">
+						<Heading level={2}>{t("subsystems")}</Heading>
+					</Card>
+					<Card className="@4xl:order-4 @4xl:col-span-5">
+						<Heading level={2}>{t("change")}</Heading>
+					</Card>
+					<Card className="@4xl:order-5 @4xl:col-span-full">
+						<Heading level={2}>{t("trend")}</Heading>
+					</Card>
+				</div>
+			</div>
+
+			<form action={signOut}>
+				<Button type="submit" variant="secondary">
 					{t("sign_out")}
 				</Button>
 			</form>
-		</Card>
+		</>
 	);
 };
 

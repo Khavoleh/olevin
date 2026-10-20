@@ -5,11 +5,11 @@ interface CardProps {
 	className?: string;
 }
 
-/** White rounded panel that holds the content of a page. */
+/** White rounded panel that fills the width it is given. */
 const Card = ({ children, className = "" }: Readonly<CardProps>) => {
 	return (
 		<section
-			className={`w-full max-w-md rounded-xl border border-border bg-surface p-4.5 shadow-card lg:p-5.5 ${className}`}
+			className={`w-full rounded-xl border border-border bg-surface p-4.5 shadow-card lg:p-5.5 ${className}`}
 		>
 			{children}
 		</section>
