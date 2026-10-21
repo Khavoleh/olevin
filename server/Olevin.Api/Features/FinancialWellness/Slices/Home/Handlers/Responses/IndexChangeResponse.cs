@@ -1,6 +1,6 @@
 using Olevin.Api.Features.FinancialWellness.Data;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Index.Handlers.Responses;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers.Responses;
 
 /// <summary>
 /// The change of the index since the previous snapshot.

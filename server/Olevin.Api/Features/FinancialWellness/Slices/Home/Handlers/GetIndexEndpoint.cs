@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Helpers;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Model;
-using Olevin.Api.Features.FinancialWellness.Slices.Index.Handlers.Responses;
+using Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers.Responses;
 using Olevin.Api.Features.Settings.Slices.UserSettings.Contracts;
 using Olevin.Api.Infrastructure.Auth;
 using Olevin.Api.Shared;
@@ -13,16 +13,16 @@ using Wolverine;
 using Wolverine.Attributes;
 using Wolverine.Http;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Index.Handlers;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers;
 
 /// <summary>
 /// Gives the latest index of the signed-in user.
 /// </summary>
-[Tags("Index")]
+[Tags("Home")]
 public static class GetIndexEndpoint
 {
     /// <summary>
-    /// Handles <c>GET /financial-wellness/v1/index</c>.
+    /// Handles <c>GET /financial-wellness/v1/home/index</c>.
     /// </summary>
     /// <param name="principal">The signed-in user.</param>
     /// <param name="db">The financial wellness database.</param>
@@ -32,7 +32,7 @@ public static class GetIndexEndpoint
     /// <returns>
     /// The index of the latest snapshot (200), or a not found (404) without user settings or snapshots.
     /// </returns>
-    [WolverineGet("/financial-wellness/v1/index", OperationId = "GetIndex")]
+    [WolverineGet("/financial-wellness/v1/home/index", OperationId = "GetIndex")]
     [ProducesResponseType<Response<GetIndexResponse>>(StatusCodes.Status200OK)]
     [ProducesResponseType<Response<GetIndexResponse>>(StatusCodes.Status404NotFound)]
     [NonTransactional]

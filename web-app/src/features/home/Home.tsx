@@ -1,7 +1,10 @@
 import { Button, Card, Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
-import { HOME_I18N } from "./home-i18n";
-import { signOut } from "./sign-out";
+import { signOut } from "./actions/sign-out";
+import IndexCard from "./components/IndexCard/IndexCard";
+import LoadIndex from "./components/LoadIndex";
+import OverviewHeader from "./components/OverviewHeader";
+import { HOME_I18N } from "./i18n/home-i18n";
 
 interface HomeProps {
 	language: string;
@@ -13,13 +16,15 @@ const Home = ({ language }: Readonly<HomeProps>) => {
 
 	return (
 		<>
-			<Heading level={1}>{t("title")}</Heading>
+			<LoadIndex language={language} />
+			<OverviewHeader language={language} />
 
 			<div className="@container">
 				<div className="grid @4xl:grid-cols-12 grid-cols-1 gap-3 md:gap-4">
-					<Card className="@4xl:order-1 @4xl:col-span-5">
-						<Heading level={2}>{t("index")}</Heading>
-					</Card>
+					<IndexCard
+						language={language}
+						className="@4xl:order-1 @4xl:col-span-5"
+					/>
 					<Card className="@4xl:order-3 @4xl:col-span-7">
 						<Heading level={2}>{t("advice")}</Heading>
 					</Card>

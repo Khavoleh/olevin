@@ -1,8 +1,8 @@
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Helpers;
-using Olevin.Api.Features.FinancialWellness.Slices.Index.Handlers;
+using Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers;
 
-namespace Olevin.Tests.Features.FinancialWellness.Slices.Index.Handlers;
+namespace Olevin.Tests.Features.FinancialWellness.Slices.Home.Handlers;
 
 public sealed class GetIndexRulesTests
 {

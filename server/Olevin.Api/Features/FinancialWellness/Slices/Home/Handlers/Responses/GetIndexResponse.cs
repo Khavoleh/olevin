@@ -1,7 +1,7 @@
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Model;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Index.Handlers.Responses;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers.Responses;
 
 /// <summary>
 /// The latest index of the user.

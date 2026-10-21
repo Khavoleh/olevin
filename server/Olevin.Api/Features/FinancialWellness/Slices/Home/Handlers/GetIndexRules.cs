@@ -1,6 +1,6 @@
 using Olevin.Api.Features.FinancialWellness.Helpers;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Index.Handlers;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers;
 
 /// <summary>
 /// The rules of the index shown to the user.

@@ -4,7 +4,8 @@ import type { I18N } from "@shared/interfaces";
 export const HOME_I18N: I18N = {
 	en: {
 		title: "Overview",
-		index: "Index",
+		snapshot_for: "Snapshot for",
+		next_snapshot: "Next snapshot —",
 		subsystems: "What it is made of",
 		advice: "What will raise the index most",
 		change: "What has changed",
@@ -13,7 +14,8 @@ export const HOME_I18N: I18N = {
 	},
 	uk: {
 		title: "Огляд",
-		index: "Індекс",
+		snapshot_for: "Зріз за",
+		next_snapshot: "Наступний зріз —",
 		subsystems: "З чого складається",
 		advice: "Що найбільше підвищить індекс",
 		change: "Що змінилося",

@@ -1,6 +1,6 @@
 using Olevin.Api.Features.FinancialWellness.Data;
 
-namespace Olevin.Api.Features.FinancialWellness.Slices.Index.Handlers;
+namespace Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers;
 
 /// <summary>
 /// The columns of a stored snapshot the index needs.
