@@ -26,6 +26,7 @@ public static class CreateFirstSnapshotHandler
     /// <param name="db">The financial wellness database.</param>
     /// <param name="bus">The message bus, to read the user's settings.</param>
     /// <param name="time">The clock.</param>
+    /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
     /// The identifier of the created snapshot (201), a not found (404) when the user or their settings don't exist,
@@ -36,6 +37,7 @@ public static class CreateFirstSnapshotHandler
         FinancialWellnessDbContext db,
         IMessageBus bus,
         TimeProvider time,
+        ILogger logger,
         CancellationToken ct
     )
     {
@@ -141,6 +143,12 @@ public static class CreateFirstSnapshotHandler
             )
         );
         db.Snapshots.Add(snapshot);
+
+        logger.LogInformation(
+            "Created the first snapshot {SnapshotId} of the user {UserId}.",
+            snapshot.Id,
+            userSettings.UserId
+        );
 
         return Response<Guid>.Ok(snapshot.Id, HttpStatusCode.Created);
     }

@@ -21,6 +21,7 @@ public static class CreateUserEndpoint
     /// </summary>
     /// <param name="principal">The signed-in user.</param>
     /// <param name="db">The settings database.</param>
+    /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
     /// The identifier of the created user (201), or a conflict (409) when the user already exists.
@@ -31,6 +32,7 @@ public static class CreateUserEndpoint
     public static async Task<Response<Guid>> Post(
         ClaimsPrincipal principal,
         SettingsDbContext db,
+        ILogger logger,
         CancellationToken ct
     )
     {
@@ -42,6 +44,8 @@ public static class CreateUserEndpoint
         User user = new() { Id = Guid.CreateVersion7(), AuthSub = authSub };
 
         db.Users.Add(user);
+
+        logger.LogInformation("Created the user {UserId}.", user.Id);
 
         return Response<Guid>.Ok(user.Id, HttpStatusCode.Created);
     }

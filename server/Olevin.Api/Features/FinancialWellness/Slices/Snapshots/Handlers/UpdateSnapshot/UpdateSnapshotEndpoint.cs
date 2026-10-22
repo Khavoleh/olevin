@@ -34,6 +34,7 @@ public static class UpdateSnapshotEndpoint
     /// <param name="db">The financial wellness database.</param>
     /// <param name="bus">The message bus.</param>
     /// <param name="time">The clock.</param>
+    /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
     /// The snapshot identifier (200), or a not found (404) without user settings or when the user has no such
@@ -49,6 +50,7 @@ public static class UpdateSnapshotEndpoint
         FinancialWellnessDbContext db,
         IMessageBus bus,
         TimeProvider time,
+        ILogger logger,
         CancellationToken ct
     )
     {
@@ -93,6 +95,12 @@ public static class UpdateSnapshotEndpoint
         );
 
         SnapshotRescorer.ApplyFrom(snapshots, month, scores, time.GetUtcNow().UtcDateTime);
+
+        logger.LogInformation(
+            "Updated the snapshot {SnapshotId} of the user {UserId}.",
+            snapshot.Id,
+            userId
+        );
 
         return Response<Guid>.Ok(snapshot.Id);
     }

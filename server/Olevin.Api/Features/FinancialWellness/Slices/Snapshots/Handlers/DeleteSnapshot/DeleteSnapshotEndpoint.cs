@@ -32,6 +32,7 @@ public static class DeleteSnapshotEndpoint
     /// <param name="db">The financial wellness database.</param>
     /// <param name="bus">The message bus.</param>
     /// <param name="time">The clock.</param>
+    /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
     /// No content (204), a not found (404) without user settings or when the user has no such snapshot, or a
@@ -47,6 +48,7 @@ public static class DeleteSnapshotEndpoint
         FinancialWellnessDbContext db,
         IMessageBus bus,
         TimeProvider time,
+        ILogger logger,
         CancellationToken ct
     )
     {
@@ -74,6 +76,12 @@ public static class DeleteSnapshotEndpoint
 
         snapshots.Remove(snapshot);
         db.Snapshots.Remove(snapshot);
+
+        logger.LogInformation(
+            "Deleted the snapshot {SnapshotId} of the user {UserId}.",
+            id,
+            userId
+        );
 
         if (DeleteSnapshotRules.IsLatest(month, snapshots.Select(SnapshotHistoryMapping.MonthOf)))
             return Results.NoContent();

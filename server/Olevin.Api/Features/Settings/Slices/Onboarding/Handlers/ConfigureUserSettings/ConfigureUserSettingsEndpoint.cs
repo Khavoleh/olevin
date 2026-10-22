@@ -23,6 +23,7 @@ public static class ConfigureUserSettingsEndpoint
     /// <param name="request">The settings of the user.</param>
     /// <param name="principal">The signed-in user.</param>
     /// <param name="db">The settings database.</param>
+    /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
     /// The identifier of the user the settings were created for (201),
@@ -37,6 +38,7 @@ public static class ConfigureUserSettingsEndpoint
         ConfigureUserSettingsRequest request,
         ClaimsPrincipal principal,
         SettingsDbContext db,
+        ILogger logger,
         CancellationToken ct
     )
     {
@@ -60,6 +62,8 @@ public static class ConfigureUserSettingsEndpoint
             Timezone = request.Timezone,
             ResearchConsent = request.ResearchConsent,
         };
+
+        logger.LogInformation("Created the settings of the user {UserId}.", user.Id);
 
         return Response<Guid>.Ok(user.Id, HttpStatusCode.Created);
     }

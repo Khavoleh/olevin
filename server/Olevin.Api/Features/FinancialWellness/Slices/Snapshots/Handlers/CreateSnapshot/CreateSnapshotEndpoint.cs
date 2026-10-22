@@ -32,6 +32,7 @@ public static class CreateSnapshotEndpoint
     /// <param name="db">The financial wellness database.</param>
     /// <param name="bus">The message bus.</param>
     /// <param name="time">The clock.</param>
+    /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
     /// The snapshot identifier (201), a bad request (400) for a month that is not allowed, a not found (404) without
@@ -48,6 +49,7 @@ public static class CreateSnapshotEndpoint
         FinancialWellnessDbContext db,
         IMessageBus bus,
         TimeProvider time,
+        ILogger logger,
         CancellationToken ct
     )
     {
@@ -125,6 +127,13 @@ public static class CreateSnapshotEndpoint
         SnapshotMapping.ApplyScore(snapshot, scores[month]);
 
         db.Snapshots.Add(snapshot);
+
+        logger.LogInformation(
+            "Created the snapshot {SnapshotId} of {Month} for the user {UserId}.",
+            snapshot.Id,
+            month,
+            userId
+        );
 
         return Response<Guid>.Ok(snapshot.Id, HttpStatusCode.Created);
     }

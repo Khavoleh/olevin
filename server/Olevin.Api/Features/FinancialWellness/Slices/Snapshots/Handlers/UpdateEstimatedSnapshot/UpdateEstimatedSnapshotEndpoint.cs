@@ -34,6 +34,7 @@ public static class UpdateEstimatedSnapshotEndpoint
     /// <param name="db">The financial wellness database.</param>
     /// <param name="bus">The message bus.</param>
     /// <param name="time">The clock.</param>
+    /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
     /// The estimate identifier (200), or a not found (404) without user settings or when the user has no such
@@ -52,6 +53,7 @@ public static class UpdateEstimatedSnapshotEndpoint
         FinancialWellnessDbContext db,
         IMessageBus bus,
         TimeProvider time,
+        ILogger logger,
         CancellationToken ct
     )
     {
@@ -97,6 +99,12 @@ public static class UpdateEstimatedSnapshotEndpoint
             SnapshotHistoryMapping.MonthOf(estimate),
             scores,
             now
+        );
+
+        logger.LogInformation(
+            "Updated the estimate {EstimateId} of the user {UserId}.",
+            estimate.Id,
+            userId
         );
 
         return Response<Guid>.Ok(estimate.Id);

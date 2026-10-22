@@ -23,6 +23,7 @@ public static class SubmitCfpbResponseEndpoint
     /// <param name="request">The answers of the user.</param>
     /// <param name="principal">The signed-in user.</param>
     /// <param name="db">The settings database.</param>
+    /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
     /// The identifier of the user the response was created for (201), a forbidden (403) when the user has not consented to research,
@@ -41,6 +42,7 @@ public static class SubmitCfpbResponseEndpoint
         SubmitCfpbResponseRequest request,
         ClaimsPrincipal principal,
         SettingsDbContext db,
+        ILogger logger,
         CancellationToken ct
     )
     {
@@ -81,6 +83,8 @@ public static class SubmitCfpbResponseEndpoint
             Is62Plus = request.Is62Plus,
             Score = CfpbScoreTableHelper.ToScore(answers.Sum(answer => answer), request.Is62Plus),
         };
+
+        logger.LogInformation("Saved the CFPB response of the user {UserId}.", user.Id);
 
         return Response<Guid>.Ok(user.Id, HttpStatusCode.Created);
     }
