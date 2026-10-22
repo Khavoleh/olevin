@@ -38,7 +38,7 @@ export default defineConfig(async () => {
 							formatter: "biome",
 							override: {
 								mutator: {
-									path: "@shared/helpers",
+									path: "@shared/api",
 									name: "apiRequest",
 								},
 							},

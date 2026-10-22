@@ -5,7 +5,7 @@
  * OpenAPI spec version: 1.0.0
  */
 
-import { apiRequest } from "@shared/helpers";
+import { apiRequest } from "@shared/api";
 import type {
 	ConfigureUserSettingsRequest,
 	FirstSnapshot,

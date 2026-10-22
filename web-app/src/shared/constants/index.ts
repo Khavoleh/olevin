@@ -6,3 +6,4 @@ export { ONBOARDED_COOKIE } from "./onboarded-cookie";
 export { PAGE_URLS } from "./page-urls/page-urls";
 export { PUBLIC_PAGE_URLS } from "./page-urls/public-page-urls";
 export { REPOSITORY_URL } from "./repository-url";
+export { TRACEPARENT_HEADER } from "./traceparent-header";
