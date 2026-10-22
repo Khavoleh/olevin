@@ -213,3 +213,765 @@ export type ResponseOfGetIndexResponse = zod.input<
 export type ResponseOfGetIndexResponseOutput = zod.output<
 	typeof ResponseOfGetIndexResponse
 >;
+
+export const AdviceStatus = zod
+	.enum(["Shown", "AtMaximum", "AllBest", "NoQuickWin"])
+	.describe(
+		"Whether there is advice for the user, and why not when there is none.",
+	);
+
+export type AdviceStatus = zod.input<typeof AdviceStatus>;
+export type AdviceStatusOutput = zod.output<typeof AdviceStatus>;
+
+export const CurrencyCode = zod
+	.enum(["USD", "EUR", "CAD", "UAH", "PLN"])
+	.describe(
+		"A currency supported by the application. Members match the labels of `financial_wellness.currency_code`.",
+	);
+
+export type CurrencyCode = zod.input<typeof CurrencyCode>;
+export type CurrencyCodeOutput = zod.output<typeof CurrencyCode>;
+
+export const IndicatorChangeResponse = zod
+	.object({
+		from: zod.number().describe("The current value."),
+		to: zod.number().describe("The value after the advice."),
+	})
+	.describe("The value of an indicator now and after the advice.");
+
+export type IndicatorChangeResponse = zod.input<typeof IndicatorChangeResponse>;
+export type IndicatorChangeResponseOutput = zod.output<
+	typeof IndicatorChangeResponse
+>;
+
+export const ExpenseCategory = zod
+	.enum([
+		"Food",
+		"Housing",
+		"Health",
+		"Clothing",
+		"Restaurants",
+		"Transport",
+		"Other",
+	])
+	.describe("A category of monthly expenses.");
+
+export type ExpenseCategory = zod.input<typeof ExpenseCategory>;
+export type ExpenseCategoryOutput = zod.output<typeof ExpenseCategory>;
+
+export const ExpenseCutResponse = zod
+	.object({
+		category: zod
+			.enum([
+				"Food",
+				"Housing",
+				"Health",
+				"Clothing",
+				"Restaurants",
+				"Transport",
+				"Other",
+			])
+			.describe("The category."),
+		amount: zod.number().describe("The monthly amount, rounded to cents."),
+	})
+	.describe("The part of the cut of expenses that falls on one category.");
+
+export type ExpenseCutResponse = zod.input<typeof ExpenseCutResponse>;
+export type ExpenseCutResponseOutput = zod.output<typeof ExpenseCutResponse>;
+
+export const AdviceResponseSavingsRateAdviceResponse = zod
+	.object({
+		kind: zod.enum(["SavingsRate"]),
+		savingsRate: zod
+			.object({
+				from: zod.number().describe("The current value."),
+				to: zod.number().describe("The value after the advice."),
+			})
+			.describe("The savings rate now and after the cut."),
+		amount: zod.number().describe("The monthly cut, rounded to cents."),
+		isPartial: zod
+			.boolean()
+			.describe(
+				"Whether the cut is all the flexible expenses and still smaller than 5% of the income.",
+			),
+		cuts: zod
+			.array(
+				zod
+					.object({
+						category: zod
+							.enum([
+								"Food",
+								"Housing",
+								"Health",
+								"Clothing",
+								"Restaurants",
+								"Transport",
+								"Other",
+							])
+							.describe("The category."),
+						amount: zod
+							.number()
+							.describe("The monthly amount, rounded to cents."),
+					})
+					.describe(
+						"The part of the cut of expenses that falls on one category.",
+					),
+			)
+			.describe(
+				"How the cut splits between the flexible categories, the largest first.",
+			),
+		gain: zod
+			.number()
+			.describe(
+				"The rise of the final index in points, rounded to one decimal.",
+			),
+	})
+	.describe("Cut the flexible expenses to save more of the income.");
+
+export type AdviceResponseSavingsRateAdviceResponse = zod.input<
+	typeof AdviceResponseSavingsRateAdviceResponse
+>;
+export type AdviceResponseSavingsRateAdviceResponseOutput = zod.output<
+	typeof AdviceResponseSavingsRateAdviceResponse
+>;
+
+export const AdviceResponseReserveAdviceResponse = zod
+	.object({
+		kind: zod.enum(["Reserve"]),
+		reserve: zod
+			.object({
+				from: zod.number().describe("The current value."),
+				to: zod.number().describe("The value after the advice."),
+			})
+			.describe(
+				"The reserve in months of expenses and debt payments now and after the top-up.",
+			),
+		monthlyAmount: zod
+			.number()
+			.describe("The amount to put aside every month, rounded to cents."),
+		months: zod.int().describe("The number of months to put it aside."),
+		gain: zod
+			.number()
+			.describe(
+				"The rise of the final index in points, rounded to one decimal.",
+			),
+	})
+	.describe("Put the surplus into the reserve for a few months.");
+
+export type AdviceResponseReserveAdviceResponse = zod.input<
+	typeof AdviceResponseReserveAdviceResponse
+>;
+export type AdviceResponseReserveAdviceResponseOutput = zod.output<
+	typeof AdviceResponseReserveAdviceResponse
+>;
+
+export const AdviceResponseDebtToIncomeAdviceResponse = zod
+	.object({
+		kind: zod.enum(["DebtToIncome"]),
+		debtToIncome: zod
+			.object({
+				from: zod.number().describe("The current value."),
+				to: zod.number().describe("The value after the advice."),
+			})
+			.describe("The debt-to-income now and after the cut."),
+		savingsRate: zod
+			.object({
+				from: zod.number().describe("The current value."),
+				to: zod.number().describe("The value after the advice."),
+			})
+			.describe("The savings rate now and after the cut."),
+		amount: zod
+			.number()
+			.describe("The monthly cut of the debt payments, rounded to cents."),
+		gain: zod
+			.number()
+			.describe(
+				"The rise of the final index in points, rounded to one decimal.",
+			),
+	})
+	.describe("Lower the monthly debt payments.");
+
+export type AdviceResponseDebtToIncomeAdviceResponse = zod.input<
+	typeof AdviceResponseDebtToIncomeAdviceResponse
+>;
+export type AdviceResponseDebtToIncomeAdviceResponseOutput = zod.output<
+	typeof AdviceResponseDebtToIncomeAdviceResponse
+>;
+
+export const AdviceResponseExpenseVariationAdviceResponse = zod
+	.object({
+		kind: zod.enum(["ExpenseVariation"]),
+		expenseVariation: zod
+			.object({
+				from: zod.number().describe("The current value."),
+				to: zod.number().describe("The value after the advice."),
+			})
+			.describe("The variation of expenses now and after the advice."),
+		amount: zod
+			.number()
+			.describe(
+				"How much smaller the typical deviation of monthly expenses should be, rounded to cents.",
+			),
+		gain: zod
+			.number()
+			.describe(
+				"The rise of the final index in points, rounded to one decimal.",
+			),
+	})
+	.describe("Keep the monthly expenses closer to their average.");
+
+export type AdviceResponseExpenseVariationAdviceResponse = zod.input<
+	typeof AdviceResponseExpenseVariationAdviceResponse
+>;
+export type AdviceResponseExpenseVariationAdviceResponseOutput = zod.output<
+	typeof AdviceResponseExpenseVariationAdviceResponse
+>;
+
+export const AdviceResponseSavingsRegularityAdviceResponse = zod
+	.object({
+		kind: zod.enum(["SavingsRegularity"]),
+		savingMonths: zod
+			.int()
+			.describe(
+				"The number of recent months with savings now; the advice adds one.",
+			),
+		months: zod
+			.int()
+			.describe("The number of recent months the regularity covers."),
+		gain: zod
+			.number()
+			.describe(
+				"The rise of the final index in points, rounded to one decimal.",
+			),
+	})
+	.describe("Save something in one more month.");
+
+export type AdviceResponseSavingsRegularityAdviceResponse = zod.input<
+	typeof AdviceResponseSavingsRegularityAdviceResponse
+>;
+export type AdviceResponseSavingsRegularityAdviceResponseOutput = zod.output<
+	typeof AdviceResponseSavingsRegularityAdviceResponse
+>;
+
+export const AdviceResponse = zod
+	.union([
+		zod
+			.object({
+				kind: zod.enum(["SavingsRate"]),
+				savingsRate: zod
+					.object({
+						from: zod.number().describe("The current value."),
+						to: zod.number().describe("The value after the advice."),
+					})
+					.describe("The savings rate now and after the cut."),
+				amount: zod.number().describe("The monthly cut, rounded to cents."),
+				isPartial: zod
+					.boolean()
+					.describe(
+						"Whether the cut is all the flexible expenses and still smaller than 5% of the income.",
+					),
+				cuts: zod
+					.array(
+						zod
+							.object({
+								category: zod
+									.enum([
+										"Food",
+										"Housing",
+										"Health",
+										"Clothing",
+										"Restaurants",
+										"Transport",
+										"Other",
+									])
+									.describe("The category."),
+								amount: zod
+									.number()
+									.describe("The monthly amount, rounded to cents."),
+							})
+							.describe(
+								"The part of the cut of expenses that falls on one category.",
+							),
+					)
+					.describe(
+						"How the cut splits between the flexible categories, the largest first.",
+					),
+				gain: zod
+					.number()
+					.describe(
+						"The rise of the final index in points, rounded to one decimal.",
+					),
+			})
+			.describe("Cut the flexible expenses to save more of the income."),
+		zod
+			.object({
+				kind: zod.enum(["Reserve"]),
+				reserve: zod
+					.object({
+						from: zod.number().describe("The current value."),
+						to: zod.number().describe("The value after the advice."),
+					})
+					.describe(
+						"The reserve in months of expenses and debt payments now and after the top-up.",
+					),
+				monthlyAmount: zod
+					.number()
+					.describe("The amount to put aside every month, rounded to cents."),
+				months: zod.int().describe("The number of months to put it aside."),
+				gain: zod
+					.number()
+					.describe(
+						"The rise of the final index in points, rounded to one decimal.",
+					),
+			})
+			.describe("Put the surplus into the reserve for a few months."),
+		zod
+			.object({
+				kind: zod.enum(["DebtToIncome"]),
+				debtToIncome: zod
+					.object({
+						from: zod.number().describe("The current value."),
+						to: zod.number().describe("The value after the advice."),
+					})
+					.describe("The debt-to-income now and after the cut."),
+				savingsRate: zod
+					.object({
+						from: zod.number().describe("The current value."),
+						to: zod.number().describe("The value after the advice."),
+					})
+					.describe("The savings rate now and after the cut."),
+				amount: zod
+					.number()
+					.describe("The monthly cut of the debt payments, rounded to cents."),
+				gain: zod
+					.number()
+					.describe(
+						"The rise of the final index in points, rounded to one decimal.",
+					),
+			})
+			.describe("Lower the monthly debt payments."),
+		zod
+			.object({
+				kind: zod.enum(["ExpenseVariation"]),
+				expenseVariation: zod
+					.object({
+						from: zod.number().describe("The current value."),
+						to: zod.number().describe("The value after the advice."),
+					})
+					.describe("The variation of expenses now and after the advice."),
+				amount: zod
+					.number()
+					.describe(
+						"How much smaller the typical deviation of monthly expenses should be, rounded to cents.",
+					),
+				gain: zod
+					.number()
+					.describe(
+						"The rise of the final index in points, rounded to one decimal.",
+					),
+			})
+			.describe("Keep the monthly expenses closer to their average."),
+		zod
+			.object({
+				kind: zod.enum(["SavingsRegularity"]),
+				savingMonths: zod
+					.int()
+					.describe(
+						"The number of recent months with savings now; the advice adds one.",
+					),
+				months: zod
+					.int()
+					.describe("The number of recent months the regularity covers."),
+				gain: zod
+					.number()
+					.describe(
+						"The rise of the final index in points, rounded to one decimal.",
+					),
+			})
+			.describe("Save something in one more month."),
+	])
+	.describe("One advice; `kind` names the indicator it improves.");
+
+export type AdviceResponse = zod.input<typeof AdviceResponse>;
+export type AdviceResponseOutput = zod.output<typeof AdviceResponse>;
+
+export const GetAdvicesResponse = zod
+	.object({
+		status: zod
+			.enum(["Shown", "AtMaximum", "AllBest", "NoQuickWin"])
+			.describe("Whether there is advice, and why not when Advices is empty."),
+		currency: zod
+			.enum(["USD", "EUR", "CAD", "UAH", "PLN"])
+			.describe("The base currency of every amount."),
+		advices: zod
+			.array(
+				zod
+					.union([
+						zod
+							.object({
+								kind: zod.enum(["SavingsRate"]),
+								savingsRate: zod
+									.object({
+										from: zod.number().describe("The current value."),
+										to: zod.number().describe("The value after the advice."),
+									})
+									.describe("The savings rate now and after the cut."),
+								amount: zod
+									.number()
+									.describe("The monthly cut, rounded to cents."),
+								isPartial: zod
+									.boolean()
+									.describe(
+										"Whether the cut is all the flexible expenses and still smaller than 5% of the income.",
+									),
+								cuts: zod
+									.array(
+										zod
+											.object({
+												category: zod
+													.enum([
+														"Food",
+														"Housing",
+														"Health",
+														"Clothing",
+														"Restaurants",
+														"Transport",
+														"Other",
+													])
+													.describe("The category."),
+												amount: zod
+													.number()
+													.describe("The monthly amount, rounded to cents."),
+											})
+											.describe(
+												"The part of the cut of expenses that falls on one category.",
+											),
+									)
+									.describe(
+										"How the cut splits between the flexible categories, the largest first.",
+									),
+								gain: zod
+									.number()
+									.describe(
+										"The rise of the final index in points, rounded to one decimal.",
+									),
+							})
+							.describe(
+								"Cut the flexible expenses to save more of the income.",
+							),
+						zod
+							.object({
+								kind: zod.enum(["Reserve"]),
+								reserve: zod
+									.object({
+										from: zod.number().describe("The current value."),
+										to: zod.number().describe("The value after the advice."),
+									})
+									.describe(
+										"The reserve in months of expenses and debt payments now and after the top-up.",
+									),
+								monthlyAmount: zod
+									.number()
+									.describe(
+										"The amount to put aside every month, rounded to cents.",
+									),
+								months: zod
+									.int()
+									.describe("The number of months to put it aside."),
+								gain: zod
+									.number()
+									.describe(
+										"The rise of the final index in points, rounded to one decimal.",
+									),
+							})
+							.describe("Put the surplus into the reserve for a few months."),
+						zod
+							.object({
+								kind: zod.enum(["DebtToIncome"]),
+								debtToIncome: zod
+									.object({
+										from: zod.number().describe("The current value."),
+										to: zod.number().describe("The value after the advice."),
+									})
+									.describe("The debt-to-income now and after the cut."),
+								savingsRate: zod
+									.object({
+										from: zod.number().describe("The current value."),
+										to: zod.number().describe("The value after the advice."),
+									})
+									.describe("The savings rate now and after the cut."),
+								amount: zod
+									.number()
+									.describe(
+										"The monthly cut of the debt payments, rounded to cents.",
+									),
+								gain: zod
+									.number()
+									.describe(
+										"The rise of the final index in points, rounded to one decimal.",
+									),
+							})
+							.describe("Lower the monthly debt payments."),
+						zod
+							.object({
+								kind: zod.enum(["ExpenseVariation"]),
+								expenseVariation: zod
+									.object({
+										from: zod.number().describe("The current value."),
+										to: zod.number().describe("The value after the advice."),
+									})
+									.describe(
+										"The variation of expenses now and after the advice.",
+									),
+								amount: zod
+									.number()
+									.describe(
+										"How much smaller the typical deviation of monthly expenses should be, rounded to cents.",
+									),
+								gain: zod
+									.number()
+									.describe(
+										"The rise of the final index in points, rounded to one decimal.",
+									),
+							})
+							.describe("Keep the monthly expenses closer to their average."),
+						zod
+							.object({
+								kind: zod.enum(["SavingsRegularity"]),
+								savingMonths: zod
+									.int()
+									.describe(
+										"The number of recent months with savings now; the advice adds one.",
+									),
+								months: zod
+									.int()
+									.describe(
+										"The number of recent months the regularity covers.",
+									),
+								gain: zod
+									.number()
+									.describe(
+										"The rise of the final index in points, rounded to one decimal.",
+									),
+							})
+							.describe("Save something in one more month."),
+					])
+					.describe("One advice; `kind` names the indicator it improves."),
+			)
+			.describe("At most three advice, the largest gain first."),
+	})
+	.describe("The advice that raises the latest index of the user most.");
+
+export type GetAdvicesResponse = zod.input<typeof GetAdvicesResponse>;
+export type GetAdvicesResponseOutput = zod.output<typeof GetAdvicesResponse>;
+
+export const ResponseOfGetAdvicesResponse = zod
+	.object({
+		error: zod
+			.string()
+			.nullable()
+			.describe("The reason of the failure, or `null` on success."),
+		data: zod.union([
+			zod.null(),
+			zod
+				.object({
+					status: zod
+						.enum(["Shown", "AtMaximum", "AllBest", "NoQuickWin"])
+						.describe(
+							"Whether there is advice, and why not when Advices is empty.",
+						),
+					currency: zod
+						.enum(["USD", "EUR", "CAD", "UAH", "PLN"])
+						.describe("The base currency of every amount."),
+					advices: zod
+						.array(
+							zod
+								.union([
+									zod
+										.object({
+											kind: zod.enum(["SavingsRate"]),
+											savingsRate: zod
+												.object({
+													from: zod.number().describe("The current value."),
+													to: zod
+														.number()
+														.describe("The value after the advice."),
+												})
+												.describe("The savings rate now and after the cut."),
+											amount: zod
+												.number()
+												.describe("The monthly cut, rounded to cents."),
+											isPartial: zod
+												.boolean()
+												.describe(
+													"Whether the cut is all the flexible expenses and still smaller than 5% of the income.",
+												),
+											cuts: zod
+												.array(
+													zod
+														.object({
+															category: zod
+																.enum([
+																	"Food",
+																	"Housing",
+																	"Health",
+																	"Clothing",
+																	"Restaurants",
+																	"Transport",
+																	"Other",
+																])
+																.describe("The category."),
+															amount: zod
+																.number()
+																.describe(
+																	"The monthly amount, rounded to cents.",
+																),
+														})
+														.describe(
+															"The part of the cut of expenses that falls on one category.",
+														),
+												)
+												.describe(
+													"How the cut splits between the flexible categories, the largest first.",
+												),
+											gain: zod
+												.number()
+												.describe(
+													"The rise of the final index in points, rounded to one decimal.",
+												),
+										})
+										.describe(
+											"Cut the flexible expenses to save more of the income.",
+										),
+									zod
+										.object({
+											kind: zod.enum(["Reserve"]),
+											reserve: zod
+												.object({
+													from: zod.number().describe("The current value."),
+													to: zod
+														.number()
+														.describe("The value after the advice."),
+												})
+												.describe(
+													"The reserve in months of expenses and debt payments now and after the top-up.",
+												),
+											monthlyAmount: zod
+												.number()
+												.describe(
+													"The amount to put aside every month, rounded to cents.",
+												),
+											months: zod
+												.int()
+												.describe("The number of months to put it aside."),
+											gain: zod
+												.number()
+												.describe(
+													"The rise of the final index in points, rounded to one decimal.",
+												),
+										})
+										.describe(
+											"Put the surplus into the reserve for a few months.",
+										),
+									zod
+										.object({
+											kind: zod.enum(["DebtToIncome"]),
+											debtToIncome: zod
+												.object({
+													from: zod.number().describe("The current value."),
+													to: zod
+														.number()
+														.describe("The value after the advice."),
+												})
+												.describe("The debt-to-income now and after the cut."),
+											savingsRate: zod
+												.object({
+													from: zod.number().describe("The current value."),
+													to: zod
+														.number()
+														.describe("The value after the advice."),
+												})
+												.describe("The savings rate now and after the cut."),
+											amount: zod
+												.number()
+												.describe(
+													"The monthly cut of the debt payments, rounded to cents.",
+												),
+											gain: zod
+												.number()
+												.describe(
+													"The rise of the final index in points, rounded to one decimal.",
+												),
+										})
+										.describe("Lower the monthly debt payments."),
+									zod
+										.object({
+											kind: zod.enum(["ExpenseVariation"]),
+											expenseVariation: zod
+												.object({
+													from: zod.number().describe("The current value."),
+													to: zod
+														.number()
+														.describe("The value after the advice."),
+												})
+												.describe(
+													"The variation of expenses now and after the advice.",
+												),
+											amount: zod
+												.number()
+												.describe(
+													"How much smaller the typical deviation of monthly expenses should be, rounded to cents.",
+												),
+											gain: zod
+												.number()
+												.describe(
+													"The rise of the final index in points, rounded to one decimal.",
+												),
+										})
+										.describe(
+											"Keep the monthly expenses closer to their average.",
+										),
+									zod
+										.object({
+											kind: zod.enum(["SavingsRegularity"]),
+											savingMonths: zod
+												.int()
+												.describe(
+													"The number of recent months with savings now; the advice adds one.",
+												),
+											months: zod
+												.int()
+												.describe(
+													"The number of recent months the regularity covers.",
+												),
+											gain: zod
+												.number()
+												.describe(
+													"The rise of the final index in points, rounded to one decimal.",
+												),
+										})
+										.describe("Save something in one more month."),
+								])
+								.describe(
+									"One advice; `kind` names the indicator it improves.",
+								),
+						)
+						.describe("At most three advice, the largest gain first."),
+				})
+				.describe("The result, or the default value of T on failure."),
+		]),
+		validationErrors: zod
+			.array(zod.string())
+			.nullable()
+			.describe(
+				"The failed validation rules, or `null` when the request is valid.",
+			),
+	})
+	.describe("The envelope every endpoint returns.");
+
+export type ResponseOfGetAdvicesResponse = zod.input<
+	typeof ResponseOfGetAdvicesResponse
+>;
+export type ResponseOfGetAdvicesResponseOutput = zod.output<
+	typeof ResponseOfGetAdvicesResponse
+>;

@@ -6,7 +6,10 @@
  */
 
 import { apiRequest } from "@shared/helpers";
-import type { ResponseOfGetIndexResponse } from "./home.schemas";
+import type {
+	ResponseOfGetAdvicesResponse,
+	ResponseOfGetIndexResponse,
+} from "./home.schemas";
 
 export type getIndexResponse200 = {
 	data: ResponseOfGetIndexResponse;
@@ -39,6 +42,44 @@ export const getIndex = async (
 	options?: RequestInit,
 ): Promise<getIndexResponse> => {
 	return apiRequest<getIndexResponse>(getGetIndexUrl(), {
+		...options,
+		method: "GET",
+	});
+};
+
+export type getAdvicesResponse200 = {
+	data: ResponseOfGetAdvicesResponse;
+	status: 200;
+};
+
+export type getAdvicesResponse404 = {
+	data: ResponseOfGetAdvicesResponse;
+	status: 404;
+};
+
+export type getAdvicesResponseSuccess = getAdvicesResponse200 & {
+	headers: Headers;
+};
+export type getAdvicesResponseError = getAdvicesResponse404 & {
+	headers: Headers;
+};
+
+export type getAdvicesResponse =
+	| getAdvicesResponseSuccess
+	| getAdvicesResponseError;
+
+export const getGetAdvicesUrl = () => {
+	return `/financial-wellness/v1/home/advices`;
+};
+
+/**
+ * GET_financial_wellness_v1_home_advices
+ * @summary Handles `GET /financial-wellness/v1/home/advices`.
+ */
+export const getAdvices = async (
+	options?: RequestInit,
+): Promise<getAdvicesResponse> => {
+	return apiRequest<getAdvicesResponse>(getGetAdvicesUrl(), {
 		...options,
 		method: "GET",
 	});

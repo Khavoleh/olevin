@@ -81,3 +81,211 @@ export interface ResponseOfGetIndexResponse {
 	 */
 	validationErrors: string[] | null;
 }
+
+/**
+ * Whether there is advice for the user, and why not when there is none.
+ */
+export type AdviceStatus = (typeof AdviceStatus)[keyof typeof AdviceStatus];
+
+export const AdviceStatus = {
+	Shown: "Shown",
+	AtMaximum: "AtMaximum",
+	AllBest: "AllBest",
+	NoQuickWin: "NoQuickWin",
+} as const;
+
+/**
+ * A currency supported by the application. Members match the labels of `financial_wellness.currency_code`.
+ */
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
+
+export const CurrencyCode = {
+	USD: "USD",
+	EUR: "EUR",
+	CAD: "CAD",
+	UAH: "UAH",
+	PLN: "PLN",
+} as const;
+
+export type AdviceResponseSavingsRateAdviceResponseKind =
+	(typeof AdviceResponseSavingsRateAdviceResponseKind)[keyof typeof AdviceResponseSavingsRateAdviceResponseKind];
+
+export const AdviceResponseSavingsRateAdviceResponseKind = {
+	SavingsRate: "SavingsRate",
+} as const;
+
+/**
+ * The value of an indicator now and after the advice.
+ */
+export interface IndicatorChangeResponse {
+	/** The current value. */
+	from: number;
+	/** The value after the advice. */
+	to: number;
+}
+
+/**
+ * A category of monthly expenses.
+ */
+export type ExpenseCategory =
+	(typeof ExpenseCategory)[keyof typeof ExpenseCategory];
+
+export const ExpenseCategory = {
+	Food: "Food",
+	Housing: "Housing",
+	Health: "Health",
+	Clothing: "Clothing",
+	Restaurants: "Restaurants",
+	Transport: "Transport",
+	Other: "Other",
+} as const;
+
+/**
+ * The part of the cut of expenses that falls on one category.
+ */
+export interface ExpenseCutResponse {
+	/** The category. */
+	category: ExpenseCategory;
+	/** The monthly amount, rounded to cents. */
+	amount: number;
+}
+
+/**
+ * Cut the flexible expenses to save more of the income.
+ */
+export interface AdviceResponseSavingsRateAdviceResponse {
+	kind: AdviceResponseSavingsRateAdviceResponseKind;
+	/** The savings rate now and after the cut. */
+	savingsRate: IndicatorChangeResponse;
+	/** The monthly cut, rounded to cents. */
+	amount: number;
+	/** Whether the cut is all the flexible expenses and still smaller than 5% of the income. */
+	isPartial: boolean;
+	/** How the cut splits between the flexible categories, the largest first. */
+	cuts: ExpenseCutResponse[];
+	/** The rise of the final index in points, rounded to one decimal. */
+	gain: number;
+}
+
+export type AdviceResponseReserveAdviceResponseKind =
+	(typeof AdviceResponseReserveAdviceResponseKind)[keyof typeof AdviceResponseReserveAdviceResponseKind];
+
+export const AdviceResponseReserveAdviceResponseKind = {
+	Reserve: "Reserve",
+} as const;
+
+/**
+ * Put the surplus into the reserve for a few months.
+ */
+export interface AdviceResponseReserveAdviceResponse {
+	kind: AdviceResponseReserveAdviceResponseKind;
+	/** The reserve in months of expenses and debt payments now and after the top-up. */
+	reserve: IndicatorChangeResponse;
+	/** The amount to put aside every month, rounded to cents. */
+	monthlyAmount: number;
+	/** The number of months to put it aside. */
+	months: number;
+	/** The rise of the final index in points, rounded to one decimal. */
+	gain: number;
+}
+
+export type AdviceResponseDebtToIncomeAdviceResponseKind =
+	(typeof AdviceResponseDebtToIncomeAdviceResponseKind)[keyof typeof AdviceResponseDebtToIncomeAdviceResponseKind];
+
+export const AdviceResponseDebtToIncomeAdviceResponseKind = {
+	DebtToIncome: "DebtToIncome",
+} as const;
+
+/**
+ * Lower the monthly debt payments.
+ */
+export interface AdviceResponseDebtToIncomeAdviceResponse {
+	kind: AdviceResponseDebtToIncomeAdviceResponseKind;
+	/** The debt-to-income now and after the cut. */
+	debtToIncome: IndicatorChangeResponse;
+	/** The savings rate now and after the cut. */
+	savingsRate: IndicatorChangeResponse;
+	/** The monthly cut of the debt payments, rounded to cents. */
+	amount: number;
+	/** The rise of the final index in points, rounded to one decimal. */
+	gain: number;
+}
+
+export type AdviceResponseExpenseVariationAdviceResponseKind =
+	(typeof AdviceResponseExpenseVariationAdviceResponseKind)[keyof typeof AdviceResponseExpenseVariationAdviceResponseKind];
+
+export const AdviceResponseExpenseVariationAdviceResponseKind = {
+	ExpenseVariation: "ExpenseVariation",
+} as const;
+
+/**
+ * Keep the monthly expenses closer to their average.
+ */
+export interface AdviceResponseExpenseVariationAdviceResponse {
+	kind: AdviceResponseExpenseVariationAdviceResponseKind;
+	/** The variation of expenses now and after the advice. */
+	expenseVariation: IndicatorChangeResponse;
+	/** How much smaller the typical deviation of monthly expenses should be, rounded to cents. */
+	amount: number;
+	/** The rise of the final index in points, rounded to one decimal. */
+	gain: number;
+}
+
+export type AdviceResponseSavingsRegularityAdviceResponseKind =
+	(typeof AdviceResponseSavingsRegularityAdviceResponseKind)[keyof typeof AdviceResponseSavingsRegularityAdviceResponseKind];
+
+export const AdviceResponseSavingsRegularityAdviceResponseKind = {
+	SavingsRegularity: "SavingsRegularity",
+} as const;
+
+/**
+ * Save something in one more month.
+ */
+export interface AdviceResponseSavingsRegularityAdviceResponse {
+	kind: AdviceResponseSavingsRegularityAdviceResponseKind;
+	/** The number of recent months with savings now; the advice adds one. */
+	savingMonths: number;
+	/** The number of recent months the regularity covers. */
+	months: number;
+	/** The rise of the final index in points, rounded to one decimal. */
+	gain: number;
+}
+
+/**
+ * One advice; `kind` names the indicator it improves.
+ */
+export type AdviceResponse =
+	| AdviceResponseSavingsRateAdviceResponse
+	| AdviceResponseReserveAdviceResponse
+	| AdviceResponseDebtToIncomeAdviceResponse
+	| AdviceResponseExpenseVariationAdviceResponse
+	| AdviceResponseSavingsRegularityAdviceResponse;
+
+/**
+ * The advice that raises the latest index of the user most.
+ */
+export interface GetAdvicesResponse {
+	/** Whether there is advice, and why not when Advices is empty. */
+	status: AdviceStatus;
+	/** The base currency of every amount. */
+	currency: CurrencyCode;
+	/** At most three advice, the largest gain first. */
+	advices: AdviceResponse[];
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfGetAdvicesResponse {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	data: null | GetAdvicesResponse;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
