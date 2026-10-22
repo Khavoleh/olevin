@@ -1,14 +1,11 @@
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
-using Olevin.Api.Features.FinancialWellness.Helpers.Index.Indicators;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 using Olevin.Api.Shared;
 
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 
 /// <summary>
-/// Maps the amounts of a snapshot between the request, the stored <see cref="SnapshotAmounts"/> and the figures of
-/// the core.
+/// Maps the amounts of a snapshot from the request to the stored <see cref="SnapshotAmounts"/>.
 /// </summary>
 public static class SnapshotAmountsMapping
 {
@@ -43,43 +40,6 @@ public static class SnapshotAmountsMapping
             [.. reserves],
             [.. debtPayments]
         );
-
-    /// <summary>
-    /// Converts the amounts of an actual snapshot to the figures of the core in the base currency.
-    /// </summary>
-    /// <param name="amounts">The amounts.</param>
-    /// <param name="rates">The rates of the snapshot.</param>
-    /// <param name="baseCurrency">The base currency of the user.</param>
-    /// <param name="selfRating">The self-rating of calm from 1 to 5.</param>
-    /// <returns>The figures of the month.</returns>
-    public static MonthFigures ToFigures(
-        SnapshotAmounts amounts,
-        ExchangeRates rates,
-        CurrencyCode baseCurrency,
-        int selfRating
-    )
-    {
-        double ToBase(Money money) => (double)rates.Convert(money, baseCurrency);
-
-        ExpenseAmounts expenses = amounts.Expenses;
-
-        return MonthFigures.Actual(
-            amounts.Income.Sum(ToBase),
-            new ExpenseBreakdown(
-                ToBase(expenses.Food),
-                ToBase(expenses.Housing),
-                ToBase(expenses.Health),
-                ToBase(expenses.Clothing),
-                ToBase(expenses.Restaurants),
-                ToBase(expenses.Transport),
-                ToBase(expenses.Other)
-            ),
-            ToBase(amounts.Saved),
-            amounts.Reserves.Sum(ToBase),
-            amounts.DebtPayments.Sum(ToBase),
-            selfRating
-        );
-    }
 
     /// <summary>
     /// Lists the currencies the amounts were entered in.

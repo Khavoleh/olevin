@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 using Olevin.Api.Features.FinancialWellness.Helpers;
+using Olevin.Api.Features.FinancialWellness.Helpers.History;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Helpers;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
@@ -105,7 +106,7 @@ public static class CreateFirstSnapshotHandler
             ),
             new(
                 current,
-                SnapshotAmountsMapping.ToFigures(
+                SnapshotHistoryMapping.ToFigures(
                     amounts,
                     currentRates.Rates,
                     baseCurrency,

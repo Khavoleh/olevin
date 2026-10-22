@@ -2,6 +2,7 @@ using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.EstimatedSnapshots;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 using Olevin.Api.Features.FinancialWellness.Helpers;
+using Olevin.Api.Features.FinancialWellness.Helpers.History;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Shared;
@@ -28,19 +29,7 @@ public static class SnapshotRescorer
         IReadOnlyList<Snapshot> snapshots,
         CurrencyCode baseCurrency,
         CancellationToken ct
-    )
-    {
-        Dictionary<DateOnly, ExchangeRates> rates = await FxRateLookup.LoadAsync(
-            db,
-            [
-                .. estimates.Select(estimate => estimate.FxDate),
-                .. snapshots.Select(snapshot => snapshot.FxDate),
-            ],
-            ct
-        );
-
-        return Score(estimates, snapshots, rates, baseCurrency);
-    }
+    ) => ByMonth(await SnapshotHistory.LoadAsync(db, estimates, snapshots, baseCurrency, ct));
 
     /// <summary>
     /// Scores every snapshot of the user.
@@ -55,22 +44,7 @@ public static class SnapshotRescorer
         IEnumerable<Snapshot> snapshots,
         IReadOnlyDictionary<DateOnly, ExchangeRates> rates,
         CurrencyCode baseCurrency
-    )
-    {
-        SnapshotFigures[] history =
-        [
-            .. estimates.Select(estimate =>
-                SnapshotHistoryMapping.ToFigures(estimate, rates[estimate.FxDate], baseCurrency)
-            ),
-            .. snapshots.Select(snapshot =>
-                SnapshotHistoryMapping.ToFigures(snapshot, rates[snapshot.FxDate], baseCurrency)
-            ),
-        ];
-
-        return SnapshotScorer
-            .Score([.. history.OrderBy(figures => (figures.Month.Year, figures.Month.Month))])
-            .ToDictionary(score => score.Month);
-    }
+    ) => ByMonth(SnapshotHistory.Build(estimates, snapshots, rates, baseCurrency));
 
     /// <summary>
     /// Applies the new scores to the snapshots of the month and the later ones. Earlier months don't depend on it.
@@ -96,4 +70,8 @@ public static class SnapshotRescorer
             snapshot.UpdatedAt = now;
         }
     }
+
+    private static Dictionary<SnapshotMonth, SnapshotScore> ByMonth(
+        IReadOnlyList<SnapshotFigures> history
+    ) => SnapshotScorer.Score(history).ToDictionary(score => score.Month);
 }

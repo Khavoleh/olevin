@@ -1,8 +1,8 @@
 using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 using Olevin.Api.Features.FinancialWellness.Helpers;
+using Olevin.Api.Features.FinancialWellness.Helpers.History;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Indicators;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Shared;
 
 namespace Olevin.Tests.TestData;

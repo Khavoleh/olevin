@@ -1,3 +1,5 @@
+using Olevin.Api.Features.FinancialWellness.Helpers.History;
+
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 
 /// <summary>
