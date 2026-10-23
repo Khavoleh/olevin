@@ -83,6 +83,120 @@ export interface ResponseOfGetIndexResponse {
 }
 
 /**
+ * The term of the "cash flow" or "financial buffer" subsystem with the highest degree of membership.
+ */
+export type SubsystemTerm = (typeof SubsystemTerm)[keyof typeof SubsystemTerm];
+
+export const SubsystemTerm = {
+	Weak: "Weak",
+	Moderate: "Moderate",
+	Strong: "Strong",
+} as const;
+
+/**
+ * The "cash flow" subsystem and the indicators it is calculated from.
+ */
+export interface CashFlowResponse {
+	/** The output from 0 to 100, rounded to one decimal. */
+	value: number;
+	/** The term of Value. */
+	term: SubsystemTerm;
+	/**
+	 * The savings rate SR before limiting, for example −0.35; `null` without income.
+	 * @nullable
+	 */
+	savingsRate: number | null;
+	/**
+	 * The debt-to-income DTI before limiting; `null` without income.
+	 * @nullable
+	 */
+	debtToIncome: number | null;
+}
+
+/**
+ * The "financial buffer" subsystem and the indicators it is calculated from.
+ */
+export interface BufferResponse {
+	/** The output from 0 to 100, rounded to one decimal. */
+	value: number;
+	/** The term of Value. */
+	term: SubsystemTerm;
+	/**
+	 * The reserve R in months before limiting; `null` without expenses and debt payments.
+	 * @nullable
+	 */
+	reserveMonths: number | null;
+	/**
+	 * The expense variation CV before limiting; `null` while there is one month.
+	 * @nullable
+	 */
+	expenseVariation: number | null;
+}
+
+/**
+ * The term of the savings regularity RG with the highest degree of membership.
+ */
+export type SavingsRegularityTerm =
+	(typeof SavingsRegularityTerm)[keyof typeof SavingsRegularityTerm];
+
+export const SavingsRegularityTerm = {
+	Rarely: "Rarely",
+	Sometimes: "Sometimes",
+	Regularly: "Regularly",
+} as const;
+
+/**
+ * One month of the savings regularity.
+ */
+export interface SavingsMonthResponse {
+	/** The year of the month. */
+	year: number;
+	/** The month. */
+	month: CalendarMonth;
+	/** Whether the user saved something that month. */
+	hasSaved: boolean;
+}
+
+/**
+ * The savings regularity: in which of the recent months the user saved something.
+ */
+export interface SavingsRegularityResponse {
+	/** The term of the share of Months with savings. */
+	term: SavingsRegularityTerm;
+	/** From 1 to 6 recent months, estimates included, the oldest first. */
+	months: SavingsMonthResponse[];
+}
+
+/**
+ * What the latest index of the user is made of: the two subsystems and the savings regularity.
+ */
+export interface GetCompositionResponse {
+	/** The "cash flow" subsystem F₁. */
+	cashFlow: CashFlowResponse;
+	/** The "financial buffer" subsystem F₂. */
+	buffer: BufferResponse;
+	/** The savings regularity RG. */
+	savingsRegularity: SavingsRegularityResponse;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfGetCompositionResponse {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	data: null | GetCompositionResponse;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * Whether there is advice for the user, and why not when there is none.
  */
 export type AdviceStatus = (typeof AdviceStatus)[keyof typeof AdviceStatus];

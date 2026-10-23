@@ -8,6 +8,7 @@
 import { apiRequest } from "@shared/api";
 import type {
 	ResponseOfGetAdvicesResponse,
+	ResponseOfGetCompositionResponse,
 	ResponseOfGetIndexResponse,
 } from "./home.schemas";
 
@@ -42,6 +43,44 @@ export const getIndex = async (
 	options?: RequestInit,
 ): Promise<getIndexResponse> => {
 	return apiRequest<getIndexResponse>(getGetIndexUrl(), {
+		...options,
+		method: "GET",
+	});
+};
+
+export type getCompositionResponse200 = {
+	data: ResponseOfGetCompositionResponse;
+	status: 200;
+};
+
+export type getCompositionResponse404 = {
+	data: ResponseOfGetCompositionResponse;
+	status: 404;
+};
+
+export type getCompositionResponseSuccess = getCompositionResponse200 & {
+	headers: Headers;
+};
+export type getCompositionResponseError = getCompositionResponse404 & {
+	headers: Headers;
+};
+
+export type getCompositionResponse =
+	| getCompositionResponseSuccess
+	| getCompositionResponseError;
+
+export const getGetCompositionUrl = () => {
+	return `/financial-wellness/v1/home/composition`;
+};
+
+/**
+ * GET_financial_wellness_v1_home_composition
+ * @summary Handles `GET /financial-wellness/v1/home/composition`.
+ */
+export const getComposition = async (
+	options?: RequestInit,
+): Promise<getCompositionResponse> => {
+	return apiRequest<getCompositionResponse>(getGetCompositionUrl(), {
 		...options,
 		method: "GET",
 	});

@@ -214,6 +214,364 @@ export type ResponseOfGetIndexResponseOutput = zod.output<
 	typeof ResponseOfGetIndexResponse
 >;
 
+export const SubsystemTerm = zod
+	.enum(["Weak", "Moderate", "Strong"])
+	.describe(
+		'The term of the "cash flow" or "financial buffer" subsystem with the highest degree of membership.',
+	);
+
+export type SubsystemTerm = zod.input<typeof SubsystemTerm>;
+export type SubsystemTermOutput = zod.output<typeof SubsystemTerm>;
+
+export const CashFlowResponse = zod
+	.object({
+		value: zod
+			.number()
+			.describe("The output from 0 to 100, rounded to one decimal."),
+		term: zod
+			.enum(["Weak", "Moderate", "Strong"])
+			.describe("The term of Value."),
+		savingsRate: zod
+			.number()
+			.nullable()
+			.describe(
+				"The savings rate SR before limiting, for example −0.35; `null` without income.",
+			),
+		debtToIncome: zod
+			.number()
+			.nullable()
+			.describe(
+				"The debt-to-income DTI before limiting; `null` without income.",
+			),
+	})
+	.describe(
+		'The "cash flow" subsystem and the indicators it is calculated from.',
+	);
+
+export type CashFlowResponse = zod.input<typeof CashFlowResponse>;
+export type CashFlowResponseOutput = zod.output<typeof CashFlowResponse>;
+
+export const BufferResponse = zod
+	.object({
+		value: zod
+			.number()
+			.describe("The output from 0 to 100, rounded to one decimal."),
+		term: zod
+			.enum(["Weak", "Moderate", "Strong"])
+			.describe("The term of Value."),
+		reserveMonths: zod
+			.number()
+			.nullable()
+			.describe(
+				"The reserve R in months before limiting; `null` without expenses and debt payments.",
+			),
+		expenseVariation: zod
+			.number()
+			.nullable()
+			.describe(
+				"The expense variation CV before limiting; `null` while there is one month.",
+			),
+	})
+	.describe(
+		'The "financial buffer" subsystem and the indicators it is calculated from.',
+	);
+
+export type BufferResponse = zod.input<typeof BufferResponse>;
+export type BufferResponseOutput = zod.output<typeof BufferResponse>;
+
+export const SavingsRegularityTerm = zod
+	.enum(["Rarely", "Sometimes", "Regularly"])
+	.describe(
+		"The term of the savings regularity RG with the highest degree of membership.",
+	);
+
+export type SavingsRegularityTerm = zod.input<typeof SavingsRegularityTerm>;
+export type SavingsRegularityTermOutput = zod.output<
+	typeof SavingsRegularityTerm
+>;
+
+export const SavingsMonthResponse = zod
+	.object({
+		year: zod.int().describe("The year of the month."),
+		month: zod
+			.enum([
+				"January",
+				"February",
+				"March",
+				"April",
+				"May",
+				"June",
+				"July",
+				"August",
+				"September",
+				"October",
+				"November",
+				"December",
+			])
+			.describe("The month."),
+		hasSaved: zod
+			.boolean()
+			.describe("Whether the user saved something that month."),
+	})
+	.describe("One month of the savings regularity.");
+
+export type SavingsMonthResponse = zod.input<typeof SavingsMonthResponse>;
+export type SavingsMonthResponseOutput = zod.output<
+	typeof SavingsMonthResponse
+>;
+
+export const SavingsRegularityResponse = zod
+	.object({
+		term: zod
+			.enum(["Rarely", "Sometimes", "Regularly"])
+			.describe("The term of the share of Months with savings."),
+		months: zod
+			.array(
+				zod
+					.object({
+						year: zod.int().describe("The year of the month."),
+						month: zod
+							.enum([
+								"January",
+								"February",
+								"March",
+								"April",
+								"May",
+								"June",
+								"July",
+								"August",
+								"September",
+								"October",
+								"November",
+								"December",
+							])
+							.describe("The month."),
+						hasSaved: zod
+							.boolean()
+							.describe("Whether the user saved something that month."),
+					})
+					.describe("One month of the savings regularity."),
+			)
+			.describe(
+				"From 1 to 6 recent months, estimates included, the oldest first.",
+			),
+	})
+	.describe(
+		"The savings regularity: in which of the recent months the user saved something.",
+	);
+
+export type SavingsRegularityResponse = zod.input<
+	typeof SavingsRegularityResponse
+>;
+export type SavingsRegularityResponseOutput = zod.output<
+	typeof SavingsRegularityResponse
+>;
+
+export const GetCompositionResponse = zod
+	.object({
+		cashFlow: zod
+			.object({
+				value: zod
+					.number()
+					.describe("The output from 0 to 100, rounded to one decimal."),
+				term: zod
+					.enum(["Weak", "Moderate", "Strong"])
+					.describe("The term of Value."),
+				savingsRate: zod
+					.number()
+					.nullable()
+					.describe(
+						"The savings rate SR before limiting, for example −0.35; `null` without income.",
+					),
+				debtToIncome: zod
+					.number()
+					.nullable()
+					.describe(
+						"The debt-to-income DTI before limiting; `null` without income.",
+					),
+			})
+			.describe('The "cash flow" subsystem F₁.'),
+		buffer: zod
+			.object({
+				value: zod
+					.number()
+					.describe("The output from 0 to 100, rounded to one decimal."),
+				term: zod
+					.enum(["Weak", "Moderate", "Strong"])
+					.describe("The term of Value."),
+				reserveMonths: zod
+					.number()
+					.nullable()
+					.describe(
+						"The reserve R in months before limiting; `null` without expenses and debt payments.",
+					),
+				expenseVariation: zod
+					.number()
+					.nullable()
+					.describe(
+						"The expense variation CV before limiting; `null` while there is one month.",
+					),
+			})
+			.describe('The "financial buffer" subsystem F₂.'),
+		savingsRegularity: zod
+			.object({
+				term: zod
+					.enum(["Rarely", "Sometimes", "Regularly"])
+					.describe("The term of the share of Months with savings."),
+				months: zod
+					.array(
+						zod
+							.object({
+								year: zod.int().describe("The year of the month."),
+								month: zod
+									.enum([
+										"January",
+										"February",
+										"March",
+										"April",
+										"May",
+										"June",
+										"July",
+										"August",
+										"September",
+										"October",
+										"November",
+										"December",
+									])
+									.describe("The month."),
+								hasSaved: zod
+									.boolean()
+									.describe("Whether the user saved something that month."),
+							})
+							.describe("One month of the savings regularity."),
+					)
+					.describe(
+						"From 1 to 6 recent months, estimates included, the oldest first.",
+					),
+			})
+			.describe("The savings regularity RG."),
+	})
+	.describe(
+		"What the latest index of the user is made of: the two subsystems and the savings regularity.",
+	);
+
+export type GetCompositionResponse = zod.input<typeof GetCompositionResponse>;
+export type GetCompositionResponseOutput = zod.output<
+	typeof GetCompositionResponse
+>;
+
+export const ResponseOfGetCompositionResponse = zod
+	.object({
+		error: zod
+			.string()
+			.nullable()
+			.describe("The reason of the failure, or `null` on success."),
+		data: zod.union([
+			zod.null(),
+			zod
+				.object({
+					cashFlow: zod
+						.object({
+							value: zod
+								.number()
+								.describe("The output from 0 to 100, rounded to one decimal."),
+							term: zod
+								.enum(["Weak", "Moderate", "Strong"])
+								.describe("The term of Value."),
+							savingsRate: zod
+								.number()
+								.nullable()
+								.describe(
+									"The savings rate SR before limiting, for example −0.35; `null` without income.",
+								),
+							debtToIncome: zod
+								.number()
+								.nullable()
+								.describe(
+									"The debt-to-income DTI before limiting; `null` without income.",
+								),
+						})
+						.describe('The "cash flow" subsystem F₁.'),
+					buffer: zod
+						.object({
+							value: zod
+								.number()
+								.describe("The output from 0 to 100, rounded to one decimal."),
+							term: zod
+								.enum(["Weak", "Moderate", "Strong"])
+								.describe("The term of Value."),
+							reserveMonths: zod
+								.number()
+								.nullable()
+								.describe(
+									"The reserve R in months before limiting; `null` without expenses and debt payments.",
+								),
+							expenseVariation: zod
+								.number()
+								.nullable()
+								.describe(
+									"The expense variation CV before limiting; `null` while there is one month.",
+								),
+						})
+						.describe('The "financial buffer" subsystem F₂.'),
+					savingsRegularity: zod
+						.object({
+							term: zod
+								.enum(["Rarely", "Sometimes", "Regularly"])
+								.describe("The term of the share of Months with savings."),
+							months: zod
+								.array(
+									zod
+										.object({
+											year: zod.int().describe("The year of the month."),
+											month: zod
+												.enum([
+													"January",
+													"February",
+													"March",
+													"April",
+													"May",
+													"June",
+													"July",
+													"August",
+													"September",
+													"October",
+													"November",
+													"December",
+												])
+												.describe("The month."),
+											hasSaved: zod
+												.boolean()
+												.describe(
+													"Whether the user saved something that month.",
+												),
+										})
+										.describe("One month of the savings regularity."),
+								)
+								.describe(
+									"From 1 to 6 recent months, estimates included, the oldest first.",
+								),
+						})
+						.describe("The savings regularity RG."),
+				})
+				.describe("The result, or the default value of T on failure."),
+		]),
+		validationErrors: zod
+			.array(zod.string())
+			.nullable()
+			.describe(
+				"The failed validation rules, or `null` when the request is valid.",
+			),
+	})
+	.describe("The envelope every endpoint returns.");
+
+export type ResponseOfGetCompositionResponse = zod.input<
+	typeof ResponseOfGetCompositionResponse
+>;
+export type ResponseOfGetCompositionResponseOutput = zod.output<
+	typeof ResponseOfGetCompositionResponse
+>;
+
 export const AdviceStatus = zod
 	.enum(["Shown", "AtMaximum", "AllBest", "NoQuickWin"])
 	.describe(
