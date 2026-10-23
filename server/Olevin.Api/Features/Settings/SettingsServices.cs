@@ -32,7 +32,7 @@ public static class SettingsServices
         services.AddDbContextWithWolverineIntegration<SettingsDbContext>(
             (provider, options) =>
                 options.UseNpgsql(
-                    provider.GetRequiredService<IOptions<DbOptions>>().Value.Olevin,
+                    provider.GetRequiredService<IOptions<DbOptions>>().Value.Settings,
                     npgsql =>
                     {
                         npgsql.MapEnum<CurrencyCode>("currency_code", CurrencySchema, Labels);

@@ -20,7 +20,7 @@ public static class MessagePersistence
     /// writes every sent message to the outbox before the commit.
     /// </summary>
     /// <param name="options">The Wolverine options.</param>
-    /// <param name="configuration">The application configuration with the <c>Olevin</c> connection string.</param>
+    /// <param name="configuration">The application configuration with the <c>Wolverine</c> connection string.</param>
     /// <returns>The same options for chaining.</returns>
     /// <exception cref="InvalidOperationException">The connection string is missing.</exception>
     public static WolverineOptions PersistMessagesInDatabase(
@@ -29,8 +29,8 @@ public static class MessagePersistence
     )
     {
         string connectionString =
-            configuration.GetConnectionString(nameof(DbOptions.Olevin))
-            ?? throw new InvalidOperationException("The Olevin connection string is missing.");
+            configuration.GetConnectionString(nameof(DbOptions.Wolverine))
+            ?? throw new InvalidOperationException("The Wolverine connection string is missing.");
 
         options.PersistMessagesWithPostgresql(connectionString, Schema);
         options.AutoBuildMessageStorageOnStartup = AutoCreate.CreateOrUpdate;

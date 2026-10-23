@@ -20,8 +20,16 @@ public static class DatabaseServices
             .AddOptions<DbOptions>()
             .Bind(configuration.GetRequiredSection(DbOptions.SectionName))
             .Validate(
-                options => !string.IsNullOrWhiteSpace(options.Olevin),
-                "The Olevin connection string is missing."
+                options => !string.IsNullOrWhiteSpace(options.Wolverine),
+                "The Wolverine connection string is missing."
+            )
+            .Validate(
+                options => !string.IsNullOrWhiteSpace(options.Settings),
+                "The Settings connection string is missing."
+            )
+            .Validate(
+                options => !string.IsNullOrWhiteSpace(options.FinancialWellness),
+                "The FinancialWellness connection string is missing."
             )
             .ValidateOnStart();
 

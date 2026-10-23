@@ -34,7 +34,7 @@ public static class FinancialWellnessServices
         services.AddDbContextWithWolverineIntegration<FinancialWellnessDbContext>(
             (provider, options) =>
                 options.UseNpgsql(
-                    provider.GetRequiredService<IOptions<DbOptions>>().Value.Olevin,
+                    provider.GetRequiredService<IOptions<DbOptions>>().Value.FinancialWellness,
                     npgsql =>
                     {
                         npgsql.MapEnum<CurrencyCode>("currency_code", Schema, Labels);
