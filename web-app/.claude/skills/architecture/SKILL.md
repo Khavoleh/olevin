@@ -42,7 +42,7 @@ app → features → widgets → shared
 
 Each slice is a self-contained folder at the layer root. Everything inside stays private behind the single top-level barrel:
 
-The root component and `index.ts` sit at the slice root. Two or more files of the same kind go into a kind folder (`components/`, `constants/`, `helpers/`, `i18n/`, `api/` for Orval output); a lone file of its kind stays at the root. An item with its own test gets its own sub-folder inside the kind folder. None of these folders has an `index.ts`.
+The root component and `index.ts` sit at the slice root. Two or more files of the same kind go into a kind folder (`components/`, `constants/`, `helpers/`, `i18n/`, `actions/` for Server Actions, `loaders/` for the `cache`-wrapped functions Server Components read API data with, `api/` for Orval output); a lone file of its kind stays at the root (`features/home/sign-out.ts`, `features/snapshots/get-snapshot-history.ts`). An item with its own test gets its own sub-folder inside the kind folder. None of these folders has an `index.ts`.
 
 ```
 src/features/onboarding/

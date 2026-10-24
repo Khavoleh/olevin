@@ -1,13 +1,12 @@
 import { Button, Card, Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
-import { signOut } from "./actions/sign-out";
 import AdviceCard from "./components/AdviceCard/AdviceCard";
 import CompositionCard from "./components/CompositionCard/CompositionCard";
 import ContributionsCard from "./components/ContributionsCard/ContributionsCard";
 import IndexCard from "./components/IndexCard/IndexCard";
-import LoadIndex from "./components/LoadIndex";
-import OverviewHeader from "./components/OverviewHeader";
+import OverviewHeader from "./components/OverviewHeader/OverviewHeader";
 import { HOME_I18N } from "./i18n/home-i18n";
+import { signOut } from "./sign-out";
 
 interface HomeProps {
 	language: string;
@@ -19,7 +18,6 @@ const Home = ({ language }: Readonly<HomeProps>) => {
 
 	return (
 		<>
-			<LoadIndex language={language} />
 			<OverviewHeader language={language} />
 
 			<div className="@container">

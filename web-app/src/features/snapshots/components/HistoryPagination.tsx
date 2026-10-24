@@ -3,12 +3,14 @@
 import { CaretLeftIcon, CaretRightIcon } from "@phosphor-icons/react";
 import { Button, Select, Text } from "@shared/components";
 import { getI18n } from "@shared/helpers";
+import type { GetSnapshotsResponse } from "../api/snapshots.schemas";
 import { PAGE_SIZES } from "../constants/page-sizes";
 import { SNAPSHOTS_I18N } from "../snapshots-i18n";
 import { useSnapshotsStore } from "../snapshots-store";
 import { useHistoryPage } from "../use-history-page";
 
 interface HistoryPaginationProps {
+	history: GetSnapshotsResponse;
 	language: string;
 }
 
@@ -18,14 +20,17 @@ const PAGE_SIZE_OPTIONS = PAGE_SIZES.map((size) => ({
 }));
 
 /** Rows per page and the arrows between pages; hidden while the whole history fits on the smallest page. */
-const HistoryPagination = ({ language }: Readonly<HistoryPaginationProps>) => {
+const HistoryPagination = ({
+	history,
+	language,
+}: Readonly<HistoryPaginationProps>) => {
 	const t = getI18n(language, SNAPSHOTS_I18N);
-	const page = useHistoryPage();
+	const page = useHistoryPage(history);
 	const pageSize = useSnapshotsStore((state) => state.pageSize);
 	const setPage = useSnapshotsStore((state) => state.setPage);
 	const setPageSize = useSnapshotsStore((state) => state.setPageSize);
 
-	if (!page || page.total <= PAGE_SIZES[0]) return null;
+	if (page.total <= PAGE_SIZES[0]) return null;
 
 	return (
 		<nav

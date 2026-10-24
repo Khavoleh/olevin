@@ -1,4 +1,4 @@
-import { ArrowRightIcon } from "@phosphor-icons/react";
+import { ArrowRightIcon } from "@phosphor-icons/react/dist/ssr";
 import { Text } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import type { IndicatorChangeResponse } from "../../api/home.schemas";

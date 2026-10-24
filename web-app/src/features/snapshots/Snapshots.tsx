@@ -1,8 +1,6 @@
+import { Suspense } from "react";
+import History from "./components/History";
 import HistoryHeader from "./components/HistoryHeader/HistoryHeader";
-import HistoryList from "./components/HistoryList/HistoryList";
-import HistoryPagination from "./components/HistoryPagination";
-import HistoryTable from "./components/HistoryTable/HistoryTable";
-import LoadSnapshots from "./components/LoadSnapshots";
 
 interface SnapshotsProps {
 	language: string;
@@ -12,13 +10,26 @@ interface SnapshotsProps {
 const Snapshots = ({ language }: Readonly<SnapshotsProps>) => {
 	return (
 		<>
-			<LoadSnapshots language={language} />
 			<HistoryHeader language={language} />
 
 			<div className="@container grid gap-3">
-				<HistoryList language={language} className="@3xl:hidden" />
-				<HistoryTable language={language} className="@3xl:block hidden" />
-				<HistoryPagination language={language} />
+				<Suspense
+					fallback={
+						<>
+							<div aria-hidden className="grid @3xl:hidden gap-2">
+								<div className="h-32 rounded-lg bg-skeleton" />
+								<div className="h-32 rounded-lg bg-skeleton" />
+								<div className="h-32 rounded-lg bg-skeleton" />
+							</div>
+							<div
+								aria-hidden
+								className="@3xl:block hidden h-72 rounded-xl bg-skeleton"
+							/>
+						</>
+					}
+				>
+					<History language={language} />
+				</Suspense>
 			</div>
 		</>
 	);

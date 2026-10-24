@@ -1,9 +1,9 @@
+import type { Icon } from "@phosphor-icons/react";
 import {
 	CaretDownIcon,
 	CaretUpIcon,
-	type Icon,
 	MinusIcon,
-} from "@phosphor-icons/react";
+} from "@phosphor-icons/react/dist/ssr";
 import { formatIndex, getI18n } from "@shared/helpers";
 import type { IndexChangeResponse } from "../../api/home.schemas";
 import { formatSinceMonth } from "../../helpers/format-since-month/format-since-month";

@@ -2,13 +2,14 @@
 
 import { getI18n } from "@shared/helpers";
 import { Column, Table, TableBody, TableHeader } from "react-aria-components";
+import type { GetSnapshotsResponse } from "../../api/snapshots.schemas";
 import { SNAPSHOTS_I18N } from "../../snapshots-i18n";
-import { useSnapshotsStore } from "../../snapshots-store";
 import { useHistoryPage } from "../../use-history-page";
 import EstimateRow from "./EstimateRow";
 import SnapshotRow from "./SnapshotRow";
 
 interface HistoryTableProps {
+	history: GetSnapshotsResponse;
 	language: string;
 	className?: string;
 }
@@ -26,17 +27,13 @@ const TABLE_CLASSES =
 
 /** Table of the history page on a tablet and a laptop, with icon actions in the last column. */
 const HistoryTable = ({
+	history,
 	language,
 	className = "",
 }: Readonly<HistoryTableProps>) => {
 	const t = getI18n(language, SNAPSHOTS_I18N);
-	const page = useHistoryPage();
-	const currency = useSnapshotsStore((state) => state.history?.currency);
-
-	if (!page || !currency)
-		return (
-			<div aria-hidden className={`h-72 rounded-xl bg-skeleton ${className}`} />
-		);
+	const page = useHistoryPage(history);
+	const { currency } = history;
 
 	return (
 		<div className={`overflow-x-auto pb-1 ${className}`}>
