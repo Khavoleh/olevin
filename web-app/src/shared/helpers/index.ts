@@ -8,6 +8,7 @@ export { getLogtoConfig } from "./auth/get-logto-config";
 export { formatDayMonth } from "./format/format-day-month/format-day-month";
 export { formatIndex } from "./format/format-index/format-index";
 export { formatMoney } from "./format/format-money/format-money";
+export { formatShortMonth } from "./format/format-short-month/format-short-month";
 export { formatSnapshotMonth } from "./format/format-snapshot-month/format-snapshot-month";
 export { getI18n } from "./get-i18n/get-i18n";
 export { getPluralKey } from "./get-plural-key/get-plural-key";
