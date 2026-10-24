@@ -2,7 +2,7 @@
 
 import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { Button, Text, useFormErrorToast } from "@shared/components";
+import { Button, FormBlock, Text, useFormErrorToast } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import { useActionState, useEffect } from "react";
 import { saveCfpbResponse } from "../../actions/save-cfpb-response";
@@ -11,11 +11,9 @@ import {
 	CfpbFrequency,
 	type SubmitCfpbResponseRequest,
 } from "../../api/onboarding.schemas";
-import { BLOCK_CLASSES } from "../../constants/block-classes";
 import { CFPB_STEP_SCHEMA } from "../../constants/cfpb-step-schema";
 import { CFPB_STEP_I18N } from "../../i18n/cfpb-step-i18n";
 import { useOnboardingStore } from "../../onboarding-store";
-import FormBlock from "../FormBlock";
 import AnswerField from "./AnswerField";
 
 type CfpbStatement = Exclude<keyof SubmitCfpbResponseRequest, "is62Plus">;
@@ -133,7 +131,7 @@ const CfpbStep = ({ language }: Readonly<CfpbStepProps>) => {
 				</FormBlock>
 			))}
 
-			<div className={BLOCK_CLASSES}>
+			<FormBlock>
 				<AnswerField
 					answer="is62Plus"
 					label={t("age")}
@@ -146,7 +144,7 @@ const CfpbStep = ({ language }: Readonly<CfpbStepProps>) => {
 					isInvalid={!!fields.is62Plus.errors}
 					optionsClassName="grid-cols-2"
 				/>
-			</div>
+			</FormBlock>
 
 			<Button
 				type="submit"

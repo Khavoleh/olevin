@@ -5,6 +5,7 @@ import { parseWithZod } from "@conform-to/zod/v4";
 import {
 	Button,
 	Checkbox,
+	FormBlock,
 	Label,
 	NumberField,
 	Text,
@@ -14,7 +15,6 @@ import { getI18n } from "@shared/helpers";
 import LanguageSwitcher from "@widgets/language-switcher";
 import { useActionState, useEffect } from "react";
 import { configureSettings } from "../../actions/configure-settings";
-import { BLOCK_CLASSES } from "../../constants/block-classes";
 import { SETTINGS_SCHEMA } from "../../constants/settings-schema";
 import { SETTINGS_STEP_I18N } from "../../i18n/settings-step-i18n";
 import { useOnboardingStore } from "../../onboarding-store";
@@ -68,7 +68,7 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 				value={language.toUpperCase()}
 			/>
 
-			<div className={BLOCK_CLASSES}>
+			<FormBlock>
 				<Label variant="group" elementType="span">
 					{t("language")}
 				</Label>
@@ -76,17 +76,17 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 					<LanguageSwitcher language={language} />
 				</div>
 				<Text variant="hint">{t("language_hint")}</Text>
-			</div>
+			</FormBlock>
 
-			<div className={BLOCK_CLASSES}>
+			<FormBlock>
 				<CurrencyField
 					language={language}
 					name={fields.baseCurrency.name}
 					isInvalid={!!fields.baseCurrency.errors}
 				/>
-			</div>
+			</FormBlock>
 
-			<div className={BLOCK_CLASSES}>
+			<FormBlock>
 				<NumberField
 					label={t("snapshot_day")}
 					description={t("snapshot_day_hint")}
@@ -103,17 +103,17 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 					isRequired
 					validationBehavior="aria"
 				/>
-			</div>
+			</FormBlock>
 
-			<div className={BLOCK_CLASSES}>
+			<FormBlock>
 				<TimezoneField
 					language={language}
 					name={fields.timezone.name}
 					isInvalid={!!fields.timezone.errors}
 				/>
-			</div>
+			</FormBlock>
 
-			<div className={BLOCK_CLASSES}>
+			<FormBlock>
 				<Label variant="group" elementType="span">
 					{t("research_consent")}
 				</Label>
@@ -125,7 +125,7 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 				>
 					{t("research_consent_label")}
 				</Checkbox>
-			</div>
+			</FormBlock>
 
 			<Button
 				type="submit"

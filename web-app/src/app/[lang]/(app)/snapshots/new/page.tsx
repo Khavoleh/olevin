@@ -1,4 +1,4 @@
-import SnapshotForm from "@features/snapshot-form";
+import SnapshotForm from "@features/snapshots";
 
 interface NewSnapshotPageProps {
 	params: Promise<{ lang: string }>;

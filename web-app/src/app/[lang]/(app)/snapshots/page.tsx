@@ -1,4 +1,4 @@
-import Snapshots from "@features/snapshots";
+import History from "@features/history";
 
 interface SnapshotsPageProps {
 	params: Promise<{ lang: string }>;
@@ -8,7 +8,7 @@ interface SnapshotsPageProps {
 const SnapshotsPage = async ({ params }: Readonly<SnapshotsPageProps>) => {
 	const { lang } = await params;
 
-	return <Snapshots language={lang} />;
+	return <History language={lang} />;
 };
 
 export default SnapshotsPage;

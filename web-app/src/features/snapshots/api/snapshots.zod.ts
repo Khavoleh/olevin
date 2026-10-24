@@ -220,15 +220,6 @@ export const UpdateSnapshotBody = zod
 	.describe("The new values of a snapshot.");
 
 /**
- * DELETE_financial_wellness_v1_snapshots_id
- * @summary Handles `DELETE /financial-wellness/v1/snapshots/{id}`. The later snapshots are scored again without it;
-nothing is scored again when it is the latest one.
- */
-export const DeleteSnapshotParams = zod.object({
-	id: zod.uuid().describe("The snapshot identifier."),
-});
-
-/**
  * PUT_financial_wellness_v1_snapshots_estimates_id
  * @summary Handles `PUT /financial-wellness/v1/snapshots/estimates/{id}`. Every snapshot is later than the estimates,
 so all of them are scored again.
@@ -271,6 +262,30 @@ export const UpdateEstimatedSnapshotBody = zod
 			.describe("The amount saved during the month."),
 	})
 	.describe("A rough month before the first snapshot, entered at onboarding.");
+
+/**
+ * GET_financial_wellness_v1_snapshots_months_year_month
+ * @summary Handles `GET /financial-wellness/v1/snapshots/months/{year}/{month}`.
+ */
+export const GetSnapshotMonthParams = zod.object({
+	year: zod.int().describe("The year of the month."),
+	month: zod
+		.enum([
+			"January",
+			"February",
+			"March",
+			"April",
+			"May",
+			"June",
+			"July",
+			"August",
+			"September",
+			"October",
+			"November",
+			"December",
+		])
+		.describe("The month."),
+});
 
 /**
  * POST_financial_wellness_v1_snapshots

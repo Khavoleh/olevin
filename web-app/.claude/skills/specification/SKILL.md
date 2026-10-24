@@ -33,8 +33,8 @@ Keep the whole spec concise — enough to orient quickly, not a novel.
 
 ## In this repo (Olevin web app)
 
-- Path: `src/features/<feature>/<FEATURE-NAME>.md`, where `<FEATURE-NAME>` is the slice name upper-cased (e.g. `src/features/home/HOME.md`, `src/features/snapshot-form/SNAPSHOT-FORM.md`).
+- Path: `src/features/<feature>/<FEATURE-NAME>.md`, where `<FEATURE-NAME>` is the slice name upper-cased (e.g. `src/features/home/HOME.md`, `src/features/snapshots/SNAPSHOTS.md`).
 - Don't restate FSD layering, the server-first/Suspense rendering rules, i18n, or tokens already covered by `architecture` and `frontend-expert` — only this feature's nuances.
-- Static slices (`privacy`, `terms`) usually need only Purpose. Signed-in features talk to the Olevin API and are where sections 2–6 earn their place: e.g. `home` (sign-out Server Action), `sign-in` (Logto redirect and `/callback`), `onboarding` (steps, which ones are optional), `snapshot-form` (create vs edit by `month`, input validation).
+- Static slices (`privacy`, `terms`) usually need only Purpose. Signed-in features talk to the Olevin API and are where sections 2–6 earn their place: e.g. `home` (sign-out Server Action), `sign-in` (Logto redirect and `/callback`), `onboarding` (steps, which ones are optional), `snapshots` (create vs edit by `month`, input validation).
 - Sequence diagrams: show the participants that actually exist — Browser, Proxy (`src/proxy.ts`), Server Component / Server Action, Logto, Olevin API — so it's clear what runs where and where the token is used.
 - **Dependencies:** the Olevin API (`server/`, via `API_URL`) and Logto are external services — name the endpoints/scopes the feature uses (e.g. `GET /me`). The rendering mode (static, or which part streams per request) is a nuance worth stating when it isn't obvious from the route.

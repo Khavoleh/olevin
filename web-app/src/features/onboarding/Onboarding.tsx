@@ -5,7 +5,7 @@ import CfpbStep from "./components/CfpbStep/CfpbStep";
 import EstimatesStep from "./components/EstimatesStep";
 import RestoreBaseCurrency from "./components/RestoreBaseCurrency";
 import SettingsStep from "./components/SettingsStep/SettingsStep";
-import SnapshotStep from "./components/SnapshotStep/SnapshotStep";
+import SnapshotStep from "./components/SnapshotStep";
 import { ONBOARDING_STAGES } from "./constants/onboarding-stages";
 import { ONBOARDING_STEPS } from "./constants/onboarding-steps";
 import { ONBOARDING_I18N } from "./i18n/onboarding-i18n";

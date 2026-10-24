@@ -31,7 +31,7 @@ Fast, deterministic **unit** tests for logic, validation and pure endpoints. Put
 
 - **Project:** `Olevin.Tests` (xUnit v3, Microsoft.Testing.Platform runner set in `global.json`). `Xunit` is a global using; `CS1591` (XML docs) is suppressed for tests, the rest of the analyzers, style rules and CSharpier still apply.
 - **Unit tests only** — no API/HTTP or database tests.
-- **Layout mirrors the source:** `Olevin.Api/Features/FinancialWellness/Slices/Snapshots/Helpers/SnapshotScorer.cs` → `Olevin.Tests/Features/FinancialWellness/Slices/Snapshots/Helpers/SnapshotScorerTests.cs`; namespace `Olevin.Tests.<same path>`. Classes `public sealed class <Type>Tests`.
+- **Layout mirrors the source:** `Olevin.Api/Features/FinancialWellness/Helpers/Scoring/SnapshotScorer.cs` → `Olevin.Tests/Features/FinancialWellness/Helpers/Scoring/SnapshotScorerTests.cs`; namespace `Olevin.Tests.<same path>`. Classes `public sealed class <Type>Tests`.
 - **Patterns in use:**
   - Pure endpoint called directly (no web host): `<UseCase>Endpoint.Post(request)` when it has no dependencies to inject.
   - Validators with `FluentValidation.TestHelper`: `Validator.TestValidate(Valid() with { SnapshotDay = day }).ShouldHaveValidationErrorFor(r => r.SnapshotDay)` (`ConfigureUserSettingsValidatorTests`).

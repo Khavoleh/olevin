@@ -4,9 +4,8 @@ using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 using Olevin.Api.Features.FinancialWellness.Helpers;
 using Olevin.Api.Features.FinancialWellness.Helpers.History;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Helpers;
+using Olevin.Api.Features.FinancialWellness.Helpers.Scoring;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Mappings;
-using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Models;
 using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 using Olevin.Api.Features.Settings.Slices.UserSettings.Contracts;
 using Olevin.Api.Shared;
@@ -126,7 +125,7 @@ public static class CreateFirstSnapshotHandler
             selfRating
         );
 
-        SnapshotMapping.ApplyScore(snapshot, score);
+        SnapshotScoreMapping.ApplyScore(snapshot, score);
 
         db.EstimatedSnapshots.AddRange(
             CreateFirstSnapshotMapping.ToEstimatedSnapshot(

@@ -1,30 +1,18 @@
 import {
-	createMoneyListItem,
-	type MoneyDraft,
-	type MoneyListItem,
-} from "@widgets/money-field";
+	createEstimateDraft,
+	createSnapshotDraft,
+	type EstimateDraft,
+	type SnapshotDraft,
+} from "@widgets/snapshot-fields";
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
 import type {
 	CurrencyCode,
-	ExpensesRequest,
 	SubmitCfpbResponseRequest,
 } from "./api/onboarding.schemas";
 
-/** Rough month before the first snapshot. */
-export interface EstimateDraft {
-	expensesTotal: MoneyDraft;
-	saved: MoneyDraft;
-}
-
 /** First snapshot with the estimates of the 2 months before it. */
-export interface SnapshotDraft {
-	income: MoneyListItem[];
-	expenses: Record<keyof ExpensesRequest, MoneyDraft>;
-	saved: MoneyDraft;
-	reserves: MoneyListItem[];
-	debtPayments: MoneyListItem[];
-	selfRating?: number;
+export interface FirstSnapshotDraft extends SnapshotDraft {
 	previousMonth: EstimateDraft;
 	twoMonthsAgo: EstimateDraft;
 }
@@ -39,32 +27,20 @@ interface OnboardingState {
 	snapshotDay: number;
 	timezone: string;
 	researchConsent: boolean;
-	snapshot: SnapshotDraft;
+	snapshot: FirstSnapshotDraft;
 	cfpbResponse: CfpbDraft;
 	setBaseCurrency: (baseCurrency: CurrencyCode) => void;
 	setSnapshotDay: (snapshotDay: number) => void;
 	setTimezone: (timezone: string) => void;
 	setResearchConsent: (researchConsent: boolean) => void;
-	setSnapshot: (snapshot: Partial<SnapshotDraft>) => void;
+	setSnapshot: (snapshot: Partial<FirstSnapshotDraft>) => void;
 	setCfpbResponse: (cfpbResponse: CfpbDraft) => void;
 }
 
-const EMPTY_SNAPSHOT: SnapshotDraft = {
-	income: [createMoneyListItem()],
-	expenses: {
-		food: {},
-		housing: {},
-		health: {},
-		clothing: {},
-		restaurants: {},
-		transport: {},
-		other: {},
-	},
-	saved: {},
-	reserves: [createMoneyListItem()],
-	debtPayments: [createMoneyListItem()],
-	previousMonth: { expensesTotal: {}, saved: {} },
-	twoMonthsAgo: { expensesTotal: {}, saved: {} },
+const EMPTY_SNAPSHOT: FirstSnapshotDraft = {
+	...createSnapshotDraft(),
+	previousMonth: createEstimateDraft(),
+	twoMonthsAgo: createEstimateDraft(),
 };
 
 /** Draft of the onboarding, kept in the tab session until it is saved so a language switch or a reload doesn't lose it. */

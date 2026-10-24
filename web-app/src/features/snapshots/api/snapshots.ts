@@ -7,10 +7,12 @@
 
 import { apiRequest } from "@shared/api";
 import type {
+	CalendarMonth,
 	CreateSnapshotRequest,
 	EstimateRequest,
-	IResult,
-	ResponseOfGetSnapshotsResponse,
+	ResponseOfCurrencyCode,
+	ResponseOfGetOpenMonthsResponse,
+	ResponseOfGetSnapshotMonthResponse,
 	ResponseOfGuid,
 	UpdateSnapshotRequest,
 } from "./snapshots.schemas";
@@ -87,62 +89,6 @@ export const updateSnapshot = async (
 			...getHeaders(options?.headers),
 		},
 		body: JSON.stringify(updateSnapshotRequest),
-	});
-};
-
-export type deleteSnapshotResponse200 = {
-	data: IResult;
-	status: 200;
-};
-
-export type deleteSnapshotResponse204 = {
-	data: void;
-	status: 204;
-};
-
-export type deleteSnapshotResponse404 = {
-	data: ResponseOfGuid;
-	status: 404;
-};
-
-export type deleteSnapshotResponse409 = {
-	data: ResponseOfGuid;
-	status: 409;
-};
-
-export type deleteSnapshotResponseSuccess = (
-	| deleteSnapshotResponse200
-	| deleteSnapshotResponse204
-) & {
-	headers: Headers;
-};
-export type deleteSnapshotResponseError = (
-	| deleteSnapshotResponse404
-	| deleteSnapshotResponse409
-) & {
-	headers: Headers;
-};
-
-export type deleteSnapshotResponse =
-	| deleteSnapshotResponseSuccess
-	| deleteSnapshotResponseError;
-
-export const getDeleteSnapshotUrl = (id: string) => {
-	return `/financial-wellness/v1/snapshots/${id}`;
-};
-
-/**
- * DELETE_financial_wellness_v1_snapshots_id
- * @summary Handles `DELETE /financial-wellness/v1/snapshots/{id}`. The later snapshots are scored again without it;
-nothing is scored again when it is the latest one.
- */
-export const deleteSnapshot = async (
-	id: string,
-	options?: RequestInit,
-): Promise<deleteSnapshotResponse> => {
-	return apiRequest<deleteSnapshotResponse>(getDeleteSnapshotUrl(id), {
-		...options,
-		method: "DELETE",
 	});
 };
 
@@ -225,42 +171,128 @@ export const updateEstimatedSnapshot = async (
 	);
 };
 
-export type getSnapshotsResponse200 = {
-	data: ResponseOfGetSnapshotsResponse;
+export type getSnapshotMonthResponse200 = {
+	data: ResponseOfGetSnapshotMonthResponse;
 	status: 200;
 };
 
-export type getSnapshotsResponse404 = {
-	data: ResponseOfGetSnapshotsResponse;
+export type getSnapshotMonthResponse404 = {
+	data: ResponseOfGetSnapshotMonthResponse;
 	status: 404;
 };
 
-export type getSnapshotsResponseSuccess = getSnapshotsResponse200 & {
+export type getSnapshotMonthResponseSuccess = getSnapshotMonthResponse200 & {
 	headers: Headers;
 };
-export type getSnapshotsResponseError = getSnapshotsResponse404 & {
+export type getSnapshotMonthResponseError = getSnapshotMonthResponse404 & {
 	headers: Headers;
 };
 
-export type getSnapshotsResponse =
-	| getSnapshotsResponseSuccess
-	| getSnapshotsResponseError;
+export type getSnapshotMonthResponse =
+	| getSnapshotMonthResponseSuccess
+	| getSnapshotMonthResponseError;
 
-export const getGetSnapshotsUrl = () => {
-	return `/financial-wellness/v1/snapshots`;
+export const getGetSnapshotMonthUrl = (year: number, month: CalendarMonth) => {
+	return `/financial-wellness/v1/snapshots/months/${year}/${month}`;
 };
 
 /**
- * GET_financial_wellness_v1_snapshots
- * @summary Handles `GET /financial-wellness/v1/snapshots`.
+ * GET_financial_wellness_v1_snapshots_months_year_month
+ * @summary Handles `GET /financial-wellness/v1/snapshots/months/{year}/{month}`.
  */
-export const getSnapshots = async (
+export const getSnapshotMonth = async (
+	year: number,
+	month: CalendarMonth,
 	options?: RequestInit,
-): Promise<getSnapshotsResponse> => {
-	return apiRequest<getSnapshotsResponse>(getGetSnapshotsUrl(), {
+): Promise<getSnapshotMonthResponse> => {
+	return apiRequest<getSnapshotMonthResponse>(
+		getGetSnapshotMonthUrl(year, month),
+		{
+			...options,
+			method: "GET",
+		},
+	);
+};
+
+export type getOpenMonthsResponse200 = {
+	data: ResponseOfGetOpenMonthsResponse;
+	status: 200;
+};
+
+export type getOpenMonthsResponse404 = {
+	data: ResponseOfGetOpenMonthsResponse;
+	status: 404;
+};
+
+export type getOpenMonthsResponseSuccess = getOpenMonthsResponse200 & {
+	headers: Headers;
+};
+export type getOpenMonthsResponseError = getOpenMonthsResponse404 & {
+	headers: Headers;
+};
+
+export type getOpenMonthsResponse =
+	| getOpenMonthsResponseSuccess
+	| getOpenMonthsResponseError;
+
+export const getGetOpenMonthsUrl = () => {
+	return `/financial-wellness/v1/snapshots/open-months`;
+};
+
+/**
+ * GET_financial_wellness_v1_snapshots_open_months
+ * @summary Handles `GET /financial-wellness/v1/snapshots/open-months`. A missed month stays open.
+ */
+export const getOpenMonths = async (
+	options?: RequestInit,
+): Promise<getOpenMonthsResponse> => {
+	return apiRequest<getOpenMonthsResponse>(getGetOpenMonthsUrl(), {
 		...options,
 		method: "GET",
 	});
+};
+
+export type getSnapshotBaseCurrencyResponse200 = {
+	data: ResponseOfCurrencyCode;
+	status: 200;
+};
+
+export type getSnapshotBaseCurrencyResponse404 = {
+	data: ResponseOfCurrencyCode;
+	status: 404;
+};
+
+export type getSnapshotBaseCurrencyResponseSuccess =
+	getSnapshotBaseCurrencyResponse200 & {
+		headers: Headers;
+	};
+export type getSnapshotBaseCurrencyResponseError =
+	getSnapshotBaseCurrencyResponse404 & {
+		headers: Headers;
+	};
+
+export type getSnapshotBaseCurrencyResponse =
+	| getSnapshotBaseCurrencyResponseSuccess
+	| getSnapshotBaseCurrencyResponseError;
+
+export const getGetSnapshotBaseCurrencyUrl = () => {
+	return `/financial-wellness/v1/snapshots/base-currency`;
+};
+
+/**
+ * GET_financial_wellness_v1_snapshots_base_currency
+ * @summary Handles `GET /financial-wellness/v1/snapshots/base-currency`.
+ */
+export const getSnapshotBaseCurrency = async (
+	options?: RequestInit,
+): Promise<getSnapshotBaseCurrencyResponse> => {
+	return apiRequest<getSnapshotBaseCurrencyResponse>(
+		getGetSnapshotBaseCurrencyUrl(),
+		{
+			...options,
+			method: "GET",
+		},
+	);
 };
 
 export type createSnapshotResponse201 = {

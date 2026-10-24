@@ -1,3 +1,4 @@
+import { getNewSnapshotOpensOn } from "@features/snapshots";
 import AppShell from "@widgets/app-shell";
 import type { ReactNode } from "react";
 
@@ -10,7 +11,11 @@ interface AppLayoutProps {
 const AppLayout = async ({ children, params }: Readonly<AppLayoutProps>) => {
 	const { lang } = await params;
 
-	return <AppShell language={lang}>{children}</AppShell>;
+	return (
+		<AppShell language={lang} newSnapshotOpensOn={getNewSnapshotOpensOn(lang)}>
+			{children}
+		</AppShell>
+	);
 };
 
 export default AppLayout;

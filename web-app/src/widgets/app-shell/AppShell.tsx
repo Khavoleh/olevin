@@ -1,7 +1,6 @@
 import {
 	HouseIcon,
 	ListBulletsIcon,
-	PlusIcon,
 	TrendUpIcon,
 	UserIcon,
 } from "@phosphor-icons/react/dist/ssr";
@@ -13,9 +12,12 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import AppNavLink from "./AppNavLink";
 import { APP_SHELL_I18N } from "./app-shell-i18n";
+import NewSnapshotNavItem from "./NewSnapshotNavItem";
 
 interface AppShellProps {
 	language: string;
+	/** Day the next month opens for a snapshot, or `null` while a month is open. */
+	newSnapshotOpensOn: Promise<string | null>;
 	children: ReactNode;
 }
 
@@ -31,7 +33,11 @@ const TAB_ITEM_CLASSES =
  * Frame of the signed-in pages: tab bar on a phone, narrow rail on a tablet and sidebar on a laptop.
  * The content scrolls inside the frame, so the bars stay in place.
  */
-const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
+const AppShell = ({
+	language,
+	newSnapshotOpensOn,
+	children,
+}: Readonly<AppShellProps>) => {
 	const t = getI18n(language, APP_SHELL_I18N);
 	const url = (page: string) => getLanguageUrl(page, language);
 
@@ -49,14 +55,11 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 					</span>
 				</Link>
 
-				<AppNavLink
-					id="new-snapshot"
-					href={url(PAGE_URLS.NEW_SNAPSHOT)}
-					className="flex size-12 flex-none items-center justify-center gap-2 rounded-lg bg-primary font-semibold text-on-primary transition-colors hover:bg-primary-hover active:bg-primary-pressed lg:h-11 lg:w-full lg:justify-start lg:rounded-md lg:px-3.5"
-				>
-					<PlusIcon size={20} />
-					<span className="sr-only lg:not-sr-only">{t("new_snapshot")}</span>
-				</AppNavLink>
+				<NewSnapshotNavItem
+					language={language}
+					opensOn={newSnapshotOpensOn}
+					placement="side"
+				/>
 
 				<nav
 					aria-label={t("main_navigation")}
@@ -104,7 +107,7 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 				</div>
 			</aside>
 
-			<main className="min-h-0 min-w-0 flex-1 overflow-y-auto px-4 pt-5 pb-6 md:px-8 md:pt-7 md:pb-8 lg:px-10 lg:pt-8 lg:pb-10">
+			<main className="relative min-h-0 min-w-0 flex-1 overflow-y-auto px-4 pt-5 pb-6 md:px-8 md:pt-7 md:pb-8 lg:px-10 lg:pt-8 lg:pb-10">
 				<div className="mx-auto grid w-full max-w-content gap-4">
 					{children}
 					<LegalLinks
@@ -134,17 +137,11 @@ const AppShell = ({ language, children }: Readonly<AppShellProps>) => {
 					<TrendUpIcon size={22} />
 					<span>{t("trend")}</span>
 				</AppNavLink>
-				<AppNavLink
-					id="new-snapshot"
-					href={url(PAGE_URLS.NEW_SNAPSHOT)}
-					aria-label={t("new_snapshot")}
-					className="flex flex-col items-center gap-0.5 py-1 font-medium text-fg-muted text-xs aria-[current=page]:font-semibold aria-[current=page]:text-primary"
-				>
-					<span className="-mt-5 flex size-12 items-center justify-center rounded-full bg-primary text-on-primary shadow-raised">
-						<PlusIcon size={24} />
-					</span>
-					<span>{t("new_snapshot_short")}</span>
-				</AppNavLink>
+				<NewSnapshotNavItem
+					language={language}
+					opensOn={newSnapshotOpensOn}
+					placement="tab"
+				/>
 				<AppNavLink
 					id="history"
 					href={url(PAGE_URLS.SNAPSHOTS)}

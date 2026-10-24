@@ -1,4 +1,4 @@
-import SnapshotForm from "@features/snapshot-form";
+import SnapshotForm from "@features/snapshots";
 import { Suspense } from "react";
 
 interface EditSnapshotPageProps {

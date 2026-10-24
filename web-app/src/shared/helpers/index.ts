@@ -10,6 +10,7 @@ export { formatIndex } from "./format/format-index/format-index";
 export { formatMoney } from "./format/format-money/format-money";
 export { formatSnapshotMonth } from "./format/format-snapshot-month/format-snapshot-month";
 export { getI18n } from "./get-i18n/get-i18n";
+export { getPluralKey } from "./get-plural-key/get-plural-key";
 export { getLanguage } from "./language/get-language/get-language";
 export { getLanguageStaticParams } from "./language/get-language-static-params";
 export { getLanguageUrl } from "./language/get-language-url/get-language-url";

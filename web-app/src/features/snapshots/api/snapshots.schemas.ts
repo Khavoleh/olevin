@@ -100,10 +100,6 @@ export interface ResponseOfGuid {
 	validationErrors: string[] | null;
 }
 
-export interface IResult {
-	[key: string]: unknown;
-}
-
 /**
  * A rough month before the first snapshot, entered at onboarding.
  */
@@ -135,85 +131,153 @@ export const CalendarMonth = {
 	December: "December",
 } as const;
 
-/**
- * A zone of the index scale; the same for I, I_fuzzy and I_lin.
- */
-export type Zone = (typeof Zone)[keyof typeof Zone];
+export type GetSnapshotMonthResponseActualMonthResponseKind =
+	(typeof GetSnapshotMonthResponseActualMonthResponseKind)[keyof typeof GetSnapshotMonthResponseActualMonthResponseKind];
 
-export const Zone = {
-	Stress: "Stress",
-	Unstable: "Unstable",
-	Calm: "Calm",
+export const GetSnapshotMonthResponseActualMonthResponseKind = {
+	Actual: "Actual",
 } as const;
 
 /**
- * One snapshot of the history.
+ * The expenses of a month by category as entered.
  */
-export interface SnapshotResponse {
-	/** The snapshot identifier. */
-	id: string;
-	/** The year of the snapshot. */
-	year: number;
-	/** The month of the snapshot. */
-	month: CalendarMonth;
-	/** The final index, rounded to one decimal. */
-	index: number;
-	/** The zone of Index. */
-	zone: Zone;
-	/**
-	 * The change since the previous snapshot, or `null` for the first one.
-	 * @nullable
-	 */
-	change: number | null;
-	/** The total expenses without debt payments. */
-	expenses: number;
+export interface ExpensesResponse {
+	/** Food. */
+	food: Money;
+	/** Housing. */
+	housing: Money;
+	/** Health and medicines. */
+	health: Money;
+	/** Clothing. */
+	clothing: Money;
+	/** Restaurants. */
+	restaurants: Money;
+	/** Transport. */
+	transport: Money;
+	/** Everything else. */
+	other: Money;
+}
+
+/**
+ * The amounts of a snapshot as entered.
+ */
+export interface GetSnapshotMonthResponseActualMonthResponse {
+	kind: GetSnapshotMonthResponseActualMonthResponseKind;
+	/** The net income, possibly in several currencies. */
+	income: Money[];
+	/** The expenses by category, without debt payments. */
+	expenses: ExpensesResponse;
 	/** The amount saved during the month. */
-	saved: number;
-}
-
-/**
- * One estimate from onboarding.
- */
-export interface EstimateResponse {
-	/** The estimate identifier. */
+	saved: Money;
+	/** The liquid reserves at the end of the month, possibly in several currencies. */
+	reserves: Money[];
+	/** The monthly debt payments, possibly in several currencies. */
+	debtPayments: Money[];
+	/** The self-rating of calm from 1 to 5. */
+	selfRating: number;
+	/** The identifier of the snapshot or the estimate. */
 	id: string;
-	/** The year of the estimate. */
-	year: number;
-	/** The month of the estimate. */
-	month: CalendarMonth;
-	/** The approximate total expenses. */
-	expenses: number;
-	/** The approximate saved amount. */
-	saved: number;
+	/** The number of snapshots after the month, scored again when it changes. */
+	laterSnapshots: number;
+}
+
+export type GetSnapshotMonthResponseEstimatedMonthResponseKind =
+	(typeof GetSnapshotMonthResponseEstimatedMonthResponseKind)[keyof typeof GetSnapshotMonthResponseEstimatedMonthResponseKind];
+
+export const GetSnapshotMonthResponseEstimatedMonthResponseKind = {
+	Estimated: "Estimated",
+} as const;
+
+/**
+ * The amounts of an estimate from onboarding as entered.
+ */
+export interface GetSnapshotMonthResponseEstimatedMonthResponse {
+	kind: GetSnapshotMonthResponseEstimatedMonthResponseKind;
+	/** The approximate total expenses of the month. */
+	expensesTotal: Money;
+	/** The amount saved during the month. */
+	saved: Money;
+	/** The identifier of the snapshot or the estimate. */
+	id: string;
+	/** The number of snapshots after the month, scored again when it changes. */
+	laterSnapshots: number;
 }
 
 /**
- * The snapshot history of the user.
+ * The amounts of one month as entered; `kind` says whether it is a snapshot or an estimate.
  */
-export interface GetSnapshotsResponse {
-	/** The base currency of every amount. */
-	currency: CurrencyCode;
-	/** Every snapshot, the latest first. */
-	snapshots: SnapshotResponse[];
-	/** The estimates from onboarding, the latest first; they can be changed, not deleted. */
-	estimates: EstimateResponse[];
-	/**
-	 * The day the next month opens for a snapshot, or `null` when a month is open now.
-	 * @nullable
-	 */
-	newSnapshotOpensOn: string | null;
-}
+export type GetSnapshotMonthResponse =
+	| GetSnapshotMonthResponseActualMonthResponse
+	| GetSnapshotMonthResponseEstimatedMonthResponse;
 
 /**
  * The envelope every endpoint returns.
  */
-export interface ResponseOfGetSnapshotsResponse {
+export interface ResponseOfGetSnapshotMonthResponse {
 	/**
 	 * The reason of the failure, or `null` on success.
 	 * @nullable
 	 */
 	error: string | null;
-	data: null | GetSnapshotsResponse;
+	data: null | GetSnapshotMonthResponse;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
+ * A month a new snapshot may be created for.
+ */
+export interface OpenMonthResponse {
+	/** The year. */
+	year: number;
+	/** The month. */
+	month: CalendarMonth;
+}
+
+/**
+ * The months a new snapshot may be created for.
+ */
+export interface GetOpenMonthsResponse {
+	/** The open months without a snapshot, the latest first; empty until the next one opens. */
+	months: OpenMonthResponse[];
+	/**
+	 * The day the next month opens for a snapshot, or `null` when a month is open now.
+	 * @nullable
+	 */
+	opensOn: string | null;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfGetOpenMonthsResponse {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	data: null | GetOpenMonthsResponse;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfCurrencyCode {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	/** The result, or the default value of T on failure. */
+	data: CurrencyCode;
 	/**
 	 * The failed validation rules, or `null` when the request is valid.
 	 * @nullable

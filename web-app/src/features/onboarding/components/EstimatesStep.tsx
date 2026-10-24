@@ -6,24 +6,17 @@ import { InfoIcon } from "@phosphor-icons/react";
 import { Button, Text, useFormErrorToast } from "@shared/components";
 import { PAGE_URLS } from "@shared/constants";
 import { getI18n, getLanguageUrl } from "@shared/helpers";
-import MoneyField from "@widgets/money-field";
+import { EstimateFields, HiddenFields } from "@widgets/snapshot-fields";
 import { useRouter } from "next/navigation";
 import { useActionState, useEffect } from "react";
 import { saveFirstSnapshot } from "../actions/save-first-snapshot";
 import { CreateFirstSnapshotBody } from "../api/onboarding.zod";
-import { getFirstSnapshotRequest } from "../helpers/get-first-snapshot-request/get-first-snapshot-request";
+import { getFirstSnapshotRequest } from "../helpers/get-first-snapshot-request";
 import { ESTIMATES_STEP_I18N } from "../i18n/estimates-step-i18n";
-import { type EstimateDraft, useOnboardingStore } from "../onboarding-store";
+import { useOnboardingStore } from "../onboarding-store";
 import { useSnapshotMonths } from "../use-snapshot-months";
-import FormBlock from "./FormBlock";
-import HiddenFields from "./HiddenFields";
 
 type EstimatedMonth = "previousMonth" | "twoMonthsAgo";
-
-const FIELD_LABELS: Record<keyof EstimateDraft, string> = {
-	expensesTotal: "expenses_total",
-	saved: "saved",
-};
 
 interface EstimatesStepProps {
 	language: string;
@@ -78,22 +71,14 @@ const EstimatesStep = ({ language }: Readonly<EstimatesStepProps>) => {
 			{request && <HiddenFields value={request} />}
 
 			{months.map(({ key, title }) => (
-				<FormBlock key={key} title={title ?? ""}>
-					<div className="grid gap-2.5 lg:grid-cols-2">
-						{(["expensesTotal", "saved"] as const).map((field) => (
-							<MoneyField
-								key={field}
-								language={language}
-								label={t(FIELD_LABELS[field])}
-								value={snapshot[key][field]}
-								baseCurrency={baseCurrency}
-								onChange={(money) =>
-									setSnapshot({ [key]: { ...snapshot[key], [field]: money } })
-								}
-							/>
-						))}
-					</div>
-				</FormBlock>
+				<EstimateFields
+					key={key}
+					language={language}
+					title={title ?? ""}
+					value={snapshot[key]}
+					baseCurrency={baseCurrency}
+					onChange={(estimate) => setSnapshot({ [key]: estimate })}
+				/>
 			))}
 
 			<div className="flex gap-2.5 rounded-lg bg-primary-soft p-3">
