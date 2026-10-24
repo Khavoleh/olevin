@@ -9,6 +9,7 @@ import { apiRequest } from "@shared/api";
 import type {
 	ResponseOfGetAdvicesResponse,
 	ResponseOfGetCompositionResponse,
+	ResponseOfGetContributionsResponse,
 	ResponseOfGetIndexResponse,
 } from "./home.schemas";
 
@@ -43,6 +44,44 @@ export const getIndex = async (
 	options?: RequestInit,
 ): Promise<getIndexResponse> => {
 	return apiRequest<getIndexResponse>(getGetIndexUrl(), {
+		...options,
+		method: "GET",
+	});
+};
+
+export type getContributionsResponse200 = {
+	data: ResponseOfGetContributionsResponse;
+	status: 200;
+};
+
+export type getContributionsResponse404 = {
+	data: ResponseOfGetContributionsResponse;
+	status: 404;
+};
+
+export type getContributionsResponseSuccess = getContributionsResponse200 & {
+	headers: Headers;
+};
+export type getContributionsResponseError = getContributionsResponse404 & {
+	headers: Headers;
+};
+
+export type getContributionsResponse =
+	| getContributionsResponseSuccess
+	| getContributionsResponseError;
+
+export const getGetContributionsUrl = () => {
+	return `/financial-wellness/v1/home/contributions`;
+};
+
+/**
+ * GET_financial_wellness_v1_home_contributions
+ * @summary Handles `GET /financial-wellness/v1/home/contributions`.
+ */
+export const getContributions = async (
+	options?: RequestInit,
+): Promise<getContributionsResponse> => {
+	return apiRequest<getContributionsResponse>(getGetContributionsUrl(), {
 		...options,
 		method: "GET",
 	});

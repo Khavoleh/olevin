@@ -6,23 +6,7 @@ namespace Olevin.Tests.Features.FinancialWellness.Slices.Home.Handlers.GetIndex;
 
 public sealed class GetIndexRulesTests
 {
-    private const double Precision = 1e-9;
-
     private static readonly SnapshotMonth October = new(2026, CalendarMonth.October);
-
-    [Theory]
-    [InlineData(58.66, 58.7)]
-    [InlineData(58.64, 58.6)]
-    public void Round_KeepsOneDecimal(double index, double expected) =>
-        Assert.Equal(expected, GetIndexRules.Round(index), Precision);
-
-    [Fact]
-    public void Delta_IsTheDifferenceOfTheRoundedIndexes() =>
-        Assert.Equal(3.6, GetIndexRules.Delta(58.74, 55.06), Precision);
-
-    [Fact]
-    public void Delta_IndexFell_IsNegative() =>
-        Assert.Equal(-2.5, GetIndexRules.Delta(52.6, 55.1), Precision);
 
     [Fact]
     public void NextSnapshotDate_CurrentMonthIsFree_IsItsSnapshotDay() =>

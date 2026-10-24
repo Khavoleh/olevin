@@ -214,6 +214,386 @@ export type ResponseOfGetIndexResponseOutput = zod.output<
 	typeof ResponseOfGetIndexResponse
 >;
 
+export const IndicatorContributionResponse = zod
+	.object({
+		points: zod
+			.number()
+			.describe(
+				"The change of the index in points, rounded to one decimal, negative when it fell.",
+			),
+		from: zod
+			.number()
+			.nullable()
+			.describe(
+				"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+			),
+		to: zod
+			.number()
+			.nullable()
+			.describe(
+				"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+			),
+	})
+	.describe("The contribution of SR, R, DTI or CV.");
+
+export type IndicatorContributionResponse = zod.input<
+	typeof IndicatorContributionResponse
+>;
+export type IndicatorContributionResponseOutput = zod.output<
+	typeof IndicatorContributionResponse
+>;
+
+export const SavingsRegularityContributionResponse = zod
+	.object({
+		points: zod
+			.number()
+			.describe(
+				"The change of the index in points, rounded to one decimal, negative when it fell.",
+			),
+		fromSavingMonths: zod
+			.int()
+			.describe(
+				"The months with savings in the window of the previous snapshot.",
+			),
+		fromMonths: zod
+			.int()
+			.describe("The months in the window of the previous snapshot."),
+		toSavingMonths: zod
+			.int()
+			.describe(
+				"The months with savings in the window of the latest snapshot.",
+			),
+		toMonths: zod
+			.int()
+			.describe("The months in the window of the latest snapshot."),
+	})
+	.describe("The contribution of the savings regularity RG.");
+
+export type SavingsRegularityContributionResponse = zod.input<
+	typeof SavingsRegularityContributionResponse
+>;
+export type SavingsRegularityContributionResponseOutput = zod.output<
+	typeof SavingsRegularityContributionResponse
+>;
+
+export const SelfRatingContributionResponse = zod
+	.object({
+		points: zod
+			.number()
+			.describe(
+				"The change of the index in points, rounded to one decimal, negative when it fell.",
+			),
+		from: zod
+			.int()
+			.describe("The self-rating of the previous snapshot from 1 to 5."),
+		to: zod
+			.int()
+			.describe("The self-rating of the latest snapshot from 1 to 5."),
+	})
+	.describe("The contribution of the self-rating.");
+
+export type SelfRatingContributionResponse = zod.input<
+	typeof SelfRatingContributionResponse
+>;
+export type SelfRatingContributionResponseOutput = zod.output<
+	typeof SelfRatingContributionResponse
+>;
+
+export const GetContributionsResponse = zod
+	.object({
+		savingsRate: zod
+			.object({
+				points: zod
+					.number()
+					.describe(
+						"The change of the index in points, rounded to one decimal, negative when it fell.",
+					),
+				from: zod
+					.number()
+					.nullable()
+					.describe(
+						"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+					),
+				to: zod
+					.number()
+					.nullable()
+					.describe(
+						"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+					),
+			})
+			.describe("The savings rate SR."),
+		reserve: zod
+			.object({
+				points: zod
+					.number()
+					.describe(
+						"The change of the index in points, rounded to one decimal, negative when it fell.",
+					),
+				from: zod
+					.number()
+					.nullable()
+					.describe(
+						"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+					),
+				to: zod
+					.number()
+					.nullable()
+					.describe(
+						"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+					),
+			})
+			.describe("The reserve R in months."),
+		debtToIncome: zod
+			.object({
+				points: zod
+					.number()
+					.describe(
+						"The change of the index in points, rounded to one decimal, negative when it fell.",
+					),
+				from: zod
+					.number()
+					.nullable()
+					.describe(
+						"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+					),
+				to: zod
+					.number()
+					.nullable()
+					.describe(
+						"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+					),
+			})
+			.describe("The debt-to-income DTI."),
+		expenseVariation: zod
+			.object({
+				points: zod
+					.number()
+					.describe(
+						"The change of the index in points, rounded to one decimal, negative when it fell.",
+					),
+				from: zod
+					.number()
+					.nullable()
+					.describe(
+						"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+					),
+				to: zod
+					.number()
+					.nullable()
+					.describe(
+						"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+					),
+			})
+			.describe("The expense variation CV."),
+		savingsRegularity: zod
+			.object({
+				points: zod
+					.number()
+					.describe(
+						"The change of the index in points, rounded to one decimal, negative when it fell.",
+					),
+				fromSavingMonths: zod
+					.int()
+					.describe(
+						"The months with savings in the window of the previous snapshot.",
+					),
+				fromMonths: zod
+					.int()
+					.describe("The months in the window of the previous snapshot."),
+				toSavingMonths: zod
+					.int()
+					.describe(
+						"The months with savings in the window of the latest snapshot.",
+					),
+				toMonths: zod
+					.int()
+					.describe("The months in the window of the latest snapshot."),
+			})
+			.describe("The savings regularity RG."),
+		selfRating: zod
+			.object({
+				points: zod
+					.number()
+					.describe(
+						"The change of the index in points, rounded to one decimal, negative when it fell.",
+					),
+				from: zod
+					.int()
+					.describe("The self-rating of the previous snapshot from 1 to 5."),
+				to: zod
+					.int()
+					.describe("The self-rating of the latest snapshot from 1 to 5."),
+			})
+			.describe("The self-rating."),
+	})
+	.describe(
+		"How much each factor changed the index since the previous snapshot.",
+	);
+
+export type GetContributionsResponse = zod.input<
+	typeof GetContributionsResponse
+>;
+export type GetContributionsResponseOutput = zod.output<
+	typeof GetContributionsResponse
+>;
+
+export const ResponseOfGetContributionsResponse = zod
+	.object({
+		error: zod
+			.string()
+			.nullable()
+			.describe("The reason of the failure, or `null` on success."),
+		data: zod.union([
+			zod.null(),
+			zod
+				.object({
+					savingsRate: zod
+						.object({
+							points: zod
+								.number()
+								.describe(
+									"The change of the index in points, rounded to one decimal, negative when it fell.",
+								),
+							from: zod
+								.number()
+								.nullable()
+								.describe(
+									"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+								),
+							to: zod
+								.number()
+								.nullable()
+								.describe(
+									"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+								),
+						})
+						.describe("The savings rate SR."),
+					reserve: zod
+						.object({
+							points: zod
+								.number()
+								.describe(
+									"The change of the index in points, rounded to one decimal, negative when it fell.",
+								),
+							from: zod
+								.number()
+								.nullable()
+								.describe(
+									"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+								),
+							to: zod
+								.number()
+								.nullable()
+								.describe(
+									"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+								),
+						})
+						.describe("The reserve R in months."),
+					debtToIncome: zod
+						.object({
+							points: zod
+								.number()
+								.describe(
+									"The change of the index in points, rounded to one decimal, negative when it fell.",
+								),
+							from: zod
+								.number()
+								.nullable()
+								.describe(
+									"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+								),
+							to: zod
+								.number()
+								.nullable()
+								.describe(
+									"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+								),
+						})
+						.describe("The debt-to-income DTI."),
+					expenseVariation: zod
+						.object({
+							points: zod
+								.number()
+								.describe(
+									"The change of the index in points, rounded to one decimal, negative when it fell.",
+								),
+							from: zod
+								.number()
+								.nullable()
+								.describe(
+									"The indicator in the previous snapshot before limiting; `null` where it means nothing.",
+								),
+							to: zod
+								.number()
+								.nullable()
+								.describe(
+									"The indicator in the latest snapshot before limiting; `null` where it means nothing.",
+								),
+						})
+						.describe("The expense variation CV."),
+					savingsRegularity: zod
+						.object({
+							points: zod
+								.number()
+								.describe(
+									"The change of the index in points, rounded to one decimal, negative when it fell.",
+								),
+							fromSavingMonths: zod
+								.int()
+								.describe(
+									"The months with savings in the window of the previous snapshot.",
+								),
+							fromMonths: zod
+								.int()
+								.describe("The months in the window of the previous snapshot."),
+							toSavingMonths: zod
+								.int()
+								.describe(
+									"The months with savings in the window of the latest snapshot.",
+								),
+							toMonths: zod
+								.int()
+								.describe("The months in the window of the latest snapshot."),
+						})
+						.describe("The savings regularity RG."),
+					selfRating: zod
+						.object({
+							points: zod
+								.number()
+								.describe(
+									"The change of the index in points, rounded to one decimal, negative when it fell.",
+								),
+							from: zod
+								.int()
+								.describe(
+									"The self-rating of the previous snapshot from 1 to 5.",
+								),
+							to: zod
+								.int()
+								.describe(
+									"The self-rating of the latest snapshot from 1 to 5.",
+								),
+						})
+						.describe("The self-rating."),
+				})
+				.describe("The result, or the default value of T on failure."),
+		]),
+		validationErrors: zod
+			.array(zod.string())
+			.nullable()
+			.describe(
+				"The failed validation rules, or `null` when the request is valid.",
+			),
+	})
+	.describe("The envelope every endpoint returns.");
+
+export type ResponseOfGetContributionsResponse = zod.input<
+	typeof ResponseOfGetContributionsResponse
+>;
+export type ResponseOfGetContributionsResponseOutput = zod.output<
+	typeof ResponseOfGetContributionsResponse
+>;
+
 export const SubsystemTerm = zod
 	.enum(["Weak", "Moderate", "Strong"])
 	.describe(

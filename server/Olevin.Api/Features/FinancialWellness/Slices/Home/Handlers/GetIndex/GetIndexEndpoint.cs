@@ -6,6 +6,7 @@ using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Helpers;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Model;
 using Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers.GetIndex.Responses;
+using Olevin.Api.Features.FinancialWellness.Slices.Home.Helpers;
 using Olevin.Api.Features.Settings.Slices.UserSettings.Contracts;
 using Olevin.Api.Infrastructure.Auth;
 using Olevin.Api.Shared;
@@ -75,7 +76,7 @@ public static class GetIndexEndpoint
 
         SnapshotDto latest = snapshots[0];
         SnapshotDto? previous = snapshots.ElementAtOrDefault(1);
-        double value = GetIndexRules.Round(latest.FinalIndex);
+        double value = IndexPoints.Round(latest.FinalIndex);
 
         return Response<GetIndexResponse>.Ok(
             new GetIndexResponse(
@@ -88,7 +89,7 @@ public static class GetIndexEndpoint
                     : new IndexChangeResponse(
                         previous.Year,
                         previous.Month,
-                        GetIndexRules.Delta(latest.FinalIndex, previous.FinalIndex)
+                        IndexPoints.Delta(latest.FinalIndex, previous.FinalIndex)
                     ),
                 GetIndexRules.NextSnapshotDate(
                     new SnapshotMonth(latest.Year, latest.Month),

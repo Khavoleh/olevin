@@ -1,0 +1,41 @@
+import type { I18N } from "@shared/interfaces";
+
+/** Texts of the contributions card. */
+export const CONTRIBUTIONS_CARD_I18N: I18N = {
+	en: {
+		title: "What has changed",
+		since: "since",
+		to: "to",
+		empty: "We'll show the change after your next snapshot.",
+		factor_SavingsRate: "Left after expenses and debts",
+		factor_Reserve: "Reserve",
+		factor_DebtToIncome: "Debt payments",
+		factor_ExpenseVariation: "Expense variation",
+		factor_SavingsRegularity: "Savings regularity",
+		factor_SelfRating: "Self-rating",
+		of: "of",
+		of_income: "of income",
+		months: "mths",
+		no_income: "no income",
+		no_obligations: "no expenses or payments",
+		one_month: "one month",
+	},
+	uk: {
+		title: "Що змінилося",
+		since: "з",
+		to: "до",
+		empty: "Зміну відповіно до минулого зрізу покажемо після наступного.",
+		factor_SavingsRate: "Залишок після витрат і боргів",
+		factor_Reserve: "Резерв",
+		factor_DebtToIncome: "Платежі за боргами",
+		factor_ExpenseVariation: "Мінливість витрат",
+		factor_SavingsRegularity: "Регулярність заощаджень",
+		factor_SelfRating: "Самооцінка",
+		of: "з",
+		of_income: "доходу",
+		months: "міс.",
+		no_income: "немає доходу",
+		no_obligations: "немає витрат і платежів",
+		one_month: "один місяць",
+	},
+};

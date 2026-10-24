@@ -9,6 +9,7 @@ using Olevin.Api.Features.FinancialWellness.Helpers.History;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Indicators;
 using Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers.GetComposition.Responses;
+using Olevin.Api.Features.FinancialWellness.Slices.Home.Helpers;
 using Olevin.Api.Features.Settings.Slices.UserSettings.Contracts;
 using Olevin.Api.Infrastructure.Auth;
 using Olevin.Api.Shared;
@@ -122,16 +123,16 @@ public static class GetCompositionEndpoint
         return Response<GetCompositionResponse>.Ok(
             new GetCompositionResponse(
                 new CashFlowResponse(
-                    GetCompositionRules.Round(latest.CashFlow),
+                    IndexPoints.Round(latest.CashFlow),
                     GetCompositionRules.SubsystemTermOf(latest.CashFlow),
-                    GetCompositionRules.OfIncome(raw.SavingsRate, month),
-                    GetCompositionRules.OfIncome(raw.DebtToIncome, month)
+                    ShownIndicators.OfIncome(raw.SavingsRate, month),
+                    ShownIndicators.OfIncome(raw.DebtToIncome, month)
                 ),
                 new BufferResponse(
-                    GetCompositionRules.Round(latest.Buffer),
+                    IndexPoints.Round(latest.Buffer),
                     GetCompositionRules.SubsystemTermOf(latest.Buffer),
-                    GetCompositionRules.ReserveMonths(inputs, month),
-                    GetCompositionRules.ExpenseVariation(inputs)
+                    ShownIndicators.ReserveMonths(inputs, month),
+                    ShownIndicators.ExpenseVariation(inputs)
                 ),
                 new SavingsRegularityResponse(
                     GetCompositionRules.SavingsRegularityTermOf(raw.SavingsRegularity),

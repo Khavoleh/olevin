@@ -27,7 +27,7 @@ export const INDEX_CARD_I18N: I18N = {
 		legend_stress: "0–39 стрес",
 		legend_unstable: "40–69 нестабільно",
 		legend_calm: "70–100 спокій",
-		since: "до",
+		since: "з",
 		rose: "Зріс на",
 		fell: "Знизився на",
 		unchanged: "Змінився на",

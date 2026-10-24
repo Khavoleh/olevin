@@ -83,6 +83,87 @@ export interface ResponseOfGetIndexResponse {
 }
 
 /**
+ * The contribution of SR, R, DTI or CV.
+ */
+export interface IndicatorContributionResponse {
+	/** The change of the index in points, rounded to one decimal, negative when it fell. */
+	points: number;
+	/**
+	 * The indicator in the previous snapshot before limiting; `null` where it means nothing.
+	 * @nullable
+	 */
+	from: number | null;
+	/**
+	 * The indicator in the latest snapshot before limiting; `null` where it means nothing.
+	 * @nullable
+	 */
+	to: number | null;
+}
+
+/**
+ * The contribution of the savings regularity RG.
+ */
+export interface SavingsRegularityContributionResponse {
+	/** The change of the index in points, rounded to one decimal, negative when it fell. */
+	points: number;
+	/** The months with savings in the window of the previous snapshot. */
+	fromSavingMonths: number;
+	/** The months in the window of the previous snapshot. */
+	fromMonths: number;
+	/** The months with savings in the window of the latest snapshot. */
+	toSavingMonths: number;
+	/** The months in the window of the latest snapshot. */
+	toMonths: number;
+}
+
+/**
+ * The contribution of the self-rating.
+ */
+export interface SelfRatingContributionResponse {
+	/** The change of the index in points, rounded to one decimal, negative when it fell. */
+	points: number;
+	/** The self-rating of the previous snapshot from 1 to 5. */
+	from: number;
+	/** The self-rating of the latest snapshot from 1 to 5. */
+	to: number;
+}
+
+/**
+ * How much each factor changed the index since the previous snapshot.
+ */
+export interface GetContributionsResponse {
+	/** The savings rate SR. */
+	savingsRate: IndicatorContributionResponse;
+	/** The reserve R in months. */
+	reserve: IndicatorContributionResponse;
+	/** The debt-to-income DTI. */
+	debtToIncome: IndicatorContributionResponse;
+	/** The expense variation CV. */
+	expenseVariation: IndicatorContributionResponse;
+	/** The savings regularity RG. */
+	savingsRegularity: SavingsRegularityContributionResponse;
+	/** The self-rating. */
+	selfRating: SelfRatingContributionResponse;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfGetContributionsResponse {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	data: null | GetContributionsResponse;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * The term of the "cash flow" or "financial buffer" subsystem with the highest degree of membership.
  */
 export type SubsystemTerm = (typeof SubsystemTerm)[keyof typeof SubsystemTerm];
