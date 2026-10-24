@@ -1,6 +1,6 @@
 import { getI18n } from "@shared/helpers";
+import { signOut } from "../actions/sign-out";
 import { PROFILE_I18N } from "../profile-i18n";
-import { signOut } from "../sign-out";
 import SettingsButton from "./SettingsList/SettingsButton";
 import SettingsGroup from "./SettingsList/SettingsGroup";
 

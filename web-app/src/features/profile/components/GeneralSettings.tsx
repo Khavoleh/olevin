@@ -1,6 +1,7 @@
 import { getI18n } from "@shared/helpers";
-import LanguageSwitcher from "@widgets/language-switcher";
+import { Suspense } from "react";
 import { PROFILE_I18N } from "../profile-i18n";
+import LanguageSetting from "./LanguageSetting";
 import SettingsButton from "./SettingsList/SettingsButton";
 import SettingsGroup from "./SettingsList/SettingsGroup";
 import SettingsRow from "./SettingsList/SettingsRow";
@@ -15,9 +16,15 @@ const GeneralSettings = ({ language }: Readonly<GeneralSettingsProps>) => {
 
 	return (
 		<SettingsGroup title={t("general")}>
-			<SettingsRow label={t("language")}>
-				<LanguageSwitcher language={language} />
-			</SettingsRow>
+			<Suspense
+				fallback={
+					<SettingsRow label={t("language")}>
+						<span aria-hidden className="h-10.5 w-23 rounded-md bg-skeleton" />
+					</SettingsRow>
+				}
+			>
+				<LanguageSetting language={language} />
+			</Suspense>
 			<SettingsButton
 				label={t("base_currency")}
 				hint={t("base_currency_hint")}

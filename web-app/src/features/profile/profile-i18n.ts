@@ -7,6 +7,8 @@ export const PROFILE_I18N: I18N = {
 		summary_preview: "6 snapshots · since September 2026",
 		general: "General",
 		language: "Language",
+		language_mismatch:
+			"Your saved language is {language}, but this page is shown in another one",
 		base_currency: "Base currency",
 		base_currency_hint: "Changing it recalculates every snapshot",
 		base_currency_value: "Hryvnia, UAH",
@@ -39,6 +41,7 @@ export const PROFILE_I18N: I18N = {
 		summary_preview: "6 зрізів · з вересня 2026",
 		general: "Загальні",
 		language: "Мова",
+		language_mismatch: "Збережена мова — {language}, а сторінку показано іншою",
 		base_currency: "Базова валюта",
 		base_currency_hint: "Зміна перерахує всі зрізи",
 		base_currency_value: "Гривня, UAH",

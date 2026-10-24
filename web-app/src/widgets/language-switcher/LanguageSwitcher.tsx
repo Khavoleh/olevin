@@ -1,8 +1,13 @@
 "use client";
 
-import { ToggleButton, ToggleButtonGroup } from "@shared/components";
+import {
+	showErrorToast,
+	ToggleButton,
+	ToggleButtonGroup,
+} from "@shared/components";
 import { LANGUAGES_SHORT } from "@shared/constants";
 import { getI18n } from "@shared/helpers";
+import { useTransition } from "react";
 import { LANGUAGE_SWITCHER_I18N } from "./language-switcher-i18n";
 import { setLanguage } from "./set-language";
 
@@ -14,23 +19,39 @@ const LANGUAGES_CONFIG = [
 
 interface LanguageSwitcherProps {
 	language: string;
+	selectedLanguage?: string;
+	saveLanguage?: (language: string) => Promise<string | undefined>;
 }
 
-/** Toggle between the supported languages; the choice is remembered in a cookie. */
-const LanguageSwitcher = ({ language }: Readonly<LanguageSwitcherProps>) => {
+/** Toggle between the supported languages; the choice is saved by `saveLanguage` when given and remembered in a cookie. */
+const LanguageSwitcher = ({
+	language,
+	selectedLanguage = language,
+	saveLanguage,
+}: Readonly<LanguageSwitcherProps>) => {
 	const t = getI18n(language, LANGUAGE_SWITCHER_I18N);
+	const [isPending, startTransition] = useTransition();
+
+	const select = (selected: string) =>
+		startTransition(async () => {
+			const error = await saveLanguage?.(selected);
+
+			if (error) showErrorToast(error);
+			else await setLanguage(selected);
+		});
 
 	return (
 		<ToggleButtonGroup
 			aria-label={t("change_language")}
 			selectionMode="single"
 			disallowEmptySelection
-			selectedKeys={[language]}
+			isDisabled={isPending}
+			selectedKeys={[selectedLanguage]}
 			onSelectionChange={(keys) => {
 				const [selected] = keys;
 
-				if (typeof selected === "string" && selected !== language) {
-					void setLanguage(selected);
+				if (typeof selected === "string" && selected !== selectedLanguage) {
+					select(selected);
 				}
 			}}
 		>

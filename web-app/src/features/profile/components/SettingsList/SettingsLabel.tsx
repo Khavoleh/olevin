@@ -3,6 +3,7 @@ interface SettingsLabelProps {
 	hint?: string;
 	hintId?: string;
 	tone?: "default" | "danger";
+	hintTone?: "default" | "warning";
 }
 
 /** Name of a setting with an optional hint under it. */
@@ -11,6 +12,7 @@ const SettingsLabel = ({
 	hint,
 	hintId,
 	tone = "default",
+	hintTone = "default",
 }: Readonly<SettingsLabelProps>) => (
 	<span className="grid min-w-0 gap-0.5">
 		<span
@@ -22,7 +24,7 @@ const SettingsLabel = ({
 			<span
 				id={hintId}
 				aria-hidden={hintId ? true : undefined}
-				className="text-fg-muted text-xs"
+				className={`text-xs ${hintTone === "warning" ? "text-warning" : "text-fg-muted"}`}
 			>
 				{hint}
 			</span>

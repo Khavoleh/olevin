@@ -1,7 +1,9 @@
 import { getI18n } from "@shared/helpers";
+import { Suspense } from "react";
 import { PROFILE_I18N } from "../profile-i18n";
+import PushSetting from "./PushSetting";
 import SettingsGroup from "./SettingsList/SettingsGroup";
-import SettingsSwitch from "./SettingsList/SettingsSwitch";
+import SettingsRow from "./SettingsList/SettingsRow";
 
 interface ReminderSettingsProps {
 	language: string;
@@ -13,7 +15,15 @@ const ReminderSettings = ({ language }: Readonly<ReminderSettingsProps>) => {
 
 	return (
 		<SettingsGroup title={t("reminders")}>
-			<SettingsSwitch label={t("push")} hint={t("push_hint")} defaultSelected />
+			<Suspense
+				fallback={
+					<SettingsRow label={t("push")} hint={t("push_hint")}>
+						<span aria-hidden className="h-7 w-11.5 rounded-full bg-skeleton" />
+					</SettingsRow>
+				}
+			>
+				<PushSetting language={language} />
+			</Suspense>
 		</SettingsGroup>
 	);
 };
