@@ -10,6 +10,7 @@ import type {
 	CreateSnapshotRequest,
 	EstimateRequest,
 	IResult,
+	ResponseOfGetSnapshotsResponse,
 	ResponseOfGuid,
 	UpdateSnapshotRequest,
 } from "./snapshots.schemas";
@@ -222,6 +223,44 @@ export const updateEstimatedSnapshot = async (
 			body: JSON.stringify(estimateRequest),
 		},
 	);
+};
+
+export type getSnapshotsResponse200 = {
+	data: ResponseOfGetSnapshotsResponse;
+	status: 200;
+};
+
+export type getSnapshotsResponse404 = {
+	data: ResponseOfGetSnapshotsResponse;
+	status: 404;
+};
+
+export type getSnapshotsResponseSuccess = getSnapshotsResponse200 & {
+	headers: Headers;
+};
+export type getSnapshotsResponseError = getSnapshotsResponse404 & {
+	headers: Headers;
+};
+
+export type getSnapshotsResponse =
+	| getSnapshotsResponseSuccess
+	| getSnapshotsResponseError;
+
+export const getGetSnapshotsUrl = () => {
+	return `/financial-wellness/v1/snapshots`;
+};
+
+/**
+ * GET_financial_wellness_v1_snapshots
+ * @summary Handles `GET /financial-wellness/v1/snapshots`.
+ */
+export const getSnapshots = async (
+	options?: RequestInit,
+): Promise<getSnapshotsResponse> => {
+	return apiRequest<getSnapshotsResponse>(getGetSnapshotsUrl(), {
+		...options,
+		method: "GET",
+	});
 };
 
 export type createSnapshotResponse201 = {

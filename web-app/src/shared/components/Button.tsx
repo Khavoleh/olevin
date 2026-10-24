@@ -7,7 +7,13 @@ import {
 } from "react-aria-components";
 
 interface ButtonProps extends AriaButtonProps {
-	variant?: "primary" | "secondary" | "ghost" | "icon";
+	variant?:
+		| "primary"
+		| "secondary"
+		| "ghost"
+		| "danger"
+		| "icon"
+		| "icon-danger";
 }
 
 const VARIANT_CLASSES = {
@@ -29,15 +35,27 @@ const VARIANT_CLASSES = {
 		hovered: "bg-primary-soft",
 		pressed: "bg-primary-soft",
 	},
+	danger: {
+		base: "gap-1.5 px-4.5 text-danger",
+		idle: "bg-transparent",
+		hovered: "bg-danger-soft",
+		pressed: "bg-danger-soft",
+	},
 	icon: {
 		base: "w-11 flex-none text-fg-muted",
 		idle: "bg-transparent",
 		hovered: "bg-surface-hover",
 		pressed: "bg-surface-sunken",
 	},
+	"icon-danger": {
+		base: "w-11 flex-none text-danger",
+		idle: "bg-transparent",
+		hovered: "bg-danger-soft",
+		pressed: "bg-danger-soft",
+	},
 };
 
-/** Accessible button of the app in the primary, secondary or ghost style, or a square icon button. */
+/** Accessible button of the app in the primary, secondary, ghost or danger style, or a square icon button. */
 const Button = ({
 	variant = "primary",
 	className,

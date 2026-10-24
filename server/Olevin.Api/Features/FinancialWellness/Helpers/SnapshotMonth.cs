@@ -15,15 +15,27 @@ public sealed record SnapshotMonth(short Year, CalendarMonth Month)
     /// <param name="now">The current instant.</param>
     /// <param name="timezone">The IANA time zone name of the user.</param>
     /// <returns>The month in the user's time zone.</returns>
-    public static SnapshotMonth Current(DateTimeOffset now, string timezone)
-    {
-        DateTimeOffset local = TimeZoneInfo.ConvertTime(
-            now,
-            TimeZoneInfo.FindSystemTimeZoneById(timezone)
+    public static SnapshotMonth Current(DateTimeOffset now, string timezone) =>
+        Of(Today(now, timezone));
+
+    /// <summary>
+    /// Gets the date that is current for the user right now.
+    /// </summary>
+    /// <param name="now">The current instant.</param>
+    /// <param name="timezone">The IANA time zone name of the user.</param>
+    /// <returns>The date in the user's time zone.</returns>
+    public static DateOnly Today(DateTimeOffset now, string timezone) =>
+        DateOnly.FromDateTime(
+            TimeZoneInfo.ConvertTime(now, TimeZoneInfo.FindSystemTimeZoneById(timezone)).DateTime
         );
 
-        return new SnapshotMonth((short)local.Year, (CalendarMonth)local.Month);
-    }
+    /// <summary>
+    /// Gets the month of a date.
+    /// </summary>
+    /// <param name="date">The date.</param>
+    /// <returns>The month the date falls in.</returns>
+    public static SnapshotMonth Of(DateOnly date) =>
+        new((short)date.Year, (CalendarMonth)date.Month);
 
     /// <summary>
     /// Gets the month before this one.

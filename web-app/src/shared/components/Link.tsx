@@ -9,23 +9,38 @@ import {
 
 interface LinkProps extends Omit<AriaLinkProps, "href" | "render"> {
 	href: string;
-	variant?: "inline" | "subtle";
+	variant?: "inline" | "subtle" | "button" | "action" | "icon";
 }
 
 const VARIANT_CLASSES = {
 	inline: {
-		base: "font-semibold underline underline-offset-2",
+		base: "rounded-sm font-semibold underline underline-offset-2",
 		idle: "text-primary",
 		hovered: "text-primary-hover",
 	},
 	subtle: {
-		base: "",
+		base: "rounded-sm",
 		idle: "text-fg-muted",
 		hovered: "text-fg underline underline-offset-2",
 	},
+	button: {
+		base: "inline-flex min-h-11 items-center justify-center gap-2 rounded-md px-4.5 font-semibold text-on-primary",
+		idle: "bg-primary",
+		hovered: "bg-primary-hover",
+	},
+	action: {
+		base: "inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md px-4.5 font-semibold",
+		idle: "text-fg-muted",
+		hovered: "bg-surface-hover text-fg",
+	},
+	icon: {
+		base: "inline-flex size-11 flex-none items-center justify-center rounded-md",
+		idle: "text-fg-muted",
+		hovered: "bg-surface-hover text-fg",
+	},
 };
 
-/** Accessible link of the app with client-side navigation: inline in text or subtle in secondary text. */
+/** Accessible link of the app with client-side navigation: in text, in secondary text, or looking like a button. */
 const Link = ({
 	variant = "inline",
 	className,
@@ -43,7 +58,7 @@ const Link = ({
 					const { base, idle, hovered } = VARIANT_CLASSES[variant];
 					const colors = isHovered ? hovered : idle;
 
-					return `rounded-sm transition-colors ${base} ${colors} ${customClasses ?? ""}`;
+					return `transition-colors ${base} ${colors} ${customClasses ?? ""}`;
 				},
 			)}
 		/>

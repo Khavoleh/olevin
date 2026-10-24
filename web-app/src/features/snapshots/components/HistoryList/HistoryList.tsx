@@ -1,0 +1,60 @@
+"use client";
+
+import { getI18n } from "@shared/helpers";
+import { GridList } from "react-aria-components";
+import { SNAPSHOTS_I18N } from "../../snapshots-i18n";
+import { useSnapshotsStore } from "../../snapshots-store";
+import { useHistoryPage } from "../../use-history-page";
+import EstimateCard from "./EstimateCard";
+import SnapshotCard from "./SnapshotCard";
+
+interface HistoryListProps {
+	language: string;
+	className?: string;
+}
+
+/** Cards of the history page on a phone and a portrait tablet, with labelled actions under each card. */
+const HistoryList = ({
+	language,
+	className = "",
+}: Readonly<HistoryListProps>) => {
+	const t = getI18n(language, SNAPSHOTS_I18N);
+	const page = useHistoryPage();
+	const currency = useSnapshotsStore((state) => state.history?.currency);
+
+	if (!page || !currency) {
+		return (
+			<div aria-hidden className={`grid gap-2 ${className}`}>
+				<div className="h-32 rounded-lg bg-skeleton" />
+				<div className="h-32 rounded-lg bg-skeleton" />
+				<div className="h-32 rounded-lg bg-skeleton" />
+			</div>
+		);
+	}
+
+	return (
+		<GridList
+			aria-label={t("history")}
+			items={page.rows}
+			className={`grid gap-2 ${className}`}
+		>
+			{(row) =>
+				row.kind === "snapshot" ? (
+					<SnapshotCard
+						snapshot={row}
+						currency={currency}
+						language={language}
+					/>
+				) : (
+					<EstimateCard
+						estimate={row}
+						currency={currency}
+						language={language}
+					/>
+				)
+			}
+		</GridList>
+	);
+};
+
+export default HistoryList;

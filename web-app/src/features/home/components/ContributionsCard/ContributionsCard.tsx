@@ -1,12 +1,11 @@
 "use client";
 
 import { Card, Heading, showErrorToast, Text } from "@shared/components";
-import { getI18n } from "@shared/helpers";
+import { formatIndex, getI18n } from "@shared/helpers";
 import { useEffect, useState } from "react";
 import { getLatestContributions } from "../../actions/get-latest-contributions";
 import type { GetContributionsResponse } from "../../api/home.schemas";
 import { describeContributions } from "../../helpers/describe-contributions/describe-contributions";
-import { formatIndex } from "../../helpers/format-index/format-index";
 import { formatSinceMonth } from "../../helpers/format-since-month/format-since-month";
 import { useHomeStore } from "../../home-store";
 import { CONTRIBUTIONS_CARD_I18N } from "../../i18n/contributions-card-i18n";

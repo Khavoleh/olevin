@@ -1,7 +1,6 @@
 import { Heading } from "@shared/components";
-import { getI18n } from "@shared/helpers";
+import { formatIndex, getI18n } from "@shared/helpers";
 import type { ReactNode } from "react";
-import { formatIndex } from "../../helpers/format-index/format-index";
 import { ADVICE_CARD_I18N } from "../../i18n/advice-card-i18n";
 
 interface AdviceRowProps {

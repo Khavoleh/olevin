@@ -1,7 +1,6 @@
-import { getI18n } from "@shared/helpers";
+import { formatSnapshotMonth, getI18n } from "@shared/helpers";
 import type { SavingsRegularityResponse } from "../../api/home.schemas";
 import { formatShortMonth } from "../../helpers/format-short-month/format-short-month";
-import { formatSnapshotMonth } from "../../helpers/format-snapshot-month/format-snapshot-month";
 import { COMPOSITION_CARD_I18N } from "../../i18n/composition-card-i18n";
 import CompositionItem from "./CompositionItem";
 

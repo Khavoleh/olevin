@@ -1,7 +1,7 @@
-namespace Olevin.Api.Features.FinancialWellness.Slices.Home.Helpers;
+namespace Olevin.Api.Features.FinancialWellness.Helpers;
 
 /// <summary>
-/// Rounds the index and its parts the way the home page shows them.
+/// Rounds the index and its parts the way the pages show them.
 /// </summary>
 public static class IndexPoints
 {

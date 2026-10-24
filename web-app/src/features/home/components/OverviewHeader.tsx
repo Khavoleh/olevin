@@ -2,9 +2,7 @@
 
 import { CalendarBlankIcon } from "@phosphor-icons/react";
 import { Heading, Text } from "@shared/components";
-import { getI18n } from "@shared/helpers";
-import { formatDayMonth } from "../helpers/format-day-month/format-day-month";
-import { formatSnapshotMonth } from "../helpers/format-snapshot-month/format-snapshot-month";
+import { formatDayMonth, formatSnapshotMonth, getI18n } from "@shared/helpers";
 import { useHomeStore } from "../home-store";
 import { HOME_I18N } from "../i18n/home-i18n";
 

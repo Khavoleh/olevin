@@ -1,7 +1,6 @@
 import { Text } from "@shared/components";
-import { getI18n } from "@shared/helpers";
+import { formatMoney, getI18n } from "@shared/helpers";
 import type { AdviceResponseReserveAdviceResponse } from "../../api/home.schemas";
-import { formatMoney } from "../../helpers/format-money/format-money";
 import { formatMonths } from "../../helpers/format-months/format-months";
 import { ADVICE_CARD_I18N } from "../../i18n/advice-card-i18n";
 import AdviceChange from "./AdviceChange";

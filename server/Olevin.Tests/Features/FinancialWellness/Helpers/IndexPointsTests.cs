@@ -1,6 +1,6 @@
-using Olevin.Api.Features.FinancialWellness.Slices.Home.Helpers;
+using Olevin.Api.Features.FinancialWellness.Helpers;
 
-namespace Olevin.Tests.Features.FinancialWellness.Slices.Home.Helpers;
+namespace Olevin.Tests.Features.FinancialWellness.Helpers;
 
 public sealed class IndexPointsTests
 {

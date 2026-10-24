@@ -6,7 +6,6 @@ using Olevin.Api.Features.FinancialWellness.Data;
 using Olevin.Api.Features.FinancialWellness.Helpers;
 using Olevin.Api.Features.FinancialWellness.Helpers.Index.Model;
 using Olevin.Api.Features.FinancialWellness.Slices.Home.Handlers.GetIndex.Responses;
-using Olevin.Api.Features.FinancialWellness.Slices.Home.Helpers;
 using Olevin.Api.Features.Settings.Slices.UserSettings.Contracts;
 using Olevin.Api.Infrastructure.Auth;
 using Olevin.Api.Shared;

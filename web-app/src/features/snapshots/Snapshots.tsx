@@ -1,16 +1,27 @@
-import { Heading } from "@shared/components";
-import { getI18n } from "@shared/helpers";
-import { SNAPSHOTS_I18N } from "./snapshots-i18n";
+import HistoryHeader from "./components/HistoryHeader/HistoryHeader";
+import HistoryList from "./components/HistoryList/HistoryList";
+import HistoryPagination from "./components/HistoryPagination";
+import HistoryTable from "./components/HistoryTable/HistoryTable";
+import LoadSnapshots from "./components/LoadSnapshots";
 
 interface SnapshotsProps {
 	language: string;
 }
 
-/** History page: every monthly snapshot, with change and delete. */
+/** History page: every snapshot and estimate, as cards on a phone and a table on wider screens. */
 const Snapshots = ({ language }: Readonly<SnapshotsProps>) => {
-	const t = getI18n(language, SNAPSHOTS_I18N);
+	return (
+		<>
+			<LoadSnapshots language={language} />
+			<HistoryHeader language={language} />
 
-	return <Heading level={1}>{t("title")}</Heading>;
+			<div className="@container grid gap-3">
+				<HistoryList language={language} className="@3xl:hidden" />
+				<HistoryTable language={language} className="@3xl:block hidden" />
+				<HistoryPagination language={language} />
+			</div>
+		</>
+	);
 };
 
 export default Snapshots;

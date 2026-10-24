@@ -9,7 +9,7 @@ namespace Olevin.Tests.Features.FinancialWellness.Slices.Snapshots.Handlers.Crea
 public sealed class CreateSnapshotRulesTests
 {
     private static readonly SnapshotMonth Earliest = new(2026, CalendarMonth.June);
-    private static readonly SnapshotMonth Current = new(2026, CalendarMonth.October);
+    private static readonly SnapshotMonth Latest = new(2026, CalendarMonth.October);
     private static readonly SnapshotMonth[] Taken =
     [
         new(2026, CalendarMonth.July),
@@ -17,7 +17,7 @@ public sealed class CreateSnapshotRulesTests
     ];
 
     private static Response<Guid>? Reject(SnapshotMonth month) =>
-        CreateSnapshotRules.RejectMonth(month, Earliest, Current, Taken);
+        CreateSnapshotRules.RejectMonth(month, Earliest, Latest, Taken);
 
     [Theory]
     [InlineData(2026, CalendarMonth.June)]
@@ -37,7 +37,7 @@ public sealed class CreateSnapshotRulesTests
     [Theory]
     [InlineData(2026, CalendarMonth.November)]
     [InlineData(2027, CalendarMonth.January)]
-    public void RejectMonth_NotStartedYet_IsBadRequest(short year, CalendarMonth month) =>
+    public void RejectMonth_AfterTheLatestOpenMonth_IsBadRequest(short year, CalendarMonth month) =>
         Assert.Equal(HttpStatusCode.BadRequest, Reject(new SnapshotMonth(year, month))?.Code);
 
     [Theory]
@@ -45,14 +45,4 @@ public sealed class CreateSnapshotRulesTests
     [InlineData(2026, CalendarMonth.October)]
     public void RejectMonth_AlreadyTaken_IsConflict(short year, CalendarMonth month) =>
         Assert.Equal(HttpStatusCode.Conflict, Reject(new SnapshotMonth(year, month))?.Code);
-
-    [Fact]
-    public void EarliestMonth_IsTheMonthAfterTheLatestEstimate() =>
-        Assert.Equal(
-            new SnapshotMonth(2026, CalendarMonth.January),
-            CreateSnapshotRules.EarliestMonth([
-                new SnapshotMonth(2025, CalendarMonth.December),
-                new SnapshotMonth(2025, CalendarMonth.November),
-            ])
-        );
 }

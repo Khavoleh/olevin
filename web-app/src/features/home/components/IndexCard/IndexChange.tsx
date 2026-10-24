@@ -4,9 +4,8 @@ import {
 	type Icon,
 	MinusIcon,
 } from "@phosphor-icons/react";
-import { getI18n } from "@shared/helpers";
+import { formatIndex, getI18n } from "@shared/helpers";
 import type { IndexChangeResponse } from "../../api/home.schemas";
-import { formatIndex } from "../../helpers/format-index/format-index";
 import { formatSinceMonth } from "../../helpers/format-since-month/format-since-month";
 import { INDEX_CARD_I18N } from "../../i18n/index-card-i18n";
 

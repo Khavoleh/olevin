@@ -35,8 +35,9 @@ public static class CreateSnapshotEndpoint
     /// <param name="logger">The logger.</param>
     /// <param name="ct">The cancellation token.</param>
     /// <returns>
-    /// The snapshot identifier (201), a bad request (400) for a month that is not allowed, a not found (404) without
-    /// user settings, or a conflict (409) without onboarding or for a taken month.
+    /// The snapshot identifier (201), a bad request (400) for a month that is not allowed or whose snapshot day has
+    /// not come yet, a not found (404) without user settings, or a conflict (409) without onboarding or for a taken
+    /// month.
     /// </returns>
     [WolverinePost("/financial-wellness/v1/snapshots", OperationId = "CreateSnapshot")]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status201Created)]
@@ -84,8 +85,11 @@ public static class CreateSnapshotEndpoint
 
         Response<Guid>? rejection = CreateSnapshotRules.RejectMonth(
             month,
-            CreateSnapshotRules.EarliestMonth(estimates.Select(SnapshotHistoryMapping.MonthOf)),
-            SnapshotMonth.Current(now, userSettings.Timezone),
+            OpenMonths.Earliest(estimates.Select(SnapshotHistoryMapping.MonthOf)),
+            OpenMonths.Latest(
+                SnapshotMonth.Today(now, userSettings.Timezone),
+                userSettings.SnapshotDay
+            ),
             taken
         );
 

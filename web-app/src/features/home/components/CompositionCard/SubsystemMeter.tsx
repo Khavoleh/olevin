@@ -1,10 +1,9 @@
 "use client";
 
 import { Text } from "@shared/components";
-import { getI18n } from "@shared/helpers";
+import { formatIndex, getI18n } from "@shared/helpers";
 import { Meter } from "react-aria-components";
 import type { SubsystemTerm } from "../../api/home.schemas";
-import { formatIndex } from "../../helpers/format-index/format-index";
 import { COMPOSITION_CARD_I18N } from "../../i18n/composition-card-i18n";
 import CompositionItem from "./CompositionItem";
 

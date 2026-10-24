@@ -1,6 +1,5 @@
-import { getI18n } from "@shared/helpers";
+import { formatMoney, getI18n } from "@shared/helpers";
 import type { AdviceResponseDebtToIncomeAdviceResponse } from "../../api/home.schemas";
-import { formatMoney } from "../../helpers/format-money/format-money";
 import { formatPercent } from "../../helpers/format-percent/format-percent";
 import { ADVICE_CARD_I18N } from "../../i18n/advice-card-i18n";
 import AdviceChange from "./AdviceChange";

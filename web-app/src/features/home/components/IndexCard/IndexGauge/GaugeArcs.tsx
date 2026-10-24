@@ -35,6 +35,7 @@ const GaugeArcs = ({ value, zone }: Readonly<GaugeArcsProps>) => {
 		startAngle: 180,
 		stroke: "none",
 		isAnimationActive: false,
+		rootTabIndex: -1,
 	};
 	const track = {
 		...arc,

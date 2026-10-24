@@ -136,6 +136,92 @@ export const CalendarMonth = {
 } as const;
 
 /**
+ * A zone of the index scale; the same for I, I_fuzzy and I_lin.
+ */
+export type Zone = (typeof Zone)[keyof typeof Zone];
+
+export const Zone = {
+	Stress: "Stress",
+	Unstable: "Unstable",
+	Calm: "Calm",
+} as const;
+
+/**
+ * One snapshot of the history.
+ */
+export interface SnapshotResponse {
+	/** The snapshot identifier. */
+	id: string;
+	/** The year of the snapshot. */
+	year: number;
+	/** The month of the snapshot. */
+	month: CalendarMonth;
+	/** The final index, rounded to one decimal. */
+	index: number;
+	/** The zone of Index. */
+	zone: Zone;
+	/**
+	 * The change since the previous snapshot, or `null` for the first one.
+	 * @nullable
+	 */
+	change: number | null;
+	/** The total expenses without debt payments. */
+	expenses: number;
+	/** The amount saved during the month. */
+	saved: number;
+}
+
+/**
+ * One estimate from onboarding.
+ */
+export interface EstimateResponse {
+	/** The estimate identifier. */
+	id: string;
+	/** The year of the estimate. */
+	year: number;
+	/** The month of the estimate. */
+	month: CalendarMonth;
+	/** The approximate total expenses. */
+	expenses: number;
+	/** The approximate saved amount. */
+	saved: number;
+}
+
+/**
+ * The snapshot history of the user.
+ */
+export interface GetSnapshotsResponse {
+	/** The base currency of every amount. */
+	currency: CurrencyCode;
+	/** Every snapshot, the latest first. */
+	snapshots: SnapshotResponse[];
+	/** The estimates from onboarding, the latest first; they can be changed, not deleted. */
+	estimates: EstimateResponse[];
+	/**
+	 * The day the next month opens for a snapshot, or `null` when a month is open now.
+	 * @nullable
+	 */
+	newSnapshotOpensOn: string | null;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfGetSnapshotsResponse {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	data: null | GetSnapshotsResponse;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * A snapshot of a month after the onboarding.
  */
 export interface CreateSnapshotRequest {

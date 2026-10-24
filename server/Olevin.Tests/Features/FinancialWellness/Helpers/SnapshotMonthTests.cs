@@ -22,6 +22,22 @@ public sealed class SnapshotMonthTests
     }
 
     [Fact]
+    public void Today_IsTheDateInTheUsersTimezone()
+    {
+        DateTimeOffset now = new(2026, 9, 30, 23, 30, 0, TimeSpan.Zero);
+
+        Assert.Equal(new DateOnly(2026, 10, 1), SnapshotMonth.Today(now, "Europe/Kyiv"));
+        Assert.Equal(new DateOnly(2026, 9, 30), SnapshotMonth.Today(now, "UTC"));
+    }
+
+    [Fact]
+    public void Of_IsTheMonthOfTheDate() =>
+        Assert.Equal(
+            new SnapshotMonth(2026, CalendarMonth.February),
+            SnapshotMonth.Of(new DateOnly(2026, 2, 28))
+        );
+
+    [Fact]
     public void Previous_OfJanuary_IsDecemberOfThePreviousYear() =>
         Assert.Equal(
             new SnapshotMonth(2025, CalendarMonth.December),
