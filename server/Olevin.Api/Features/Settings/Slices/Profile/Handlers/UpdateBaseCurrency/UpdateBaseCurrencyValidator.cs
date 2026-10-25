@@ -1,4 +1,5 @@
 using FluentValidation;
+using Olevin.Api.Features.Settings.Validators;
 
 namespace Olevin.Api.Features.Settings.Slices.Profile.Handlers.UpdateBaseCurrency;
 
@@ -12,9 +13,6 @@ public sealed class UpdateBaseCurrencyValidator : AbstractValidator<UpdateBaseCu
     /// </summary>
     public UpdateBaseCurrencyValidator()
     {
-        RuleFor(request => request.BaseCurrency)
-            .NotNull()
-            .IsInEnum()
-            .WithMessage("Currency is not supported.");
+        RuleFor(request => request.BaseCurrency).BaseCurrency();
     }
 }

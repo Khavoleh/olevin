@@ -41,7 +41,7 @@ const Select = ({
 				<SelectValue />
 				<CaretDownIcon size={16} aria-hidden />
 			</Button>
-			<Popover className="z-20 min-w-(--trigger-width) overflow-hidden rounded-lg border border-border bg-surface shadow-overlay data-entering:animate-popover-in data-exiting:animate-popover-out">
+			<Popover className="z-40 min-w-(--trigger-width) overflow-hidden rounded-lg border border-border bg-surface shadow-overlay data-entering:animate-popover-in data-exiting:animate-popover-out">
 				<ListBox
 					items={options}
 					className="max-h-72 overflow-y-auto p-1 outline-none"

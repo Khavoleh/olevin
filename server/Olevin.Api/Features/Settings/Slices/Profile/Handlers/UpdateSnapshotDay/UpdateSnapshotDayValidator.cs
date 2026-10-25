@@ -1,4 +1,5 @@
 using FluentValidation;
+using Olevin.Api.Features.Settings.Validators;
 
 namespace Olevin.Api.Features.Settings.Slices.Profile.Handlers.UpdateSnapshotDay;
 
@@ -12,9 +13,6 @@ public sealed class UpdateSnapshotDayValidator : AbstractValidator<UpdateSnapsho
     /// </summary>
     public UpdateSnapshotDayValidator()
     {
-        RuleFor(request => request.SnapshotDay)
-            .NotNull()
-            .InclusiveBetween((short)1, (short)31)
-            .WithMessage("Snapshot day must be from 1 to 31.");
+        RuleFor(request => request.SnapshotDay).SnapshotDay();
     }
 }

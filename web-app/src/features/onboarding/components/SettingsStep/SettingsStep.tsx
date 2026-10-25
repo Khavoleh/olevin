@@ -13,13 +13,13 @@ import {
 } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import LanguageSwitcher from "@widgets/language-switcher";
+import TimezoneField from "@widgets/timezone-field";
 import { useActionState, useEffect } from "react";
 import { configureSettings } from "../../actions/configure-settings";
 import { SETTINGS_SCHEMA } from "../../constants/settings-schema";
 import { SETTINGS_STEP_I18N } from "../../i18n/settings-step-i18n";
 import { useOnboardingStore } from "../../onboarding-store";
 import CurrencyField from "./CurrencyField";
-import TimezoneField from "./TimezoneField";
 
 interface SettingsStepProps {
 	language: string;
@@ -30,6 +30,8 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 	const t = getI18n(language, SETTINGS_STEP_I18N);
 	const snapshotDay = useOnboardingStore((state) => state.snapshotDay);
 	const setSnapshotDay = useOnboardingStore((state) => state.setSnapshotDay);
+	const timezone = useOnboardingStore((state) => state.timezone);
+	const setTimezone = useOnboardingStore((state) => state.setTimezone);
 	const researchConsent = useOnboardingStore((state) => state.researchConsent);
 	const setResearchConsent = useOnboardingStore(
 		(state) => state.setResearchConsent,
@@ -108,7 +110,10 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 			<FormBlock>
 				<TimezoneField
 					language={language}
+					value={timezone}
+					onChange={setTimezone}
 					name={fields.timezone.name}
+					labelVariant="group"
 					isInvalid={!!fields.timezone.errors}
 				/>
 			</FormBlock>

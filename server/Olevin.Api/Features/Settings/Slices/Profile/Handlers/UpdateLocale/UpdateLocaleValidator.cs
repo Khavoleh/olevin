@@ -1,4 +1,5 @@
 using FluentValidation;
+using Olevin.Api.Features.Settings.Validators;
 
 namespace Olevin.Api.Features.Settings.Slices.Profile.Handlers.UpdateLocale;
 
@@ -12,9 +13,6 @@ public sealed class UpdateLocaleValidator : AbstractValidator<UpdateLocaleReques
     /// </summary>
     public UpdateLocaleValidator()
     {
-        RuleFor(request => request.Locale)
-            .NotNull()
-            .IsInEnum()
-            .WithMessage("Locale is not supported.");
+        RuleFor(request => request.Locale).Locale();
     }
 }

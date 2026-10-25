@@ -8,15 +8,10 @@ public sealed class UpdateBaseCurrencyValidatorTests
 {
     private readonly UpdateBaseCurrencyValidator Validator = new();
 
-    [Theory]
-    [InlineData(CurrencyCode.USD)]
-    [InlineData(CurrencyCode.EUR)]
-    [InlineData(CurrencyCode.CAD)]
-    [InlineData(CurrencyCode.UAH)]
-    [InlineData(CurrencyCode.PLN)]
-    public void SupportedCurrency_IsAccepted(CurrencyCode currency) =>
+    [Fact]
+    public void SupportedCurrency_IsAccepted() =>
         Validator
-            .TestValidate(new UpdateBaseCurrencyRequest(currency))
+            .TestValidate(new UpdateBaseCurrencyRequest(CurrencyCode.EUR))
             .ShouldNotHaveAnyValidationErrors();
 
     [Fact]

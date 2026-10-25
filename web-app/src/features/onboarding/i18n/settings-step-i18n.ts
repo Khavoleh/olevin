@@ -15,10 +15,6 @@ export const SETTINGS_STEP_I18N: I18N = {
 		snapshot_day_hint:
 			"The day of the month you take a monthly snapshot on, from 1 to 31.",
 		snapshot_day_error: "Enter a day from 1 to 31.",
-		timezone: "Time zone",
-		timezone_hint: "It sets when your snapshot day starts.",
-		timezone_error: "Choose a time zone from the list.",
-		show_timezones: "Show time zones",
 		research_consent: "Research",
 		research_consent_label:
 			"I agree that my anonymised answers may be used for research",
@@ -39,10 +35,6 @@ export const SETTINGS_STEP_I18N: I18N = {
 		snapshot_day_hint:
 			"День місяця, коли ви робите щомісячний зріз, від 1 до 31.",
 		snapshot_day_error: "Введіть день від 1 до 31.",
-		timezone: "Часовий пояс",
-		timezone_hint: "Від нього залежить, коли настає день зрізу.",
-		timezone_error: "Оберіть часовий пояс зі списку.",
-		show_timezones: "Показати часові пояси",
 		research_consent: "Дослідження",
 		research_consent_label:
 			"Погоджуюся, що мої знеособлені відповіді можуть використовуватися для досліджень",

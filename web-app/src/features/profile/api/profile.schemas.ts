@@ -5,6 +5,40 @@
  * OpenAPI spec version: 1.0.0
  */
 /**
+ * The new time zone of a user.
+ */
+export interface UpdateTimezoneRequest {
+	/**
+	 * The IANA time zone name.
+	 * @minLength 1
+	 * @maxLength 64
+	 * @pattern ^[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*$(?!\n)
+	 */
+	timezone: string;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfstring {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	/**
+	 * The result, or the default value of T on failure.
+	 * @nullable
+	 */
+	data: string | null;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * The new snapshot day of a user.
  */
 export interface UpdateSnapshotDayRequest {

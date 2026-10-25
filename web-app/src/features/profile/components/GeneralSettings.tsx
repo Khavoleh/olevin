@@ -3,10 +3,10 @@ import { Suspense } from "react";
 import { PROFILE_I18N } from "../profile-i18n";
 import BaseCurrencySetting from "./BaseCurrencySetting/BaseCurrencySetting";
 import LanguageSetting from "./LanguageSetting";
-import SettingsButton from "./SettingsList/SettingsButton";
 import SettingsGroup from "./SettingsList/SettingsGroup";
 import SettingsRow from "./SettingsList/SettingsRow";
 import SnapshotDaySetting from "./SnapshotDaySetting/SnapshotDaySetting";
+import TimezoneSetting from "./TimezoneSetting/TimezoneSetting";
 
 interface GeneralSettingsProps {
 	language: string;
@@ -48,7 +48,15 @@ const GeneralSettings = ({ language }: Readonly<GeneralSettingsProps>) => {
 			>
 				<SnapshotDaySetting language={language} />
 			</Suspense>
-			<SettingsButton label={t("time_zone")} value={t("time_zone_value")} />
+			<Suspense
+				fallback={
+					<SettingsRow label={t("time_zone")}>
+						<span aria-hidden className="h-5 w-24 rounded-md bg-skeleton" />
+					</SettingsRow>
+				}
+			>
+				<TimezoneSetting language={language} />
+			</Suspense>
 		</SettingsGroup>
 	);
 };

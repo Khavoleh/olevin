@@ -38,7 +38,7 @@ const AddonSelect = ({
 				<SelectValue />
 				<CaretDownIcon size={14} />
 			</Button>
-			<Popover className="z-20 min-w-(--trigger-width) overflow-hidden rounded-lg border border-border bg-surface shadow-overlay outline-none data-entering:animate-popover-in data-exiting:animate-popover-out data-[placement=top]:[--popover-shift:4px]">
+			<Popover className="z-40 min-w-(--trigger-width) overflow-hidden rounded-lg border border-border bg-surface shadow-overlay outline-none data-entering:animate-popover-in data-exiting:animate-popover-out data-[placement=top]:[--popover-shift:4px]">
 				<ListBox className="max-h-72 overflow-y-auto p-1 outline-none">
 					{options.map((option) => (
 						<ComboBoxItem key={option} id={option} textValue={option}>

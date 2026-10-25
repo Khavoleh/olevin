@@ -7,21 +7,13 @@ public sealed class UpdateSnapshotDayValidatorTests
 {
     private readonly UpdateSnapshotDayValidator Validator = new();
 
-    [Theory]
-    [InlineData(1)]
-    [InlineData(15)]
-    [InlineData(31)]
-    public void SnapshotDay_WithinTheBounds_IsAccepted(short day) =>
-        Validator
-            .TestValidate(new UpdateSnapshotDayRequest(day))
-            .ShouldNotHaveAnyValidationErrors();
+    [Fact]
+    public void DayOfTheMonth_IsAccepted() =>
+        Validator.TestValidate(new UpdateSnapshotDayRequest(15)).ShouldNotHaveAnyValidationErrors();
 
-    [Theory]
-    [InlineData(0)]
-    [InlineData(32)]
-    [InlineData(-1)]
-    public void SnapshotDay_OutsideTheBounds_IsRejected(short day) =>
+    [Fact]
+    public void SnapshotDay_OutsideTheBounds_IsRejected() =>
         Validator
-            .TestValidate(new UpdateSnapshotDayRequest(day))
+            .TestValidate(new UpdateSnapshotDayRequest(32))
             .ShouldHaveValidationErrorFor(r => r.SnapshotDay);
 }

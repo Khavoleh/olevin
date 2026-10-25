@@ -7,9 +7,29 @@
 import * as zod from "zod";
 
 /**
+ * PUT_settings_v1_user_settings_timezone
+ * @summary Handles `PUT /settings/v1/user-settings/timezone`. The new zone only sets when the next snapshot days start.
+ */
+export const updateTimezoneBodyTimezoneMax = 64;
+
+export const updateTimezoneBodyTimezoneRegExp = new RegExp(
+	"^[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*$(?!\\n)",
+);
+
+export const UpdateTimezoneBody = zod
+	.object({
+		timezone: zod
+			.string()
+			.min(1)
+			.max(updateTimezoneBodyTimezoneMax)
+			.regex(updateTimezoneBodyTimezoneRegExp)
+			.describe("The IANA time zone name."),
+	})
+	.describe("The new time zone of a user.");
+
+/**
  * PUT_settings_v1_user_settings_snapshot_day
- * @summary Handles `PUT /settings/v1/user-settings/snapshot-day`. The new day applies to the next snapshots only; the
-stored ones keep their month and exchange rates.
+ * @summary Handles `PUT /settings/v1/user-settings/snapshot-day`. The new day applies to the next snapshots only.
  */
 export const updateSnapshotDayBodySnapshotDayMax = 31;
 

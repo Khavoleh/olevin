@@ -11,10 +11,85 @@ import type {
 	ResponseOfGetSettingsResponse,
 	ResponseOfLocaleCode,
 	ResponseOfshort,
+	ResponseOfstring,
 	UpdateBaseCurrencyRequest,
 	UpdateLocaleRequest,
 	UpdateSnapshotDayRequest,
+	UpdateTimezoneRequest,
 } from "./profile.schemas";
+
+export type updateTimezoneResponse200 = {
+	data: ResponseOfstring;
+	status: 200;
+};
+
+export type updateTimezoneResponse400 = {
+	data: ResponseOfstring;
+	status: 400;
+};
+
+export type updateTimezoneResponse404 = {
+	data: ResponseOfstring;
+	status: 404;
+};
+
+export type updateTimezoneResponseSuccess = updateTimezoneResponse200 & {
+	headers: Headers;
+};
+export type updateTimezoneResponseError = (
+	| updateTimezoneResponse400
+	| updateTimezoneResponse404
+) & {
+	headers: Headers;
+};
+
+export type updateTimezoneResponse =
+	| updateTimezoneResponseSuccess
+	| updateTimezoneResponseError;
+
+export const getUpdateTimezoneUrl = () => {
+	return `/settings/v1/user-settings/timezone`;
+};
+
+/**
+ * PUT_settings_v1_user_settings_timezone
+ * @summary Handles `PUT /settings/v1/user-settings/timezone`. The new zone only sets when the next snapshot days start.
+ */
+export const updateTimezone = async (
+	updateTimezoneRequest: UpdateTimezoneRequest,
+	options?: RequestInit,
+): Promise<updateTimezoneResponse> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return apiRequest<updateTimezoneResponse>(getUpdateTimezoneUrl(), {
+		...options,
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: JSON.stringify(updateTimezoneRequest),
+	});
+};
 
 export type updateSnapshotDayResponse200 = {
 	data: ResponseOfshort;
@@ -51,8 +126,7 @@ export const getUpdateSnapshotDayUrl = () => {
 
 /**
  * PUT_settings_v1_user_settings_snapshot_day
- * @summary Handles `PUT /settings/v1/user-settings/snapshot-day`. The new day applies to the next snapshots only; the
-stored ones keep their month and exchange rates.
+ * @summary Handles `PUT /settings/v1/user-settings/snapshot-day`. The new day applies to the next snapshots only.
  */
 export const updateSnapshotDay = async (
 	updateSnapshotDayRequest: UpdateSnapshotDayRequest,

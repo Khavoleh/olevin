@@ -29,7 +29,10 @@ export const PROFILE_I18N: I18N = {
 			"Only the next snapshots will follow the new day. The saved ones keep their month and exchange rates.",
 		snapshot_day_confirm: "Change the day",
 		time_zone: "Time zone",
-		time_zone_value: "Kyiv, UTC+3",
+		time_zone_title: "Change the time zone",
+		time_zone_warning:
+			"The saved snapshots stay as they are. The new zone only sets when the next snapshot days start.",
+		time_zone_confirm: "Change the zone",
 		reminders: "Reminders",
 		push: "Push on the snapshot day",
 		push_hint: "On iPhone it works once Olevin is added to the Home Screen",
@@ -78,7 +81,10 @@ export const PROFILE_I18N: I18N = {
 			"Новий день діятиме лише для наступних зрізів. Збережені залишаться у своїх місяцях і зі своїми курсами.",
 		snapshot_day_confirm: "Змінити день",
 		time_zone: "Часовий пояс",
-		time_zone_value: "Київ, UTC+3",
+		time_zone_title: "Змінити часовий пояс",
+		time_zone_warning:
+			"Збережені зрізи не зміняться. Новий пояс лише визначатиме, коли настають наступні дні зрізу.",
+		time_zone_confirm: "Змінити пояс",
 		reminders: "Нагадування",
 		push: "Push у день зрізу",
 		push_hint: "На iPhone працює, якщо Olevin додано на головний екран",
