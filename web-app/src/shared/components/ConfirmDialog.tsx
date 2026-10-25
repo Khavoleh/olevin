@@ -13,11 +13,12 @@ interface ConfirmDialogProps {
 	variant?: "primary" | "danger";
 	isOpen: boolean;
 	isPending?: boolean;
+	isConfirmDisabled?: boolean;
 	onOpenChange: (isOpen: boolean) => void;
 	onConfirm: () => void;
 }
 
-/** Modal that asks to confirm an action; it stays open while the action runs. */
+/** Modal that asks to confirm an action; it stays open while the action runs, and the confirmation can wait for a choice. */
 const ConfirmDialog = ({
 	title,
 	children,
@@ -26,6 +27,7 @@ const ConfirmDialog = ({
 	variant = "primary",
 	isOpen,
 	isPending = false,
+	isConfirmDisabled = false,
 	onOpenChange,
 	onConfirm,
 }: Readonly<ConfirmDialogProps>) => {
@@ -51,7 +53,12 @@ const ConfirmDialog = ({
 						>
 							{cancelLabel}
 						</Button>
-						<Button variant={variant} isPending={isPending} onPress={onConfirm}>
+						<Button
+							variant={variant}
+							isPending={isPending}
+							isDisabled={isConfirmDisabled}
+							onPress={onConfirm}
+						>
 							{confirmLabel}
 						</Button>
 					</div>

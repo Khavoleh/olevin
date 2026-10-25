@@ -15,3 +15,16 @@ export const UpdateLocaleBody = zod
 		locale: zod.enum(["UK", "EN"]).describe("The interface language."),
 	})
 	.describe("The new interface language of a user.");
+
+/**
+ * PUT_settings_v1_user_settings_base_currency
+ * @summary Handles `PUT /settings/v1/user-settings/base-currency`. The new currency is saved together with a message
+in the outbox, which scores every snapshot again after the commit.
+ */
+export const UpdateBaseCurrencyBody = zod
+	.object({
+		baseCurrency: zod
+			.enum(["USD", "EUR", "CAD", "UAH", "PLN"])
+			.describe("The base currency."),
+	})
+	.describe("The new base currency of a user.");

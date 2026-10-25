@@ -55,13 +55,28 @@ public static class SnapshotRescorer
         SnapshotMonth from,
         IReadOnlyDictionary<SnapshotMonth, SnapshotScore> scores,
         DateTime now
+    ) =>
+        ApplyAll(
+            snapshots.Where(stored =>
+                (stored.Year, stored.Month).CompareTo((from.Year, from.Month)) >= 0
+            ),
+            scores,
+            now
+        );
+
+    /// <summary>
+    /// Applies the new scores to every snapshot, as after a change that touches every month.
+    /// </summary>
+    /// <param name="snapshots">The stored snapshots.</param>
+    /// <param name="scores">The new scores by month.</param>
+    /// <param name="now">The time of the change.</param>
+    public static void ApplyAll(
+        IEnumerable<Snapshot> snapshots,
+        IReadOnlyDictionary<SnapshotMonth, SnapshotScore> scores,
+        DateTime now
     )
     {
-        foreach (
-            Snapshot snapshot in snapshots.Where(stored =>
-                (stored.Year, stored.Month).CompareTo((from.Year, from.Month)) >= 0
-            )
-        )
+        foreach (Snapshot snapshot in snapshots)
         {
             SnapshotScoreMapping.ApplyScore(
                 snapshot,

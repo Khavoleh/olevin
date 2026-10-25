@@ -7,8 +7,10 @@
 
 import { apiRequest } from "@shared/api";
 import type {
+	ResponseOfCurrencyCode,
 	ResponseOfGetSettingsResponse,
 	ResponseOfLocaleCode,
+	UpdateBaseCurrencyRequest,
 	UpdateLocaleRequest,
 } from "./profile.schemas";
 
@@ -82,6 +84,81 @@ export const updateLocale = async (
 			...getHeaders(options?.headers),
 		},
 		body: JSON.stringify(updateLocaleRequest),
+	});
+};
+
+export type updateBaseCurrencyResponse200 = {
+	data: ResponseOfCurrencyCode;
+	status: 200;
+};
+
+export type updateBaseCurrencyResponse400 = {
+	data: ResponseOfCurrencyCode;
+	status: 400;
+};
+
+export type updateBaseCurrencyResponse404 = {
+	data: ResponseOfCurrencyCode;
+	status: 404;
+};
+
+export type updateBaseCurrencyResponseSuccess =
+	updateBaseCurrencyResponse200 & {
+		headers: Headers;
+	};
+export type updateBaseCurrencyResponseError = (
+	| updateBaseCurrencyResponse400
+	| updateBaseCurrencyResponse404
+) & {
+	headers: Headers;
+};
+
+export type updateBaseCurrencyResponse =
+	| updateBaseCurrencyResponseSuccess
+	| updateBaseCurrencyResponseError;
+
+export const getUpdateBaseCurrencyUrl = () => {
+	return `/settings/v1/user-settings/base-currency`;
+};
+
+/**
+ * PUT_settings_v1_user_settings_base_currency
+ * @summary Handles `PUT /settings/v1/user-settings/base-currency`. The new currency is saved together with a message
+in the outbox, which scores every snapshot again after the commit.
+ */
+export const updateBaseCurrency = async (
+	updateBaseCurrencyRequest: UpdateBaseCurrencyRequest,
+	options?: RequestInit,
+): Promise<updateBaseCurrencyResponse> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return apiRequest<updateBaseCurrencyResponse>(getUpdateBaseCurrencyUrl(), {
+		...options,
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: JSON.stringify(updateBaseCurrencyRequest),
 	});
 };
 

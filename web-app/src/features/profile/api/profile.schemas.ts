@@ -54,6 +54,32 @@ export const CurrencyCode = {
 } as const;
 
 /**
+ * The new base currency of a user.
+ */
+export interface UpdateBaseCurrencyRequest {
+	/** The base currency. */
+	baseCurrency: CurrencyCode;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfCurrencyCode {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	/** The result, or the default value of T on failure. */
+	data: CurrencyCode;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * The settings of the signed-in user shown on the profile page.
  */
 export interface GetSettingsResponse {

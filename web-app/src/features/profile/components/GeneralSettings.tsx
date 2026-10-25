@@ -1,6 +1,7 @@
 import { getI18n } from "@shared/helpers";
 import { Suspense } from "react";
 import { PROFILE_I18N } from "../profile-i18n";
+import BaseCurrencySetting from "./BaseCurrencySetting/BaseCurrencySetting";
 import LanguageSetting from "./LanguageSetting";
 import SettingsButton from "./SettingsList/SettingsButton";
 import SettingsGroup from "./SettingsList/SettingsGroup";
@@ -25,11 +26,18 @@ const GeneralSettings = ({ language }: Readonly<GeneralSettingsProps>) => {
 			>
 				<LanguageSetting language={language} />
 			</Suspense>
-			<SettingsButton
-				label={t("base_currency")}
-				hint={t("base_currency_hint")}
-				value={t("base_currency_value")}
-			/>
+			<Suspense
+				fallback={
+					<SettingsRow
+						label={t("base_currency")}
+						hint={t("base_currency_hint")}
+					>
+						<span aria-hidden className="h-5 w-14 rounded-md bg-skeleton" />
+					</SettingsRow>
+				}
+			>
+				<BaseCurrencySetting language={language} />
+			</Suspense>
 			<SettingsButton
 				label={t("snapshot_day")}
 				value={t("snapshot_day_value")}

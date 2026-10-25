@@ -159,6 +159,29 @@ public sealed class SnapshotRescorerTests
     }
 
     [Fact]
+    public void ApplyAll_ScoresEveryMonth()
+    {
+        Snapshot july = Stored(CalendarMonth.July);
+        Snapshot august = Stored(CalendarMonth.August);
+        Snapshot september = Stored(CalendarMonth.September);
+        Dictionary<SnapshotMonth, SnapshotScore> scores = Score(july, august, september);
+
+        SnapshotRescorer.ApplyAll([september, july, august], scores, Now);
+
+        Assert.All(
+            [july, august, september],
+            snapshot =>
+            {
+                Assert.Equal(
+                    scores[SnapshotHistoryMapping.MonthOf(snapshot)].Index.Final,
+                    snapshot.FinalIndex
+                );
+                Assert.Equal(Now, snapshot.UpdatedAt);
+            }
+        );
+    }
+
+    [Fact]
     public void ApplyFrom_ADeletedMonth_ScoresTheLaterOnesWithoutIt()
     {
         Snapshot july = Stored(CalendarMonth.July);
