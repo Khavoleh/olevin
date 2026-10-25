@@ -10,9 +10,85 @@ import type {
 	ResponseOfCurrencyCode,
 	ResponseOfGetSettingsResponse,
 	ResponseOfLocaleCode,
+	ResponseOfshort,
 	UpdateBaseCurrencyRequest,
 	UpdateLocaleRequest,
+	UpdateSnapshotDayRequest,
 } from "./profile.schemas";
+
+export type updateSnapshotDayResponse200 = {
+	data: ResponseOfshort;
+	status: 200;
+};
+
+export type updateSnapshotDayResponse400 = {
+	data: ResponseOfshort;
+	status: 400;
+};
+
+export type updateSnapshotDayResponse404 = {
+	data: ResponseOfshort;
+	status: 404;
+};
+
+export type updateSnapshotDayResponseSuccess = updateSnapshotDayResponse200 & {
+	headers: Headers;
+};
+export type updateSnapshotDayResponseError = (
+	| updateSnapshotDayResponse400
+	| updateSnapshotDayResponse404
+) & {
+	headers: Headers;
+};
+
+export type updateSnapshotDayResponse =
+	| updateSnapshotDayResponseSuccess
+	| updateSnapshotDayResponseError;
+
+export const getUpdateSnapshotDayUrl = () => {
+	return `/settings/v1/user-settings/snapshot-day`;
+};
+
+/**
+ * PUT_settings_v1_user_settings_snapshot_day
+ * @summary Handles `PUT /settings/v1/user-settings/snapshot-day`. The new day applies to the next snapshots only; the
+stored ones keep their month and exchange rates.
+ */
+export const updateSnapshotDay = async (
+	updateSnapshotDayRequest: UpdateSnapshotDayRequest,
+	options?: RequestInit,
+): Promise<updateSnapshotDayResponse> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return apiRequest<updateSnapshotDayResponse>(getUpdateSnapshotDayUrl(), {
+		...options,
+		method: "PUT",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: JSON.stringify(updateSnapshotDayRequest),
+	});
+};
 
 export type updateLocaleResponse200 = {
 	data: ResponseOfLocaleCode;

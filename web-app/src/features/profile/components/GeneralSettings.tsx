@@ -6,6 +6,7 @@ import LanguageSetting from "./LanguageSetting";
 import SettingsButton from "./SettingsList/SettingsButton";
 import SettingsGroup from "./SettingsList/SettingsGroup";
 import SettingsRow from "./SettingsList/SettingsRow";
+import SnapshotDaySetting from "./SnapshotDaySetting/SnapshotDaySetting";
 
 interface GeneralSettingsProps {
 	language: string;
@@ -38,10 +39,15 @@ const GeneralSettings = ({ language }: Readonly<GeneralSettingsProps>) => {
 			>
 				<BaseCurrencySetting language={language} />
 			</Suspense>
-			<SettingsButton
-				label={t("snapshot_day")}
-				value={t("snapshot_day_value")}
-			/>
+			<Suspense
+				fallback={
+					<SettingsRow label={t("snapshot_day")}>
+						<span aria-hidden className="h-5 w-20 rounded-md bg-skeleton" />
+					</SettingsRow>
+				}
+			>
+				<SnapshotDaySetting language={language} />
+			</Suspense>
 			<SettingsButton label={t("time_zone")} value={t("time_zone_value")} />
 		</SettingsGroup>
 	);

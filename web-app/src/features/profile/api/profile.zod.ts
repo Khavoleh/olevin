@@ -7,6 +7,25 @@
 import * as zod from "zod";
 
 /**
+ * PUT_settings_v1_user_settings_snapshot_day
+ * @summary Handles `PUT /settings/v1/user-settings/snapshot-day`. The new day applies to the next snapshots only; the
+stored ones keep their month and exchange rates.
+ */
+export const updateSnapshotDayBodySnapshotDayMax = 31;
+
+export const UpdateSnapshotDayBody = zod
+	.object({
+		snapshotDay: zod
+			.int()
+			.min(1)
+			.max(updateSnapshotDayBodySnapshotDayMax)
+			.describe(
+				"The day of the month (1-31) the monthly snapshot is taken on.",
+			),
+	})
+	.describe("The new snapshot day of a user.");
+
+/**
  * PUT_settings_v1_user_settings_locale
  * @summary Handles `PUT /settings/v1/user-settings/locale`.
  */

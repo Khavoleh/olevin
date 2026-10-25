@@ -5,6 +5,36 @@
  * OpenAPI spec version: 1.0.0
  */
 /**
+ * The new snapshot day of a user.
+ */
+export interface UpdateSnapshotDayRequest {
+	/**
+	 * The day of the month (1-31) the monthly snapshot is taken on.
+	 * @minimum 1
+	 * @maximum 31
+	 */
+	snapshotDay: number;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfshort {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	/** The result, or the default value of T on failure. */
+	data: number;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * An interface language. Members match the labels of `settings.locale_code`.
  */
 export type LocaleCode = (typeof LocaleCode)[keyof typeof LocaleCode];
