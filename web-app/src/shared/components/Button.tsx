@@ -12,6 +12,7 @@ interface ButtonProps extends AriaButtonProps {
 		| "secondary"
 		| "ghost"
 		| "danger"
+		| "ghost-danger"
 		| "icon"
 		| "icon-danger";
 }
@@ -36,6 +37,12 @@ const VARIANT_CLASSES = {
 		pressed: "bg-primary-soft",
 	},
 	danger: {
+		base: "px-4.5 text-on-danger",
+		idle: "bg-danger",
+		hovered: "bg-danger-hover",
+		pressed: "bg-danger-hover",
+	},
+	"ghost-danger": {
 		base: "gap-1.5 px-4.5 text-danger",
 		idle: "bg-transparent",
 		hovered: "bg-danger-soft",
@@ -55,7 +62,7 @@ const VARIANT_CLASSES = {
 	},
 };
 
-/** Accessible button of the app in the primary, secondary, ghost or danger style, or a square icon button. */
+/** Accessible button of the app in the primary, secondary, ghost, danger or ghost danger style, or a square icon button. */
 const Button = ({
 	variant = "primary",
 	className,

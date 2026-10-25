@@ -5,6 +5,24 @@
  * OpenAPI spec version: 1.0.0
  */
 /**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfGuid {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	/** The result, or the default value of T on failure. */
+	data: string;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * The new time zone of a user.
  */
 export interface UpdateTimezoneRequest {

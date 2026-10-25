@@ -1,14 +1,16 @@
 import { Card, Text } from "@shared/components";
 import { getI18n } from "@shared/helpers";
-import { getProfileSettings } from "../loaders/get-profile-settings";
-import { PROFILE_I18N } from "../profile-i18n";
+import { getProfileSettings } from "../../loaders/get-profile-settings";
+import { PROFILE_I18N } from "../../profile-i18n";
 
-interface AccountSummaryProps {
+interface AccountSummaryCardProps {
 	language: string;
 }
 
 /** Card of the signed-in account: its initial, username, email and when it was created. */
-const AccountSummary = async ({ language }: Readonly<AccountSummaryProps>) => {
+const AccountSummaryCard = async ({
+	language,
+}: Readonly<AccountSummaryCardProps>) => {
 	const t = getI18n(language, PROFILE_I18N);
 	const result = await getProfileSettings(language);
 
@@ -40,4 +42,4 @@ const AccountSummary = async ({ language }: Readonly<AccountSummaryProps>) => {
 	);
 };
 
-export default AccountSummary;
+export default AccountSummaryCard;

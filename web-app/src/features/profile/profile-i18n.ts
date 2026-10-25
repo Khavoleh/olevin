@@ -41,6 +41,10 @@ export const PROFILE_I18N: I18N = {
 		research_consent_hint:
 			"Consent given on 8 October 2026. Revoking it excludes you from the next exports.",
 		revoke: "Revoke",
+		research_revoke_title: "Revoke the research consent",
+		research_revoke_warning:
+			"Your answers to the financial well-being questionnaire will be deleted and you will be excluded from the next exports. The consent cannot be given again.",
+		research_revoke_confirm: "Revoke the consent",
 		my_data: "My data",
 		download_snapshots: "Download all snapshots",
 		account: "Account",
@@ -93,6 +97,10 @@ export const PROFILE_I18N: I18N = {
 		research_consent_hint:
 			"Згоду надано 8 жовтня 2026. Відкликання виключить вас із наступних вивантажень.",
 		revoke: "Відкликати",
+		research_revoke_title: "Відкликати згоду на дослідження",
+		research_revoke_warning:
+			"Ваші відповіді на анкету фінансового благополуччя буде видалено, а вас виключено з наступних вивантажень. Надати згоду повторно не вийде.",
+		research_revoke_confirm: "Відкликати згоду",
 		my_data: "Мої дані",
 		download_snapshots: "Завантажити всі зрізи",
 		account: "Акаунт",

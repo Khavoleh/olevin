@@ -9,6 +9,7 @@ import { apiRequest } from "@shared/api";
 import type {
 	ResponseOfCurrencyCode,
 	ResponseOfGetSettingsResponse,
+	ResponseOfGuid,
 	ResponseOfLocaleCode,
 	ResponseOfshort,
 	ResponseOfstring,
@@ -17,6 +18,49 @@ import type {
 	UpdateSnapshotDayRequest,
 	UpdateTimezoneRequest,
 } from "./profile.schemas";
+
+export type withdrawResearchConsentResponse204 = {
+	data: void;
+	status: 204;
+};
+
+export type withdrawResearchConsentResponse404 = {
+	data: ResponseOfGuid;
+	status: 404;
+};
+
+export type withdrawResearchConsentResponseSuccess =
+	withdrawResearchConsentResponse204 & {
+		headers: Headers;
+	};
+export type withdrawResearchConsentResponseError =
+	withdrawResearchConsentResponse404 & {
+		headers: Headers;
+	};
+
+export type withdrawResearchConsentResponse =
+	| withdrawResearchConsentResponseSuccess
+	| withdrawResearchConsentResponseError;
+
+export const getWithdrawResearchConsentUrl = () => {
+	return `/settings/v1/user-settings/research-consent`;
+};
+
+/**
+ * DELETE_settings_v1_user_settings_research_consent
+ * @summary Handles `DELETE /settings/v1/user-settings/research-consent`. The consent cannot be given again.
+ */
+export const withdrawResearchConsent = async (
+	options?: RequestInit,
+): Promise<withdrawResearchConsentResponse> => {
+	return apiRequest<withdrawResearchConsentResponse>(
+		getWithdrawResearchConsentUrl(),
+		{
+			...options,
+			method: "DELETE",
+		},
+	);
+};
 
 export type updateTimezoneResponse200 = {
 	data: ResponseOfstring;

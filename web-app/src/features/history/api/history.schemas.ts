@@ -4,10 +4,6 @@
  * Olevin.Api | v1
  * OpenAPI spec version: 1.0.0
  */
-export interface IResult {
-	[key: string]: unknown;
-}
-
 /**
  * The envelope every endpoint returns.
  */

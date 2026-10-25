@@ -7,15 +7,9 @@
 
 import { apiRequest } from "@shared/api";
 import type {
-	IResult,
 	ResponseOfGetSnapshotsResponse,
 	ResponseOfGuid,
 } from "./history.schemas";
-
-export type deleteSnapshotResponse200 = {
-	data: IResult;
-	status: 200;
-};
 
 export type deleteSnapshotResponse204 = {
 	data: void;
@@ -32,10 +26,7 @@ export type deleteSnapshotResponse409 = {
 	status: 409;
 };
 
-export type deleteSnapshotResponseSuccess = (
-	| deleteSnapshotResponse200
-	| deleteSnapshotResponse204
-) & {
+export type deleteSnapshotResponseSuccess = deleteSnapshotResponse204 & {
 	headers: Headers;
 };
 export type deleteSnapshotResponseError = (

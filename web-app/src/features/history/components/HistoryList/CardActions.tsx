@@ -58,7 +58,7 @@ const CardActions = ({
 			{deletable && <span aria-hidden className="bg-border" />}
 			{deletable && (
 				<Button
-					variant="danger"
+					variant="ghost-danger"
 					aria-label={`${t("delete")} ${monthName}`}
 					isDisabled={deletable.isOnly}
 					onPress={() => setIsDeleting(true)}

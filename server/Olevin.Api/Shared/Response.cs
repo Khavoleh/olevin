@@ -30,6 +30,12 @@ public sealed record Response<T>(
         new(code, null, data, null);
 
     /// <summary>
+    /// Creates a successful response without a body.
+    /// </summary>
+    /// <returns>The response.</returns>
+    public static Response<T> NoContent() => new(HttpStatusCode.NoContent, null, default, null);
+
+    /// <summary>
     /// Creates a failed response.
     /// </summary>
     /// <param name="code">The result code.</param>

@@ -41,7 +41,7 @@ public static class DeleteSnapshotEndpoint
     [ProducesResponseType(StatusCodes.Status204NoContent)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status404NotFound)]
     [ProducesResponseType<Response<Guid>>(StatusCodes.Status409Conflict)]
-    public static async Task<IResult> Delete(
+    public static async Task<Response<Guid>> Delete(
         Guid id,
         ClaimsPrincipal principal,
         FinancialWellnessDbContext db,
@@ -57,7 +57,7 @@ public static class DeleteSnapshotEndpoint
         );
 
         if (userSettings is null)
-            return Fail(HttpStatusCode.NotFound, "The user settings do not exist.");
+            return Response<Guid>.Fail(HttpStatusCode.NotFound, "The user settings do not exist.");
 
         Guid userId = userSettings.UserId;
         List<Snapshot> snapshots = await db
@@ -66,10 +66,15 @@ public static class DeleteSnapshotEndpoint
         Snapshot? snapshot = snapshots.SingleOrDefault(stored => stored.Id == id);
 
         if (snapshot is null)
-            return Fail(HttpStatusCode.NotFound, "The snapshot does not exist.");
+            return Response<Guid>.Fail(HttpStatusCode.NotFound, "The snapshot does not exist.");
 
         if (snapshots.Count == 1)
-            return Fail(HttpStatusCode.Conflict, "The only snapshot cannot be deleted.");
+        {
+            return Response<Guid>.Fail(
+                HttpStatusCode.Conflict,
+                "The only snapshot cannot be deleted."
+            );
+        }
 
         SnapshotMonth month = SnapshotHistoryMapping.MonthOf(snapshot);
 
@@ -83,7 +88,7 @@ public static class DeleteSnapshotEndpoint
         );
 
         if (DeleteSnapshotRules.IsLatest(month, snapshots.Select(SnapshotHistoryMapping.MonthOf)))
-            return Results.NoContent();
+            return Response<Guid>.NoContent();
 
         List<EstimatedSnapshot> estimates = await db
             .EstimatedSnapshots.Where(estimate => estimate.UserId == userId)
@@ -99,9 +104,6 @@ public static class DeleteSnapshotEndpoint
 
         SnapshotRescorer.ApplyFrom(snapshots, month, scores, time.GetUtcNow().UtcDateTime);
 
-        return Results.NoContent();
+        return Response<Guid>.NoContent();
     }
-
-    private static IResult Fail(HttpStatusCode code, string error) =>
-        Results.Json(Response<Guid>.Fail(code, error), statusCode: (int)code);
 }
