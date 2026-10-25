@@ -7,6 +7,7 @@
 
 import { apiRequest } from "@shared/api";
 import type {
+	ExportSnapshotsParams,
 	ResponseOfCurrencyCode,
 	ResponseOfGetSettingsResponse,
 	ResponseOfGuid,
@@ -389,6 +390,65 @@ export const getSettings = async (
 	options?: RequestInit,
 ): Promise<getSettingsResponse> => {
 	return apiRequest<getSettingsResponse>(getGetSettingsUrl(), {
+		...options,
+		method: "GET",
+	});
+};
+
+export type exportSnapshotsResponse200ApplicationJson = {
+	data: unknown;
+	status: 200;
+};
+
+export type exportSnapshotsResponse200TextCsv = {
+	data: unknown;
+	status: 200;
+};
+
+export type exportSnapshotsResponse404 = {
+	data: ResponseOfGuid;
+	status: 404;
+};
+
+export type exportSnapshotsResponseSuccess = (
+	| exportSnapshotsResponse200ApplicationJson
+	| exportSnapshotsResponse200TextCsv
+) & {
+	headers: Headers;
+};
+export type exportSnapshotsResponseError = exportSnapshotsResponse404 & {
+	headers: Headers;
+};
+
+export type exportSnapshotsResponse =
+	| exportSnapshotsResponseSuccess
+	| exportSnapshotsResponseError;
+
+export const getExportSnapshotsUrl = (params?: ExportSnapshotsParams) => {
+	const normalizedParams = new URLSearchParams();
+
+	Object.entries(params || {}).forEach(([key, value]) => {
+		if (value !== undefined) {
+			normalizedParams.append(key, value === null ? "null" : String(value));
+		}
+	});
+
+	const stringifiedParams = normalizedParams.toString();
+
+	return stringifiedParams.length > 0
+		? `/settings/v1/user-settings/snapshots/export?${stringifiedParams}`
+		: `/settings/v1/user-settings/snapshots/export`;
+};
+
+/**
+ * GET_settings_v1_user_settings_snapshots_export
+ * @summary Handles `GET /settings/v1/user-settings/snapshots/export?format=Json|Csv`. The format is JSON when omitted.
+ */
+export const exportSnapshots = async (
+	params?: ExportSnapshotsParams,
+	options?: RequestInit,
+): Promise<exportSnapshotsResponse> => {
+	return apiRequest<exportSnapshotsResponse>(getExportSnapshotsUrl(params), {
 		...options,
 		method: "GET",
 	});

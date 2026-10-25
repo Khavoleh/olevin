@@ -9,8 +9,8 @@ import { headers as getRequestHeaders } from "next/headers";
 
 /**
  * Transport of the Orval clients in `features/<tag>/api`: resolves the path against the API address and adds the
- * user's access token and the trace of the incoming request, so calls of one Server Action share a trace. Runs only on
- * the server.
+ * user's access token and the trace of the incoming request, so calls of one Server Action share a trace. The data is
+ * the parsed JSON, a `Blob` for a downloaded file, or `undefined` without a body. Runs only on the server.
  */
 export async function apiRequest<T>(
 	path: string,
@@ -33,10 +33,19 @@ export async function apiRequest<T>(
 		...options,
 		headers,
 	});
-	const body = await response.text();
+	const isFile = (response.headers.get("content-disposition") ?? "").startsWith(
+		"attachment",
+	);
+	const getData = async () => {
+		if (isFile) return response.blob();
+
+		const body = await response.text();
+
+		return body ? JSON.parse(body) : undefined;
+	};
 
 	return {
-		data: body ? JSON.parse(body) : undefined,
+		data: await getData(),
 		status: response.status,
 		headers: response.headers,
 	} as T;

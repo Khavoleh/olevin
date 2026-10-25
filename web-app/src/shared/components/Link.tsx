@@ -9,7 +9,8 @@ import {
 
 interface LinkProps extends Omit<AriaLinkProps, "href" | "render"> {
 	href: string;
-	variant?: "inline" | "subtle" | "button" | "action" | "icon";
+	variant?: "inline" | "subtle" | "button" | "secondary" | "action" | "icon";
+	isDocument?: boolean;
 }
 
 const VARIANT_CLASSES = {
@@ -28,6 +29,11 @@ const VARIANT_CLASSES = {
 		idle: "bg-primary",
 		hovered: "bg-primary-hover",
 	},
+	secondary: {
+		base: "inline-flex min-h-11 items-center justify-center rounded-md border border-input px-4.5 font-semibold text-fg",
+		idle: "bg-surface",
+		hovered: "bg-surface-hover",
+	},
 	action: {
 		base: "inline-flex min-h-11 items-center justify-center gap-1.5 rounded-md px-4.5 font-semibold",
 		idle: "text-fg-muted",
@@ -40,18 +46,21 @@ const VARIANT_CLASSES = {
 	},
 };
 
-/** Accessible link of the app with client-side navigation: in text, in secondary text, or looking like a button. */
+/** Accessible link of the app with client-side navigation: in text, in secondary text, or looking like a button; a document one (a route handler) loads without the client router. */
 const Link = ({
 	variant = "inline",
+	isDocument = false,
 	className,
 	...props
 }: Readonly<LinkProps>) => {
 	return (
 		<AriaLink
 			{...props}
-			render={(domProps) =>
-				"href" in domProps ? <NextLink {...domProps} /> : <span {...domProps} />
-			}
+			render={(domProps) => {
+				if (!("href" in domProps)) return <span {...domProps} />;
+
+				return isDocument ? <a {...domProps} /> : <NextLink {...domProps} />;
+			}}
 			className={composeRenderProps(
 				className,
 				(customClasses, { isHovered }) => {

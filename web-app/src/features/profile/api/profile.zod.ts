@@ -67,3 +67,14 @@ export const UpdateBaseCurrencyBody = zod
 			.describe("The base currency."),
 	})
 	.describe("The new base currency of a user.");
+
+/**
+ * GET_settings_v1_user_settings_snapshots_export
+ * @summary Handles `GET /settings/v1/user-settings/snapshots/export?format=Json|Csv`. The format is JSON when omitted.
+ */
+export const ExportSnapshotsQueryParams = zod.object({
+	format: zod
+		.enum(["Json", "Csv"])
+		.optional()
+		.describe("The format of the file."),
+});

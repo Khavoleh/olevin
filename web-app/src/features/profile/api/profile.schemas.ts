@@ -207,3 +207,20 @@ export interface ResponseOfGetSettingsResponse {
 	 */
 	validationErrors: string[] | null;
 }
+
+/**
+ * The format of the exported snapshots.
+ */
+export type ExportFormat = (typeof ExportFormat)[keyof typeof ExportFormat];
+
+export const ExportFormat = {
+	Json: "Json",
+	Csv: "Csv",
+} as const;
+
+export type ExportSnapshotsParams = {
+	/**
+	 * The format of the file.
+	 */
+	format?: ExportFormat;
+};
