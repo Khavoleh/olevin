@@ -6,6 +6,7 @@ export { refreshApiToken } from "./api/refresh-api-token";
 export { getIsAuthenticated } from "./auth/get-is-authenticated";
 export { getIsOnboarded } from "./auth/get-is-onboarded";
 export { getLogtoConfig } from "./auth/get-logto-config";
+export { getLogtoManagementApi } from "./auth/get-logto-management-api";
 export { formatDayMonth } from "./format/format-day-month/format-day-month";
 export { formatIndex } from "./format/format-index/format-index";
 export { formatMoney } from "./format/format-money/format-money";

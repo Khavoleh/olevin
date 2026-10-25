@@ -71,3 +71,9 @@ export const useOnboardingStore = create<OnboardingState>()(
 		},
 	),
 );
+
+/** Drops the draft from memory and from the tab session so the next account starts empty. */
+export const clearOnboardingDraft = () => {
+	useOnboardingStore.setState(useOnboardingStore.getInitialState());
+	useOnboardingStore.persist.clearStorage();
+};

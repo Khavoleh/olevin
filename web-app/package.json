@@ -23,6 +23,7 @@
 	"dependencies": {
 		"@conform-to/react": "1.21.2",
 		"@conform-to/zod": "1.21.2",
+		"@logto/api": "1.45.0",
 		"@logto/next": "5.0.0",
 		"@phosphor-icons/react": "2.1.10",
 		"next": "16.3.8",

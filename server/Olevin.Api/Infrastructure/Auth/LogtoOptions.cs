@@ -19,4 +19,9 @@ public sealed class LogtoOptions
     /// Gets the API resource indicator registered in Logto.
     /// </summary>
     public required string ApiResource { get; init; }
+
+    /// <summary>
+    /// Gets the signing key of the Logto webhook, which signs every request it sends.
+    /// </summary>
+    public required string WebhookSigningKey { get; init; }
 }

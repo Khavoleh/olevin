@@ -1,3 +1,4 @@
+export { default as ClearOnboardingDraft } from "./components/ClearOnboardingDraft";
 export { default as FlowShell } from "./components/FlowShell";
 export { ONBOARDING_STEPS } from "./constants/onboarding-steps";
 export { getOnboardingPage } from "./helpers/get-onboarding-page/get-onboarding-page";

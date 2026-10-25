@@ -1,6 +1,7 @@
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Options;
 
 namespace Olevin.Api.Infrastructure.Auth;
 
@@ -39,6 +40,11 @@ public static class Auth
         LogtoOptions logto =
             configuration.GetRequiredSection(LogtoOptions.SectionName).Get<LogtoOptions>()
             ?? throw new InvalidOperationException("Logto settings are missing.");
+
+        if (string.IsNullOrWhiteSpace(logto.WebhookSigningKey))
+            throw new InvalidOperationException("The Logto webhook signing key is missing.");
+
+        services.AddSingleton(Options.Create(logto));
 
         services
             .AddAuthentication(JwtBearerDefaults.AuthenticationScheme)

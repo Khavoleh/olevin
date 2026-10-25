@@ -1,3 +1,4 @@
+import { ClearOnboardingDraft } from "@features/onboarding";
 import { getNewSnapshotOpensOn } from "@features/snapshots";
 import AppShell from "@widgets/app-shell";
 import type { ReactNode } from "react";
@@ -13,6 +14,7 @@ const AppLayout = async ({ children, params }: Readonly<AppLayoutProps>) => {
 
 	return (
 		<AppShell language={lang} newSnapshotOpensOn={getNewSnapshotOpensOn(lang)}>
+			<ClearOnboardingDraft />
 			{children}
 		</AppShell>
 	);
