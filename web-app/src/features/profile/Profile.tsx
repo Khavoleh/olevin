@@ -1,5 +1,6 @@
-import { Heading } from "@shared/components";
+import { Card, Heading } from "@shared/components";
 import { getI18n } from "@shared/helpers";
+import { Suspense } from "react";
 import AccountSettings from "./components/AccountSettings";
 import AccountSummary from "./components/AccountSummary";
 import DataSettings from "./components/DataSettings";
@@ -23,7 +24,22 @@ const Profile = ({ language }: Readonly<ProfileProps>) => {
 
 			<div className="@container">
 				<div className="grid max-w-profile gap-5.5">
-					<AccountSummary language={language} />
+					<Suspense
+						fallback={
+							<Card className="flex items-center gap-3.5">
+								<span
+									aria-hidden
+									className="size-13 flex-none rounded-full bg-skeleton"
+								/>
+								<span aria-hidden className="grid gap-1.5">
+									<span className="h-5 w-44 rounded-md bg-skeleton" />
+									<span className="h-4 w-36 rounded-md bg-skeleton" />
+								</span>
+							</Card>
+						}
+					>
+						<AccountSummary language={language} />
+					</Suspense>
 					<GeneralSettings language={language} />
 					<ReminderSettings language={language} />
 					<ResearchSettings language={language} />

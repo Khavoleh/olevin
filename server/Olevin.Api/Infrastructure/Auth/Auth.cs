@@ -15,6 +15,16 @@ public static class Auth
     private const string SubjectClaim = "sub";
 
     /// <summary>
+    /// The custom claim that holds the Logto username.
+    /// </summary>
+    private const string UsernameClaim = "username";
+
+    /// <summary>
+    /// The custom claim that holds the primary email of the Logto user.
+    /// </summary>
+    private const string EmailClaim = "email";
+
+    /// <summary>
     /// Validates Logto access tokens issued for the API resource and requires a signed-in user on every endpoint
     /// unless it explicitly allows anonymous access.
     /// </summary>
@@ -58,4 +68,19 @@ public static class Auth
         return user.FindFirstValue(SubjectClaim)
             ?? throw new InvalidOperationException("The access token has no subject.");
     }
+
+    /// <summary>
+    /// Gets the Logto username of an authenticated user.
+    /// </summary>
+    /// <param name="user">The authenticated user.</param>
+    /// <returns>The value of the <c>username</c> claim, or <see langword="null"/> when the user has no username.</returns>
+    public static string? GetUsername(this ClaimsPrincipal user) =>
+        user.FindFirstValue(UsernameClaim);
+
+    /// <summary>
+    /// Gets the primary email of an authenticated user.
+    /// </summary>
+    /// <param name="user">The authenticated user.</param>
+    /// <returns>The value of the <c>email</c> claim, or <see langword="null"/> when the user has no email.</returns>
+    public static string? GetEmail(this ClaimsPrincipal user) => user.FindFirstValue(EmailClaim);
 }

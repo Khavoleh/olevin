@@ -4,7 +4,7 @@ import type { I18N } from "@shared/interfaces";
 export const PROFILE_I18N: I18N = {
 	en: {
 		title: "Profile",
-		summary_preview: "6 snapshots · since September 2026",
+		joined: "Joined {date}",
 		general: "General",
 		language: "Language",
 		language_mismatch:
@@ -27,6 +27,8 @@ export const PROFILE_I18N: I18N = {
 		my_data: "My data",
 		download_snapshots: "Download all snapshots",
 		account: "Account",
+		account_center: "Account and security",
+		account_center_hint: "Username, email, password and linked accounts",
 		sign_out: "Sign out",
 		delete_account: "Delete account",
 		delete_account_hint:
@@ -38,7 +40,7 @@ export const PROFILE_I18N: I18N = {
 	},
 	uk: {
 		title: "Профіль",
-		summary_preview: "6 зрізів · з вересня 2026",
+		joined: "Акаунт створено {date}",
 		general: "Загальні",
 		language: "Мова",
 		language_mismatch: "Збережена мова — {language}, а сторінку показано іншою",
@@ -60,6 +62,8 @@ export const PROFILE_I18N: I18N = {
 		my_data: "Мої дані",
 		download_snapshots: "Завантажити всі зрізи",
 		account: "Акаунт",
+		account_center: "Акаунт і безпека",
+		account_center_hint: "Ім’я користувача, пошта, пароль і пов’язані акаунти",
 		sign_out: "Вийти",
 		delete_account: "Видалити акаунт",
 		delete_account_hint:

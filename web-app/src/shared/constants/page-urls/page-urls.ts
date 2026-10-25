@@ -6,6 +6,7 @@ export const PAGE_URLS = {
 	NEW_SNAPSHOT: "/snapshots/new",
 	TREND: "/trend",
 	PROFILE: "/profile",
+	ACCOUNT_CENTER: "/profile/account",
 	ONBOARDING: "/onboarding",
 	PRIVACY: "/privacy",
 	TERMS: "/terms",

@@ -2,6 +2,7 @@ export { ApiError } from "./api/api-error/api-error";
 export { createTraceparent } from "./api/create-traceparent/create-traceparent";
 export { getApiToken } from "./api/get-api-token";
 export { getApiUrl } from "./api/get-api-url";
+export { refreshApiToken } from "./api/refresh-api-token";
 export { getIsAuthenticated } from "./auth/get-is-authenticated";
 export { getIsOnboarded } from "./auth/get-is-onboarded";
 export { getLogtoConfig } from "./auth/get-logto-config";

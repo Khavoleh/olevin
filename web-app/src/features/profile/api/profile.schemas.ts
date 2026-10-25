@@ -57,6 +57,18 @@ export const CurrencyCode = {
  * The settings of the signed-in user shown on the profile page.
  */
 export interface GetSettingsResponse {
+	/**
+	 * The Logto username, or `null` when the user has none.
+	 * @nullable
+	 */
+	username: string | null;
+	/**
+	 * The primary email, or `null` when the user has none.
+	 * @nullable
+	 */
+	email: string | null;
+	/** When the user was created. */
+	createdAt: string;
 	/** The default currency. */
 	baseCurrency: CurrencyCode;
 	/** The saved interface language. */
@@ -67,7 +79,7 @@ export interface GetSettingsResponse {
 	timezone: string;
 	/** Whether the user consented to use of their data for research. */
 	researchConsent: boolean;
-	/** Whether the push on the snapshot day is on; always on until push notifications exist. */
+	/** Whether the push on the snapshot day is on. */
 	pushNotifications: boolean;
 }
 

@@ -36,10 +36,15 @@ public static class GetSettingsEndpoint
     )
     {
         string authSub = principal.GetSubject();
+        string? username = principal.GetUsername();
+        string? email = principal.GetEmail();
 
         GetSettingsResponse? settings = await db
             .UserSettings.Where(setting => setting.User.AuthSub == authSub)
             .Select(setting => new GetSettingsResponse(
+                username,
+                email,
+                setting.User.CreatedAt,
                 setting.BaseCurrency,
                 setting.Locale,
                 setting.SnapshotDay,
