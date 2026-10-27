@@ -3,7 +3,6 @@
 import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import {
-	Button,
 	Checkbox,
 	FormBlock,
 	Label,
@@ -19,6 +18,7 @@ import { configureSettings } from "../../actions/configure-settings";
 import { SETTINGS_SCHEMA } from "../../constants/settings-schema";
 import { SETTINGS_STEP_I18N } from "../../i18n/settings-step-i18n";
 import { useOnboardingStore } from "../../onboarding-store";
+import SubmitButton from "../SubmitButton";
 import CurrencyField from "./CurrencyField";
 
 interface SettingsStepProps {
@@ -30,6 +30,7 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 	const t = getI18n(language, SETTINGS_STEP_I18N);
 	const snapshotDay = useOnboardingStore((state) => state.snapshotDay);
 	const setSnapshotDay = useOnboardingStore((state) => state.setSnapshotDay);
+	const baseCurrency = useOnboardingStore((state) => state.baseCurrency);
 	const timezone = useOnboardingStore((state) => state.timezone);
 	const setTimezone = useOnboardingStore((state) => state.setTimezone);
 	const researchConsent = useOnboardingStore((state) => state.researchConsent);
@@ -47,6 +48,14 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 		shouldValidate: "onBlur",
 		shouldRevalidate: "onInput",
 	});
+
+	const isComplete = SETTINGS_SCHEMA.safeParse({
+		baseCurrency,
+		locale: language.toUpperCase(),
+		snapshotDay,
+		timezone,
+		researchConsent,
+	}).success;
 
 	useFormErrorToast(lastResult);
 
@@ -132,13 +141,13 @@ const SettingsStep = ({ language }: Readonly<SettingsStepProps>) => {
 				</Checkbox>
 			</FormBlock>
 
-			<Button
-				type="submit"
+			<SubmitButton
+				language={language}
+				isComplete={isComplete}
 				isPending={isPending}
-				className="md:min-w-65 md:justify-self-start"
 			>
 				{t("continue")}
-			</Button>
+			</SubmitButton>
 		</form>
 	);
 };

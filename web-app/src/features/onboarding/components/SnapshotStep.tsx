@@ -2,7 +2,7 @@
 
 import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { Button, Text } from "@shared/components";
+import { Text } from "@shared/components";
 import { PAGE_URLS } from "@shared/constants";
 import { getI18n, getLanguageUrl } from "@shared/helpers";
 import SnapshotFields, { HiddenFields } from "@widgets/snapshot-fields";
@@ -13,6 +13,7 @@ import { getFirstSnapshotRequest } from "../helpers/get-first-snapshot-request";
 import { SNAPSHOT_STEP_I18N } from "../i18n/snapshot-step-i18n";
 import { useOnboardingStore } from "../onboarding-store";
 import { useSnapshotMonths } from "../use-snapshot-months";
+import SubmitButton from "./SubmitButton";
 
 interface SnapshotStepProps {
 	language: string;
@@ -38,6 +39,7 @@ const SnapshotStep = ({ language }: Readonly<SnapshotStepProps>) => {
 	const request = baseCurrency
 		? getFirstSnapshotRequest(snapshot, baseCurrency)
 		: undefined;
+	const isComplete = SNAPSHOT_STEP_SCHEMA.safeParse(request).success;
 
 	useEffect(() => {
 		void useOnboardingStore.persist.rehydrate();
@@ -69,13 +71,9 @@ const SnapshotStep = ({ language }: Readonly<SnapshotStepProps>) => {
 				onChange={setSnapshot}
 			/>
 
-			<Button
-				type="submit"
-				isDisabled={!request}
-				className="md:min-w-65 md:justify-self-start"
-			>
+			<SubmitButton language={language} isComplete={isComplete}>
 				{t("continue")}
-			</Button>
+			</SubmitButton>
 		</form>
 	);
 };

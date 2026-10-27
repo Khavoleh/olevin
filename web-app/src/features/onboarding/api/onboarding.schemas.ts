@@ -5,6 +5,72 @@
  * OpenAPI spec version: 1.0.0
  */
 /**
+ * A currency supported by the application. Members match the labels of `financial_wellness.currency_code`.
+ */
+export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
+
+export const CurrencyCode = {
+	USD: "USD",
+	EUR: "EUR",
+	CAD: "CAD",
+	UAH: "UAH",
+	PLN: "PLN",
+} as const;
+
+/**
+ * An interface language. Members match the labels of `settings.locale_code`.
+ */
+export type LocaleCode = (typeof LocaleCode)[keyof typeof LocaleCode];
+
+export const LocaleCode = {
+	UK: "UK",
+	EN: "EN",
+} as const;
+
+/**
+ * The settings of a user.
+ */
+export interface ConfigureUserSettingsRequest {
+	/** The default currency. */
+	baseCurrency: CurrencyCode;
+	/** The interface language. */
+	locale: LocaleCode;
+	/**
+	 * The day of the month (1-31) the monthly snapshot is taken on.
+	 * @minimum 1
+	 * @maximum 31
+	 */
+	snapshotDay: number;
+	/**
+	 * The IANA time zone name.
+	 * @minLength 1
+	 * @maxLength 64
+	 * @pattern ^[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*$(?!\n)
+	 */
+	timezone: string;
+	/** The user's research consent. */
+	researchConsent: boolean;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfGuid {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	/** The result, or the default value of T on failure. */
+	data: string;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * How well a statement of the CFPB scale describes the respondent (statements 1-6).
  */
 export type CfpbDescription =
@@ -60,16 +126,27 @@ export interface SubmitCfpbResponseRequest {
 }
 
 /**
+ * The settings saved during onboarding that the next steps depend on.
+ */
+export interface GetSavedSettingsResponse {
+	/** The default currency. */
+	baseCurrency: CurrencyCode;
+	/** The day of the month (1-31) the monthly snapshot is taken on. */
+	snapshotDay: number;
+	/** The IANA time zone name. */
+	timezone: string;
+}
+
+/**
  * The envelope every endpoint returns.
  */
-export interface ResponseOfGuid {
+export interface ResponseOfGetSavedSettingsResponse {
 	/**
 	 * The reason of the failure, or `null` on success.
 	 * @nullable
 	 */
 	error: string | null;
-	/** The result, or the default value of T on failure. */
-	data: string;
+	data: null | GetSavedSettingsResponse;
 	/**
 	 * The failed validation rules, or `null` when the request is valid.
 	 * @nullable
@@ -102,37 +179,6 @@ export interface ResponseOfOnboardingStatus {
 	error: string | null;
 	/** The result, or the default value of T on failure. */
 	data: OnboardingStatus;
-	/**
-	 * The failed validation rules, or `null` when the request is valid.
-	 * @nullable
-	 */
-	validationErrors: string[] | null;
-}
-
-/**
- * A currency supported by the application. Members match the labels of `financial_wellness.currency_code`.
- */
-export type CurrencyCode = (typeof CurrencyCode)[keyof typeof CurrencyCode];
-
-export const CurrencyCode = {
-	USD: "USD",
-	EUR: "EUR",
-	CAD: "CAD",
-	UAH: "UAH",
-	PLN: "PLN",
-} as const;
-
-/**
- * The envelope every endpoint returns.
- */
-export interface ResponseOfCurrencyCode {
-	/**
-	 * The reason of the failure, or `null` on success.
-	 * @nullable
-	 */
-	error: string | null;
-	/** The result, or the default value of T on failure. */
-	data: CurrencyCode;
 	/**
 	 * The failed validation rules, or `null` when the request is valid.
 	 * @nullable
@@ -185,7 +231,7 @@ export interface EstimateRequest {
 }
 
 /**
- * The first snapshot of a user, for the current month, with rough estimates of the 2 months before it.
+ * The first snapshot of a user, for the latest month whose snapshot day has come, with rough estimates of the 2 months before it.
  */
 export interface FirstSnapshot {
 	/**
@@ -217,39 +263,4 @@ export interface FirstSnapshot {
 	previousMonth: EstimateRequest;
 	/** The estimate of the month before PreviousMonth. */
 	twoMonthsAgo: EstimateRequest;
-}
-
-/**
- * An interface language. Members match the labels of `settings.locale_code`.
- */
-export type LocaleCode = (typeof LocaleCode)[keyof typeof LocaleCode];
-
-export const LocaleCode = {
-	UK: "UK",
-	EN: "EN",
-} as const;
-
-/**
- * The settings of a user.
- */
-export interface ConfigureUserSettingsRequest {
-	/** The default currency. */
-	baseCurrency: CurrencyCode;
-	/** The interface language. */
-	locale: LocaleCode;
-	/**
-	 * The day of the month (1-31) the monthly snapshot is taken on.
-	 * @minimum 1
-	 * @maximum 31
-	 */
-	snapshotDay: number;
-	/**
-	 * The IANA time zone name.
-	 * @minLength 1
-	 * @maxLength 64
-	 * @pattern ^[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*$(?!\n)
-	 */
-	timezone: string;
-	/** The user's research consent. */
-	researchConsent: boolean;
 }

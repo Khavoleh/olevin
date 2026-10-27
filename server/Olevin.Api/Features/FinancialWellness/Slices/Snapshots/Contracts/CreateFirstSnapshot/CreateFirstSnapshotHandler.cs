@@ -19,7 +19,8 @@ namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts.Creat
 public static class CreateFirstSnapshotHandler
 {
     /// <summary>
-    /// Handles <see cref="CreateFirstSnapshotRequest"/>. The snapshot is for the current month in the user's time zone.
+    /// Handles <see cref="CreateFirstSnapshotRequest"/>. The snapshot is for the latest month whose snapshot day
+    /// has come in the user's time zone.
     /// </summary>
     /// <param name="request">The request.</param>
     /// <param name="db">The financial wellness database.</param>
@@ -63,13 +64,16 @@ public static class CreateFirstSnapshotHandler
 
         FirstSnapshot first = request.Snapshot;
         CurrencyCode baseCurrency = userSettings.BaseCurrency;
-        SnapshotMonth current = SnapshotMonth.Current(time.GetUtcNow(), userSettings.Timezone);
+        short snapshotDay = userSettings.SnapshotDay;
+        SnapshotMonth current = OpenMonths.Latest(
+            SnapshotMonth.Today(time.GetUtcNow(), userSettings.Timezone),
+            snapshotDay
+        );
         SnapshotMonth previous = current.Previous();
         SnapshotMonth twoMonthsAgo = previous.Previous();
         EstimateRequest previousEstimate = first.PreviousMonth;
         EstimateRequest twoMonthsAgoEstimate = first.TwoMonthsAgo;
         SnapshotAmounts amounts = CreateFirstSnapshotMapping.ToAmounts(first);
-        short snapshotDay = userSettings.SnapshotDay;
 
         SnapshotRates currentRates = await FxRateLookup.FindAsync(
             db,

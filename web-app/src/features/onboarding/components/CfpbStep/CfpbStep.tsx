@@ -2,7 +2,7 @@
 
 import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
-import { Button, FormBlock, Text, useFormErrorToast } from "@shared/components";
+import { FormBlock, Text, useFormErrorToast } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import { useActionState, useEffect } from "react";
 import { saveCfpbResponse } from "../../actions/save-cfpb-response";
@@ -14,6 +14,7 @@ import {
 import { CFPB_STEP_SCHEMA } from "../../constants/cfpb-step-schema";
 import { CFPB_STEP_I18N } from "../../i18n/cfpb-step-i18n";
 import { useOnboardingStore } from "../../onboarding-store";
+import SubmitButton from "../SubmitButton";
 import AnswerField from "./AnswerField";
 
 type CfpbStatement = Exclude<keyof SubmitCfpbResponseRequest, "is62Plus">;
@@ -85,6 +86,7 @@ interface CfpbStepProps {
 /** Step with the CFPB Financial Well-Being Scale for the users who consented to research, which finishes the onboarding. */
 const CfpbStep = ({ language }: Readonly<CfpbStepProps>) => {
 	const t = getI18n(language, CFPB_STEP_I18N);
+	const cfpbResponse = useOnboardingStore((state) => state.cfpbResponse);
 	const [lastResult, action, isPending] = useActionState(
 		saveCfpbResponse,
 		undefined,
@@ -95,6 +97,8 @@ const CfpbStep = ({ language }: Readonly<CfpbStepProps>) => {
 			parseWithZod(formData, { schema: CFPB_STEP_SCHEMA }),
 		shouldRevalidate: "onInput",
 	});
+
+	const isComplete = CFPB_STEP_SCHEMA.safeParse(cfpbResponse).success;
 
 	useFormErrorToast(lastResult);
 
@@ -146,13 +150,13 @@ const CfpbStep = ({ language }: Readonly<CfpbStepProps>) => {
 				/>
 			</FormBlock>
 
-			<Button
-				type="submit"
+			<SubmitButton
+				language={language}
+				isComplete={isComplete}
 				isPending={isPending}
-				className="md:min-w-65 md:justify-self-start"
 			>
 				{t("finish")}
-			</Button>
+			</SubmitButton>
 		</form>
 	);
 };

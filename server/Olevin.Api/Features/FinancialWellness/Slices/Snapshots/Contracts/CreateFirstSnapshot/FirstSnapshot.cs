@@ -4,7 +4,7 @@ using Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Requests;
 namespace Olevin.Api.Features.FinancialWellness.Slices.Snapshots.Contracts.CreateFirstSnapshot;
 
 /// <summary>
-/// The first snapshot of a user, for the current month, with rough estimates of the 2 months before it.
+/// The first snapshot of a user, for the latest month whose snapshot day has come, with rough estimates of the 2 months before it.
 /// </summary>
 /// <param name="Income">The net income, possibly in several currencies.</param>
 /// <param name="Expenses">The expenses by category, without debt payments.</param>

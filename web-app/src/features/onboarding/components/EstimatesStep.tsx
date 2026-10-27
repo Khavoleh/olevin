@@ -3,7 +3,7 @@
 import { getFormProps, useForm } from "@conform-to/react";
 import { parseWithZod } from "@conform-to/zod/v4";
 import { InfoIcon } from "@phosphor-icons/react";
-import { Button, Text, useFormErrorToast } from "@shared/components";
+import { Text, useFormErrorToast } from "@shared/components";
 import { PAGE_URLS } from "@shared/constants";
 import { getI18n, getLanguageUrl } from "@shared/helpers";
 import { EstimateFields, HiddenFields } from "@widgets/snapshot-fields";
@@ -15,6 +15,7 @@ import { getFirstSnapshotRequest } from "../helpers/get-first-snapshot-request";
 import { ESTIMATES_STEP_I18N } from "../i18n/estimates-step-i18n";
 import { useOnboardingStore } from "../onboarding-store";
 import { useSnapshotMonths } from "../use-snapshot-months";
+import SubmitButton from "./SubmitButton";
 
 type EstimatedMonth = "previousMonth" | "twoMonthsAgo";
 
@@ -42,6 +43,7 @@ const EstimatesStep = ({ language }: Readonly<EstimatesStepProps>) => {
 	const request = baseCurrency
 		? getFirstSnapshotRequest(snapshot, baseCurrency)
 		: undefined;
+	const isComplete = CreateFirstSnapshotBody.safeParse(request).success;
 	const months = [
 		{ key: "previousMonth", title: previous?.title },
 		{ key: "twoMonthsAgo", title: twoMonthsAgo?.title },
@@ -86,14 +88,13 @@ const EstimatesStep = ({ language }: Readonly<EstimatesStepProps>) => {
 				<Text>{t("note")}</Text>
 			</div>
 
-			<Button
-				type="submit"
+			<SubmitButton
+				language={language}
+				isComplete={isComplete}
 				isPending={isPending}
-				isDisabled={!request}
-				className="md:min-w-65 md:justify-self-start"
 			>
 				{t("continue")}
-			</Button>
+			</SubmitButton>
 		</form>
 	);
 };

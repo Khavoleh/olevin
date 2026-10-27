@@ -16,8 +16,8 @@ namespace Olevin.Api.Features.Settings.Slices.Onboarding.Handlers.CreateFirstSna
 public static class CreateFirstSnapshotEndpoint
 {
     /// <summary>
-    /// Handles <c>POST /settings/v1/user/onboarding/first-snapshot</c>. The snapshot is for the current month in
-    /// the user's time zone.
+    /// Handles <c>POST /settings/v1/user/onboarding/first-snapshot</c>. The snapshot is for the latest month whose
+    /// snapshot day has come in the user's time zone.
     /// </summary>
     /// <param name="snapshot">The first snapshot and the estimates.</param>
     /// <param name="principal">The signed-in user.</param>

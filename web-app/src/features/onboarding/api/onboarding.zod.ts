@@ -7,6 +7,41 @@
 import * as zod from "zod";
 
 /**
+ * POST_settings_v1_user_settings
+ * @summary Handles `POST /settings/v1/user-settings`.
+ */
+export const configureUserSettingsBodySnapshotDayMax = 31;
+
+export const configureUserSettingsBodyTimezoneMax = 64;
+
+export const configureUserSettingsBodyTimezoneRegExp = new RegExp(
+	"^[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*$(?!\\n)",
+);
+
+export const ConfigureUserSettingsBody = zod
+	.object({
+		baseCurrency: zod
+			.enum(["USD", "EUR", "CAD", "UAH", "PLN"])
+			.describe("The default currency."),
+		locale: zod.enum(["UK", "EN"]).describe("The interface language."),
+		snapshotDay: zod
+			.int()
+			.min(1)
+			.max(configureUserSettingsBodySnapshotDayMax)
+			.describe(
+				"The day of the month (1-31) the monthly snapshot is taken on.",
+			),
+		timezone: zod
+			.string()
+			.min(1)
+			.max(configureUserSettingsBodyTimezoneMax)
+			.regex(configureUserSettingsBodyTimezoneRegExp)
+			.describe("The IANA time zone name."),
+		researchConsent: zod.boolean().describe("The user's research consent."),
+	})
+	.describe("The settings of a user.");
+
+/**
  * POST_settings_v1_user_onboarding_cfpb_response
  * @summary Handles `POST /settings/v1/user/onboarding/cfpb-response`.
  */
@@ -58,8 +93,8 @@ export const SubmitCfpbResponseBody = zod
 
 /**
  * POST_settings_v1_user_onboarding_first_snapshot
- * @summary Handles `POST /settings/v1/user/onboarding/first-snapshot`. The snapshot is for the current month in
-the user's time zone.
+ * @summary Handles `POST /settings/v1/user/onboarding/first-snapshot`. The snapshot is for the latest month whose
+snapshot day has come in the user's time zone.
  */
 export const createFirstSnapshotBodyIncomeItemAmountMin = 0;
 export const createFirstSnapshotBodyIncomeItemAmountMax = 1000000000000;
@@ -332,40 +367,5 @@ export const CreateFirstSnapshotBody = zod
 			.describe("The estimate of the month before PreviousMonth."),
 	})
 	.describe(
-		"The first snapshot of a user, for the current month, with rough estimates of the 2 months before it.",
+		"The first snapshot of a user, for the latest month whose snapshot day has come, with rough estimates of the 2 months before it.",
 	);
-
-/**
- * POST_settings_v1_user_settings
- * @summary Handles `POST /settings/v1/user-settings`.
- */
-export const configureUserSettingsBodySnapshotDayMax = 31;
-
-export const configureUserSettingsBodyTimezoneMax = 64;
-
-export const configureUserSettingsBodyTimezoneRegExp = new RegExp(
-	"^[A-Za-z0-9_+-]+(?:/[A-Za-z0-9_+-]+)*$(?!\\n)",
-);
-
-export const ConfigureUserSettingsBody = zod
-	.object({
-		baseCurrency: zod
-			.enum(["USD", "EUR", "CAD", "UAH", "PLN"])
-			.describe("The default currency."),
-		locale: zod.enum(["UK", "EN"]).describe("The interface language."),
-		snapshotDay: zod
-			.int()
-			.min(1)
-			.max(configureUserSettingsBodySnapshotDayMax)
-			.describe(
-				"The day of the month (1-31) the monthly snapshot is taken on.",
-			),
-		timezone: zod
-			.string()
-			.min(1)
-			.max(configureUserSettingsBodyTimezoneMax)
-			.regex(configureUserSettingsBodyTimezoneRegExp)
-			.describe("The IANA time zone name."),
-		researchConsent: zod.boolean().describe("The user's research consent."),
-	})
-	.describe("The settings of a user.");

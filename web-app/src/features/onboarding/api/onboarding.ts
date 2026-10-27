@@ -9,11 +9,94 @@ import { apiRequest } from "@shared/api";
 import type {
 	ConfigureUserSettingsRequest,
 	FirstSnapshot,
-	ResponseOfCurrencyCode,
+	ResponseOfGetSavedSettingsResponse,
 	ResponseOfGuid,
 	ResponseOfOnboardingStatus,
 	SubmitCfpbResponseRequest,
 } from "./onboarding.schemas";
+
+export type configureUserSettingsResponse201 = {
+	data: ResponseOfGuid;
+	status: 201;
+};
+
+export type configureUserSettingsResponse400 = {
+	data: ResponseOfGuid;
+	status: 400;
+};
+
+export type configureUserSettingsResponse404 = {
+	data: ResponseOfGuid;
+	status: 404;
+};
+
+export type configureUserSettingsResponse409 = {
+	data: ResponseOfGuid;
+	status: 409;
+};
+
+export type configureUserSettingsResponseSuccess =
+	configureUserSettingsResponse201 & {
+		headers: Headers;
+	};
+export type configureUserSettingsResponseError = (
+	| configureUserSettingsResponse400
+	| configureUserSettingsResponse404
+	| configureUserSettingsResponse409
+) & {
+	headers: Headers;
+};
+
+export type configureUserSettingsResponse =
+	| configureUserSettingsResponseSuccess
+	| configureUserSettingsResponseError;
+
+export const getConfigureUserSettingsUrl = () => {
+	return `/settings/v1/user-settings`;
+};
+
+/**
+ * POST_settings_v1_user_settings
+ * @summary Handles `POST /settings/v1/user-settings`.
+ */
+export const configureUserSettings = async (
+	configureUserSettingsRequest: ConfigureUserSettingsRequest,
+	options?: RequestInit,
+): Promise<configureUserSettingsResponse> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return apiRequest<configureUserSettingsResponse>(
+		getConfigureUserSettingsUrl(),
+		{
+			...options,
+			method: "POST",
+			headers: {
+				"Content-Type": "application/json",
+				...getHeaders(options?.headers),
+			},
+			body: JSON.stringify(configureUserSettingsRequest),
+		},
+	);
+};
 
 export type submitCfpbResponseResponse201 = {
 	data: ResponseOfGuid;
@@ -101,6 +184,44 @@ export const submitCfpbResponse = async (
 	});
 };
 
+export type getSavedSettingsResponse200 = {
+	data: ResponseOfGetSavedSettingsResponse;
+	status: 200;
+};
+
+export type getSavedSettingsResponse404 = {
+	data: ResponseOfGetSavedSettingsResponse;
+	status: 404;
+};
+
+export type getSavedSettingsResponseSuccess = getSavedSettingsResponse200 & {
+	headers: Headers;
+};
+export type getSavedSettingsResponseError = getSavedSettingsResponse404 & {
+	headers: Headers;
+};
+
+export type getSavedSettingsResponse =
+	| getSavedSettingsResponseSuccess
+	| getSavedSettingsResponseError;
+
+export const getGetSavedSettingsUrl = () => {
+	return `/settings/v1/user/onboarding/settings`;
+};
+
+/**
+ * GET_settings_v1_user_onboarding_settings
+ * @summary Handles `GET /settings/v1/user/onboarding/settings`.
+ */
+export const getSavedSettings = async (
+	options?: RequestInit,
+): Promise<getSavedSettingsResponse> => {
+	return apiRequest<getSavedSettingsResponse>(getGetSavedSettingsUrl(), {
+		...options,
+		method: "GET",
+	});
+};
+
 export type getOnboardingStatusResponse200 = {
 	data: ResponseOfOnboardingStatus;
 	status: 200;
@@ -125,44 +246,6 @@ export const getOnboardingStatus = async (
 	options?: RequestInit,
 ): Promise<getOnboardingStatusResponse> => {
 	return apiRequest<getOnboardingStatusResponse>(getGetOnboardingStatusUrl(), {
-		...options,
-		method: "GET",
-	});
-};
-
-export type getBaseCurrencyResponse200 = {
-	data: ResponseOfCurrencyCode;
-	status: 200;
-};
-
-export type getBaseCurrencyResponse404 = {
-	data: ResponseOfCurrencyCode;
-	status: 404;
-};
-
-export type getBaseCurrencyResponseSuccess = getBaseCurrencyResponse200 & {
-	headers: Headers;
-};
-export type getBaseCurrencyResponseError = getBaseCurrencyResponse404 & {
-	headers: Headers;
-};
-
-export type getBaseCurrencyResponse =
-	| getBaseCurrencyResponseSuccess
-	| getBaseCurrencyResponseError;
-
-export const getGetBaseCurrencyUrl = () => {
-	return `/settings/v1/user-settings/base-currency`;
-};
-
-/**
- * GET_settings_v1_user_settings_base_currency
- * @summary Handles `GET /settings/v1/user-settings/base-currency`.
- */
-export const getBaseCurrency = async (
-	options?: RequestInit,
-): Promise<getBaseCurrencyResponse> => {
-	return apiRequest<getBaseCurrencyResponse>(getGetBaseCurrencyUrl(), {
 		...options,
 		method: "GET",
 	});
@@ -248,8 +331,8 @@ export const getCreateFirstSnapshotUrl = () => {
 
 /**
  * POST_settings_v1_user_onboarding_first_snapshot
- * @summary Handles `POST /settings/v1/user/onboarding/first-snapshot`. The snapshot is for the current month in
-the user's time zone.
+ * @summary Handles `POST /settings/v1/user/onboarding/first-snapshot`. The snapshot is for the latest month whose
+snapshot day has come in the user's time zone.
  */
 export const createFirstSnapshot = async (
 	firstSnapshot: FirstSnapshot,
@@ -285,87 +368,4 @@ export const createFirstSnapshot = async (
 		},
 		body: JSON.stringify(firstSnapshot),
 	});
-};
-
-export type configureUserSettingsResponse201 = {
-	data: ResponseOfGuid;
-	status: 201;
-};
-
-export type configureUserSettingsResponse400 = {
-	data: ResponseOfGuid;
-	status: 400;
-};
-
-export type configureUserSettingsResponse404 = {
-	data: ResponseOfGuid;
-	status: 404;
-};
-
-export type configureUserSettingsResponse409 = {
-	data: ResponseOfGuid;
-	status: 409;
-};
-
-export type configureUserSettingsResponseSuccess =
-	configureUserSettingsResponse201 & {
-		headers: Headers;
-	};
-export type configureUserSettingsResponseError = (
-	| configureUserSettingsResponse400
-	| configureUserSettingsResponse404
-	| configureUserSettingsResponse409
-) & {
-	headers: Headers;
-};
-
-export type configureUserSettingsResponse =
-	| configureUserSettingsResponseSuccess
-	| configureUserSettingsResponseError;
-
-export const getConfigureUserSettingsUrl = () => {
-	return `/settings/v1/user-settings`;
-};
-
-/**
- * POST_settings_v1_user_settings
- * @summary Handles `POST /settings/v1/user-settings`.
- */
-export const configureUserSettings = async (
-	configureUserSettingsRequest: ConfigureUserSettingsRequest,
-	options?: RequestInit,
-): Promise<configureUserSettingsResponse> => {
-	const getHeaders = (
-		h?: NonNullable<RequestInit["headers"]>,
-	): Record<string, string | readonly string[]> => {
-		if (!h) return {};
-		if (h instanceof Headers) return Object.fromEntries(h.entries());
-		if (Symbol.iterator in h) {
-			return Object.fromEntries(
-				Array.from(
-					h as Iterable<Iterable<string>>,
-					(entry) => Array.from(entry) as [string, string],
-				),
-			);
-		}
-		const headers: Record<string, string | readonly string[]> = {};
-		for (const [name, value] of Object.entries<
-			string | readonly string[] | undefined
-		>(h)) {
-			if (value !== undefined) headers[name] = value;
-		}
-		return headers;
-	};
-	return apiRequest<configureUserSettingsResponse>(
-		getConfigureUserSettingsUrl(),
-		{
-			...options,
-			method: "POST",
-			headers: {
-				"Content-Type": "application/json",
-				...getHeaders(options?.headers),
-			},
-			body: JSON.stringify(configureUserSettingsRequest),
-		},
-	);
 };

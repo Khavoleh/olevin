@@ -3,7 +3,7 @@ import { Heading, Text } from "@shared/components";
 import { getI18n } from "@shared/helpers";
 import CfpbStep from "./components/CfpbStep/CfpbStep";
 import EstimatesStep from "./components/EstimatesStep";
-import RestoreBaseCurrency from "./components/RestoreBaseCurrency";
+import RestoreSettings from "./components/RestoreSettings";
 import SettingsStep from "./components/SettingsStep/SettingsStep";
 import SnapshotStep from "./components/SnapshotStep";
 import { ONBOARDING_STAGES } from "./constants/onboarding-stages";
@@ -99,7 +99,7 @@ const Onboarding = ({ language, step }: Readonly<OnboardingProps>) => {
 				{step === 3 && <EstimatesStep language={language} />}
 				{step === 4 && <CfpbStep language={language} />}
 				{ONBOARDING_STAGES.Onboarding.includes(step) && (
-					<RestoreBaseCurrency language={language} />
+					<RestoreSettings language={language} />
 				)}
 			</section>
 		</div>
