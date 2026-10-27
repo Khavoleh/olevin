@@ -1,4 +1,5 @@
 export { CALENDAR_MONTHS } from "./calendar-months";
+export { CONTACT_EMAIL } from "./contact-email";
 export { DEFAULT_LANGUAGE } from "./language/default-language";
 export { LANGUAGE_COOKIE } from "./language/language-cookie";
 export { LANGUAGES_SHORT } from "./language/languages-short";

@@ -4,12 +4,12 @@ import type { I18N } from "@shared/interfaces";
 export const LEGAL_LINKS_I18N: I18N = {
 	en: {
 		privacy: "Privacy policy",
-		terms: "Terms & Conditions",
+		terms: "Terms of use",
 		source_code: "Source code",
 	},
 	uk: {
 		privacy: "Політика конфіденційності",
-		terms: "Умови та положення",
+		terms: "Умови використання",
 		source_code: "Вихідний код",
 	},
 };

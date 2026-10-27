@@ -71,7 +71,7 @@ export const PROFILE_I18N: I18N = {
 		delete_account_confirm: "Delete the account",
 		documents: "Documents and code",
 		privacy: "Privacy policy",
-		terms: "Terms & Conditions",
+		terms: "Terms of use",
 		source_code: "Source code",
 	},
 	uk: {
@@ -141,7 +141,7 @@ export const PROFILE_I18N: I18N = {
 		delete_account_confirm: "Видалити акаунт",
 		documents: "Документи й код",
 		privacy: "Політика конфіденційності",
-		terms: "Умови та положення",
+		terms: "Умови використання",
 		source_code: "Вихідний код",
 	},
 };
