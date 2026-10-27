@@ -1,7 +1,7 @@
 import { getI18n } from "@shared/helpers";
 import { Suspense } from "react";
 import { PROFILE_I18N } from "../profile-i18n";
-import PushSetting from "./PushSetting";
+import PushSetting from "./PushSetting/PushSetting";
 import SettingsGroup from "./SettingsList/SettingsGroup";
 import SettingsRow from "./SettingsList/SettingsRow";
 
@@ -9,7 +9,7 @@ interface ReminderSettingsProps {
 	language: string;
 }
 
-/** Push reminder on the snapshot day. */
+/** Push reminder on the snapshot day with the browsers that get it. */
 const ReminderSettings = ({ language }: Readonly<ReminderSettingsProps>) => {
 	const t = getI18n(language, PROFILE_I18N);
 

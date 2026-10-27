@@ -110,6 +110,95 @@ table "user_settings" {
   }
 }
 
+table "push_subscriptions" {
+  schema  = schema.settings
+  comment = "Web Push subscriptions of the user's browsers and devices"
+
+  column "id" {
+    type    = uuid
+    default = sql("uuidv7()")
+    comment = "Subscription identifier"
+  }
+  column "user_id" {
+    type    = uuid
+    comment = "Owning user identifier"
+  }
+  column "endpoint" {
+    type    = varchar(2048)
+    comment = "URL of the push service the messages are sent to"
+  }
+  column "p256dh" {
+    type    = varchar(128)
+    comment = "Public key of the browser the payload is encrypted for"
+  }
+  column "auth" {
+    type    = varchar(64)
+    comment = "Authentication secret of the browser"
+  }
+  column "device_name" {
+    type    = varchar(128)
+    comment = "Name of the browser and device shown to the user"
+  }
+  column "snapshot_push_year" {
+    type    = smallint
+    null    = true
+    comment = "Year of the snapshot day push last sent to the subscription"
+  }
+  column "snapshot_push_month" {
+    type    = enum.calendar_month
+    null    = true
+    comment = "Month of the snapshot day push last sent to the subscription"
+  }
+  column "created_at" {
+    type    = timestamptz
+    default = sql("now()")
+    comment = "When the subscription was created"
+  }
+  column "updated_at" {
+    type    = timestamptz
+    default = sql("now()")
+    comment = "When the browser last confirmed the subscription"
+  }
+
+  primary_key {
+    columns = [column.id]
+  }
+
+  index "push_subscriptions_endpoint_key" {
+    unique  = true
+    columns = [column.endpoint]
+  }
+  index "push_subscriptions_user_id_idx" {
+    columns = [column.user_id]
+  }
+
+  foreign_key "push_subscriptions_user_id_fkey" {
+    columns     = [column.user_id]
+    ref_columns = [table.users.column.id]
+    on_delete   = CASCADE
+    on_update   = NO_ACTION
+  }
+
+  check "push_subscriptions_endpoint_https" {
+    expr = "endpoint ~ '^https://'"
+  }
+  check "push_subscriptions_p256dh_not_blank" {
+    expr = "length(btrim(p256dh)) > 0"
+  }
+  check "push_subscriptions_auth_not_blank" {
+    expr = "length(btrim(auth)) > 0"
+  }
+  check "push_subscriptions_device_name_not_blank" {
+    expr = "length(btrim(device_name)) > 0"
+  }
+  check "push_subscriptions_snapshot_push_year_range" {
+    expr = "snapshot_push_year BETWEEN 2000 AND 9999"
+  }
+  check "push_subscriptions_snapshot_push_both_or_none" {
+    expr = "(snapshot_push_year IS NULL) = (snapshot_push_month IS NULL)"
+  }
+}
+
 table "cfpb_responses" {
   schema  = schema.settings
   comment = "CFPB Financial Well-Being Scale answers given once at onboarding"

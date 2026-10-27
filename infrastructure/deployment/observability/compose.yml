@@ -72,9 +72,9 @@ services:
         condition: service_healthy
     environment:
       GF_SERVER_ROOT_URL: https://grafana.localhost
-      GF_AUTH_ANONYMOUS_ENABLED: "true"
-      GF_AUTH_ANONYMOUS_ORG_ROLE: Admin
-      GF_AUTH_DISABLE_LOGIN_FORM: "true"
+      GF_SECURITY_ADMIN_USER: olevin
+      GF_SECURITY_ADMIN_PASSWORD: olevin
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_PLUGINS_PREINSTALL_SYNC: victoriametrics-logs-datasource@0.32.0
     networks:

@@ -11,9 +11,12 @@ import type {
 	ResponseOfCurrencyCode,
 	ResponseOfGetSettingsResponse,
 	ResponseOfGuid,
+	ResponseOfIReadOnlyListOfPushSubscriptionResponse,
 	ResponseOfLocaleCode,
 	ResponseOfshort,
 	ResponseOfstring,
+	SubscribePushRequest,
+	SyncPushSubscriptionRequest,
 	UpdateBaseCurrencyRequest,
 	UpdateLocaleRequest,
 	UpdateSnapshotDayRequest,
@@ -357,6 +360,198 @@ export const updateBaseCurrency = async (
 	});
 };
 
+export type syncPushSubscriptionResponse200 = {
+	data: ResponseOfGuid;
+	status: 200;
+};
+
+export type syncPushSubscriptionResponse400 = {
+	data: ResponseOfGuid;
+	status: 400;
+};
+
+export type syncPushSubscriptionResponse404 = {
+	data: ResponseOfGuid;
+	status: 404;
+};
+
+export type syncPushSubscriptionResponseSuccess =
+	syncPushSubscriptionResponse200 & {
+		headers: Headers;
+	};
+export type syncPushSubscriptionResponseError = (
+	| syncPushSubscriptionResponse400
+	| syncPushSubscriptionResponse404
+) & {
+	headers: Headers;
+};
+
+export type syncPushSubscriptionResponse =
+	| syncPushSubscriptionResponseSuccess
+	| syncPushSubscriptionResponseError;
+
+export const getSyncPushSubscriptionUrl = () => {
+	return `/settings/v1/push-subscriptions`;
+};
+
+/**
+ * PUT_settings_v1_push_subscriptions
+ * @summary Handles `PUT /settings/v1/push-subscriptions`. Never adds a subscription, so a browser removed from another
+device does not come back on its own.
+ */
+export const syncPushSubscription = async (
+	syncPushSubscriptionRequest: SyncPushSubscriptionRequest,
+	options?: RequestInit,
+): Promise<syncPushSubscriptionResponse> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return apiRequest<syncPushSubscriptionResponse>(
+		getSyncPushSubscriptionUrl(),
+		{
+			...options,
+			method: "PUT",
+			headers: {
+				"Content-Type": "application/json",
+				...getHeaders(options?.headers),
+			},
+			body: JSON.stringify(syncPushSubscriptionRequest),
+		},
+	);
+};
+
+export type subscribePushResponse200 = {
+	data: ResponseOfGuid;
+	status: 200;
+};
+
+export type subscribePushResponse201 = {
+	data: ResponseOfGuid;
+	status: 201;
+};
+
+export type subscribePushResponse400 = {
+	data: ResponseOfGuid;
+	status: 400;
+};
+
+export type subscribePushResponse404 = {
+	data: ResponseOfGuid;
+	status: 404;
+};
+
+export type subscribePushResponseSuccess = (
+	| subscribePushResponse200
+	| subscribePushResponse201
+) & {
+	headers: Headers;
+};
+export type subscribePushResponseError = (
+	| subscribePushResponse400
+	| subscribePushResponse404
+) & {
+	headers: Headers;
+};
+
+export type subscribePushResponse =
+	| subscribePushResponseSuccess
+	| subscribePushResponseError;
+
+export const getSubscribePushUrl = () => {
+	return `/settings/v1/push-subscriptions`;
+};
+
+/**
+ * POST_settings_v1_push_subscriptions
+ * @summary Handles `POST /settings/v1/push-subscriptions`. A known endpoint gets the new keys and name, and moves to
+the signed-in user when another account subscribed it in the same browser before.
+ */
+export const subscribePush = async (
+	subscribePushRequest: SubscribePushRequest,
+	options?: RequestInit,
+): Promise<subscribePushResponse> => {
+	const getHeaders = (
+		h?: NonNullable<RequestInit["headers"]>,
+	): Record<string, string | readonly string[]> => {
+		if (!h) return {};
+		if (h instanceof Headers) return Object.fromEntries(h.entries());
+		if (Symbol.iterator in h) {
+			return Object.fromEntries(
+				Array.from(
+					h as Iterable<Iterable<string>>,
+					(entry) => Array.from(entry) as [string, string],
+				),
+			);
+		}
+		const headers: Record<string, string | readonly string[]> = {};
+		for (const [name, value] of Object.entries<
+			string | readonly string[] | undefined
+		>(h)) {
+			if (value !== undefined) headers[name] = value;
+		}
+		return headers;
+	};
+	return apiRequest<subscribePushResponse>(getSubscribePushUrl(), {
+		...options,
+		method: "POST",
+		headers: {
+			"Content-Type": "application/json",
+			...getHeaders(options?.headers),
+		},
+		body: JSON.stringify(subscribePushRequest),
+	});
+};
+
+export type getPushSubscriptionsResponse200 = {
+	data: ResponseOfIReadOnlyListOfPushSubscriptionResponse;
+	status: 200;
+};
+
+export type getPushSubscriptionsResponseSuccess =
+	getPushSubscriptionsResponse200 & {
+		headers: Headers;
+	};
+
+export type getPushSubscriptionsResponse = getPushSubscriptionsResponseSuccess;
+
+export const getGetPushSubscriptionsUrl = () => {
+	return `/settings/v1/push-subscriptions`;
+};
+
+/**
+ * GET_settings_v1_push_subscriptions
+ * @summary Handles `GET /settings/v1/push-subscriptions`.
+ */
+export const getPushSubscriptions = async (
+	options?: RequestInit,
+): Promise<getPushSubscriptionsResponse> => {
+	return apiRequest<getPushSubscriptionsResponse>(
+		getGetPushSubscriptionsUrl(),
+		{
+			...options,
+			method: "GET",
+		},
+	);
+};
+
 export type getSettingsResponse200 = {
 	data: ResponseOfGetSettingsResponse;
 	status: 200;
@@ -452,4 +647,49 @@ export const exportSnapshots = async (
 		...options,
 		method: "GET",
 	});
+};
+
+export type deletePushSubscriptionResponse204 = {
+	data: void;
+	status: 204;
+};
+
+export type deletePushSubscriptionResponse404 = {
+	data: ResponseOfGuid;
+	status: 404;
+};
+
+export type deletePushSubscriptionResponseSuccess =
+	deletePushSubscriptionResponse204 & {
+		headers: Headers;
+	};
+export type deletePushSubscriptionResponseError =
+	deletePushSubscriptionResponse404 & {
+		headers: Headers;
+	};
+
+export type deletePushSubscriptionResponse =
+	| deletePushSubscriptionResponseSuccess
+	| deletePushSubscriptionResponseError;
+
+export const getDeletePushSubscriptionUrl = (id: string) => {
+	return `/settings/v1/push-subscriptions/${id}`;
+};
+
+/**
+ * DELETE_settings_v1_push_subscriptions_id
+ * @summary Handles `DELETE /settings/v1/push-subscriptions/{id}`. Any browser of the user can be removed, not only
+the one that sends the request.
+ */
+export const deletePushSubscription = async (
+	id: string,
+	options?: RequestInit,
+): Promise<deletePushSubscriptionResponse> => {
+	return apiRequest<deletePushSubscriptionResponse>(
+		getDeletePushSubscriptionUrl(id),
+		{
+			...options,
+			method: "DELETE",
+		},
+	);
 };

@@ -1,4 +1,4 @@
-import { ToastRegion } from "@shared/components";
+import { ServiceWorkerRegistration, ToastRegion } from "@shared/components";
 import { getI18n, getLanguageStaticParams } from "@shared/helpers";
 import { APP_I18N } from "@shared/i18n";
 import type { Metadata, Viewport } from "next";
@@ -12,6 +12,7 @@ export const viewport: Viewport = {
 	width: "device-width",
 	initialScale: 1,
 	viewportFit: "cover",
+	themeColor: "#5C4D9E",
 };
 
 interface LanguageParams {
@@ -27,6 +28,7 @@ export async function generateMetadata({
 	return {
 		title: t("title"),
 		description: t("description"),
+		appleWebApp: { capable: true, title: t("title") },
 	};
 }
 
@@ -43,6 +45,7 @@ const RootLayout = async ({ children, params }: Readonly<RootLayoutProps>) => {
 			<body>
 				{children}
 				<ToastRegion language={lang} />
+				<ServiceWorkerRegistration />
 			</body>
 		</html>
 	);

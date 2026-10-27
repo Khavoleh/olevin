@@ -14,7 +14,7 @@ namespace Olevin.Api.Features.Settings.Slices.Profile.Handlers.GetSettings;
 /// <param name="SnapshotDay">The day of the month (1-31) the monthly snapshot is taken on.</param>
 /// <param name="Timezone">The IANA time zone name.</param>
 /// <param name="ResearchConsent">Whether the user consented to use of their data for research.</param>
-/// <param name="PushNotifications">Whether the push on the snapshot day is on.</param>
+/// <param name="PushNotifications">Whether any browser of the user gets the push on the snapshot day.</param>
 public sealed record GetSettingsResponse(
     string? Username,
     string? Email,

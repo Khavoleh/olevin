@@ -1,6 +1,7 @@
 using System.Diagnostics;
 using Npgsql;
 using Olevin.Api.Infrastructure.ExchangeRate;
+using Olevin.Api.Infrastructure.WebPush;
 using OpenTelemetry.Exporter;
 using OpenTelemetry.Metrics;
 using OpenTelemetry.Resources;
@@ -70,8 +71,11 @@ public static class Telemetry
                 tracing
                     .AddAspNetCoreInstrumentation()
                     .AddHttpClientInstrumentation(options =>
-                        options.EnrichWithHttpRequestMessage = (activity, _) =>
-                            ExchangeRateRedaction.RedactSpan(activity)
+                        options.EnrichWithHttpRequestMessage = (activity, request) =>
+                        {
+                            ExchangeRateRedaction.RedactSpan(activity);
+                            WebPushRedaction.RedactSpan(activity, request);
+                        }
                     )
                     .AddNpgsql()
                     .AddSource(ActivitySourceName)

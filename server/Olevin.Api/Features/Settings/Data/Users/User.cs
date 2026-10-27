@@ -1,4 +1,5 @@
 using Olevin.Api.Features.Settings.Data.CfpbResponses;
+using Olevin.Api.Features.Settings.Data.PushSubscriptions;
 using Olevin.Api.Features.Settings.Data.UserSettings;
 
 namespace Olevin.Api.Features.Settings.Data.Users;
@@ -37,4 +38,9 @@ public sealed class User
     /// The CFPB Financial Well-Being Scale response of the user.
     /// </summary>
     public CfpbResponse? CfpbResponse { get; set; }
+
+    /// <summary>
+    /// The Web Push subscriptions of the user's browsers and devices.
+    /// </summary>
+    public List<PushSubscription> PushSubscriptions { get; set; } = [];
 }

@@ -10,6 +10,7 @@ using Olevin.Api.Infrastructure.ExchangeRate;
 using Olevin.Api.Infrastructure.Jobs;
 using Olevin.Api.Infrastructure.Telemetry;
 using Olevin.Api.Infrastructure.Validation;
+using Olevin.Api.Infrastructure.WebPush;
 using Scalar.AspNetCore;
 using Serilog;
 using Wolverine;
@@ -48,6 +49,7 @@ builder.Services.ConfigureHttpJsonOptions(options =>
 
 builder.Services.AddDatabase(builder.Configuration);
 builder.Services.AddExchangeRateApi(builder.Configuration);
+builder.Services.AddWebPush(builder.Configuration);
 builder.Services.AddSettings();
 builder.Services.AddFinancialWellness();
 builder.Services.AddJobs();
@@ -59,6 +61,7 @@ builder.Services.AddOpenApi(options => options.AddFluentValidationRules());
 
 WebApplication app = builder.Build();
 
+app.Services.UseSettingsJobs();
 app.Services.UseFinancialWellnessJobs();
 
 app.UseExceptionHandler();

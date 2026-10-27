@@ -16,6 +16,7 @@ export { default as NumberField } from "./NumberField";
 export { default as Radio } from "./RadioGroup/Radio";
 export { default as RadioGroup } from "./RadioGroup/RadioGroup";
 export { default as Select } from "./Select";
+export { default as ServiceWorkerRegistration } from "./ServiceWorkerRegistration";
 export { default as Text } from "./Text";
 export { default as TextField } from "./TextField";
 export { default as ErrorToast } from "./Toast/ErrorToast";

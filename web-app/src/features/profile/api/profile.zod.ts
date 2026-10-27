@@ -69,6 +69,71 @@ export const UpdateBaseCurrencyBody = zod
 	.describe("The new base currency of a user.");
 
 /**
+ * PUT_settings_v1_push_subscriptions
+ * @summary Handles `PUT /settings/v1/push-subscriptions`. Never adds a subscription, so a browser removed from another
+device does not come back on its own.
+ */
+export const syncPushSubscriptionBodyEndpointMax = 2048;
+
+export const SyncPushSubscriptionBody = zod
+	.object({
+		endpoint: zod
+			.string()
+			.min(1)
+			.max(syncPushSubscriptionBodyEndpointMax)
+			.describe("The URL of the push service from the subscription."),
+	})
+	.describe("The push subscription a browser still has.");
+
+/**
+ * POST_settings_v1_push_subscriptions
+ * @summary Handles `POST /settings/v1/push-subscriptions`. A known endpoint gets the new keys and name, and moves to
+the signed-in user when another account subscribed it in the same browser before.
+ */
+export const subscribePushBodyEndpointMax = 2048;
+
+export const subscribePushBodyP256dhMax = 128;
+
+export const subscribePushBodyP256dhRegExp = new RegExp(
+	"^[A-Za-z0-9_-]+={0,2}$(?!\n)",
+);
+export const subscribePushBodyAuthMax = 64;
+
+export const subscribePushBodyAuthRegExp = new RegExp(
+	"^[A-Za-z0-9_-]+={0,2}$(?!\n)",
+);
+export const subscribePushBodyDeviceNameMax = 128;
+
+export const SubscribePushBody = zod
+	.object({
+		endpoint: zod
+			.string()
+			.min(1)
+			.max(subscribePushBodyEndpointMax)
+			.describe("The URL of the push service from the subscription."),
+		p256dh: zod
+			.string()
+			.min(1)
+			.max(subscribePushBodyP256dhMax)
+			.regex(subscribePushBodyP256dhRegExp)
+			.describe("The `p256dh` key from the subscription (base64url)."),
+		auth: zod
+			.string()
+			.min(1)
+			.max(subscribePushBodyAuthMax)
+			.regex(subscribePushBodyAuthRegExp)
+			.describe("The `auth` key from the subscription (base64url)."),
+		deviceName: zod
+			.string()
+			.min(1)
+			.max(subscribePushBodyDeviceNameMax)
+			.describe("The name of the browser and device shown to the user."),
+	})
+	.describe(
+		"The push subscription of the browser the user turns the push on in.",
+	);
+
+/**
  * GET_settings_v1_user_settings_snapshots_export
  * @summary Handles `GET /settings/v1/user-settings/snapshots/export?format=Json|Csv`. The format is JSON when omitted.
  */
@@ -77,4 +142,13 @@ export const ExportSnapshotsQueryParams = zod.object({
 		.enum(["Json", "Csv"])
 		.optional()
 		.describe("The format of the file."),
+});
+
+/**
+ * DELETE_settings_v1_push_subscriptions_id
+ * @summary Handles `DELETE /settings/v1/push-subscriptions/{id}`. Any browser of the user can be removed, not only
+the one that sends the request.
+ */
+export const DeletePushSubscriptionParams = zod.object({
+	id: zod.uuid().describe("The subscription identifier."),
 });

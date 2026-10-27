@@ -162,6 +162,89 @@ export interface ResponseOfCurrencyCode {
 }
 
 /**
+ * The push subscription a browser still has.
+ */
+export interface SyncPushSubscriptionRequest {
+	/**
+	 * The URL of the push service from the subscription.
+	 * @minLength 1
+	 * @maxLength 2048
+	 */
+	endpoint: string;
+}
+
+/**
+ * The push subscription of the browser the user turns the push on in.
+ */
+export interface SubscribePushRequest {
+	/**
+	 * The URL of the push service from the subscription.
+	 * @minLength 1
+	 * @maxLength 2048
+	 */
+	endpoint: string;
+	/**
+     * The `p256dh` key from the subscription (base64url).
+     * @minLength 1
+     * @maxLength 128
+     * @pattern ^[A-Za-z0-9_-]+={0,2}$(?!
+  )
+     */
+	p256dh: string;
+	/**
+     * The `auth` key from the subscription (base64url).
+     * @minLength 1
+     * @maxLength 64
+     * @pattern ^[A-Za-z0-9_-]+={0,2}$(?!
+  )
+     */
+	auth: string;
+	/**
+	 * The name of the browser and device shown to the user.
+	 * @minLength 1
+	 * @maxLength 128
+	 */
+	deviceName: string;
+}
+
+/**
+ * A browser of the user that gets the push on the snapshot day.
+ */
+export interface PushSubscriptionResponse {
+	/** The subscription identifier. */
+	id: string;
+	/** The URL of the push service, which tells the current browser apart. */
+	endpoint: string;
+	/** The name of the browser and device. */
+	deviceName: string;
+	/** When the push was turned on in the browser. */
+	createdAt: string;
+	/** When the browser last confirmed the subscription. */
+	updatedAt: string;
+}
+
+/**
+ * The envelope every endpoint returns.
+ */
+export interface ResponseOfIReadOnlyListOfPushSubscriptionResponse {
+	/**
+	 * The reason of the failure, or `null` on success.
+	 * @nullable
+	 */
+	error: string | null;
+	/**
+	 * The result, or the default value of T on failure.
+	 * @nullable
+	 */
+	data: PushSubscriptionResponse[] | null;
+	/**
+	 * The failed validation rules, or `null` when the request is valid.
+	 * @nullable
+	 */
+	validationErrors: string[] | null;
+}
+
+/**
  * The settings of the signed-in user shown on the profile page.
  */
 export interface GetSettingsResponse {
@@ -187,7 +270,7 @@ export interface GetSettingsResponse {
 	timezone: string;
 	/** Whether the user consented to use of their data for research. */
 	researchConsent: boolean;
-	/** Whether the push on the snapshot day is on. */
+	/** Whether any browser of the user gets the push on the snapshot day. */
 	pushNotifications: boolean;
 }
 

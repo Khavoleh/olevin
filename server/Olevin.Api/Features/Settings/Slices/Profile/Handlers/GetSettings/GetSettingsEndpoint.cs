@@ -50,7 +50,7 @@ public static class GetSettingsEndpoint
                 setting.SnapshotDay,
                 setting.Timezone,
                 setting.ResearchConsent,
-                true
+                setting.User.PushSubscriptions.Any()
             ))
             .FirstOrDefaultAsync(ct);
 

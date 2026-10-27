@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using Olevin.Api.Features.Settings.Data.CfpbResponses;
+using Olevin.Api.Features.Settings.Data.PushSubscriptions;
 using Olevin.Api.Features.Settings.Data.Users;
 using Olevin.Api.Features.Settings.Data.UserSettings;
 
@@ -27,11 +28,17 @@ public sealed class SettingsDbContext(DbContextOptions<SettingsDbContext> option
     /// </summary>
     public DbSet<CfpbResponse> CfpbResponses => Set<CfpbResponse>();
 
+    /// <summary>
+    /// Gets the Web Push subscriptions.
+    /// </summary>
+    public DbSet<PushSubscription> PushSubscriptions => Set<PushSubscription>();
+
     /// <inheritdoc/>
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfiguration(new UserConfiguration());
         modelBuilder.ApplyConfiguration(new UserSettingConfiguration());
         modelBuilder.ApplyConfiguration(new CfpbResponseConfiguration());
+        modelBuilder.ApplyConfiguration(new PushSubscriptionConfiguration());
     }
 }
