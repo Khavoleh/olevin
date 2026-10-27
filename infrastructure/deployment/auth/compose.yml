@@ -1,0 +1,31 @@
+services:
+  logto:
+    image: svhd/logto:1.44.0
+    container_name: logto
+    restart: unless-stopped
+    depends_on:
+      postgresql-bootstrap:
+        condition: service_completed_successfully
+    entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
+    environment:
+      TRUST_PROXY_HEADER: "1"
+      DB_URL: postgres://olevin_logto:olevin_logto@postgresql:5432/auth
+      ENDPOINT: ${LOGTO_ENDPOINT:-https://localhost:3001}
+      ADMIN_ENDPOINT: ${LOGTO_ADMIN_ENDPOINT:-https://auth-admin.localhost}
+      SSRF_ALLOWED_ADDRESSES: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,fc00::/7
+    networks:
+      - olevin
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://localhost:3001/api/status'').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+networks:
+  olevin:
+    name: olevin

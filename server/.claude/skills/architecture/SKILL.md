@@ -82,7 +82,7 @@ Shared/
 Infrastructure/
   Auth/       Auth.cs (AddLogtoAuthentication, GetSubject, GetUsername, GetEmail) + LogtoOptions.cs + LogtoWebhookSignature.cs
   Database/   DatabaseServices.cs (AddDatabase) + DbOptions.cs + MessagePersistence.cs (Wolverine inbox/outbox)
-  Telemetry/  Telemetry.cs (AddTelemetry) + SeqOptions.cs
+  Telemetry/  Telemetry.cs (AddTelemetry) + TelemetryOptions.cs
 ```
 
 **Don't create a sub-folder for a single occupant** — add the topic folder once a second related file appears.

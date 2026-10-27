@@ -39,6 +39,7 @@ Prefer the tools already in the project; add a dependency only when it clearly e
 - **Dates/numbers:** native `Intl` (`DateTimeFormat`, `NumberFormat`) — no date library so far; justify one before adding.
 - **Charts:** `recharts` (3) with its `react-is` peer — client-only, so a chart is a `"use client"` leaf (`features/home/components/IndexCard/IndexGauge/`). Color sectors through the `shape` prop with token classes (`fill-zone-*-graphic`, passed as `className` in the data items), not the deprecated `Cell`. Don't add another chart library.
 - **Animation:** Tailwind transitions + CSS; no motion library.
+- **Error reporting:** `@sentry/nextjs` → GlitchTip, errors only (no tracing, replay or profiling — GlitchTip lacks them). Set up in `src/instrumentation.ts` (server, `onRequestError`) and `src/instrumentation-client.ts` (browser); DSN in `NEXT_PUBLIC_SENTRY_DSN`.
 
 **Dev deps:**
 

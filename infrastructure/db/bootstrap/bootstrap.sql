@@ -5,9 +5,10 @@
 \getenv wolverine_password OLEVIN_WOLVERINE_PASSWORD
 \getenv settings_password OLEVIN_SETTINGS_PASSWORD
 \getenv financial_wellness_password OLEVIN_FINANCIAL_WELLNESS_PASSWORD
+\getenv glitchtip_password OLEVIN_GLITCHTIP_PASSWORD
 
 SELECT format('CREATE ROLE %I', name)
-FROM unnest(ARRAY['olevin_logto', 'olevin_atlas', 'olevin_wolverine', 'olevin_settings', 'olevin_financial_wellness']) AS name
+FROM unnest(ARRAY['olevin_logto', 'olevin_atlas', 'olevin_wolverine', 'olevin_settings', 'olevin_financial_wellness', 'olevin_glitchtip']) AS name
 WHERE NOT EXISTS (SELECT FROM pg_roles WHERE rolname = name)
 \gexec
 
@@ -16,6 +17,7 @@ ALTER ROLE olevin_atlas WITH LOGIN PASSWORD :'atlas_password';
 ALTER ROLE olevin_wolverine WITH LOGIN PASSWORD :'wolverine_password';
 ALTER ROLE olevin_settings WITH LOGIN PASSWORD :'settings_password';
 ALTER ROLE olevin_financial_wellness WITH LOGIN PASSWORD :'financial_wellness_password';
+ALTER ROLE olevin_glitchtip WITH LOGIN PASSWORD :'glitchtip_password';
 
 SELECT format('GRANT %I TO olevin_logto WITH ADMIN OPTION, INHERIT FALSE, SET FALSE', rolname)
 FROM pg_roles
@@ -24,12 +26,13 @@ WHERE rolname LIKE 'logto\_tenant\_%'
 \gexec
 
 SELECT format('CREATE DATABASE %I OWNER %I', name, owner)
-FROM (VALUES ('auth', 'olevin_logto'), ('atlas', 'olevin_atlas')) AS databases(name, owner)
+FROM (VALUES ('auth', 'olevin_logto'), ('atlas', 'olevin_atlas'), ('glitchtip', 'olevin_glitchtip')) AS databases(name, owner)
 WHERE NOT EXISTS (SELECT FROM pg_database WHERE datname = name)
 \gexec
 
 ALTER DATABASE auth OWNER TO olevin_logto;
 ALTER DATABASE atlas OWNER TO olevin_atlas;
+ALTER DATABASE glitchtip OWNER TO olevin_glitchtip;
 
 REVOKE ALL ON DATABASE olevin FROM PUBLIC;
 GRANT CONNECT ON DATABASE olevin TO olevin_atlas, olevin_wolverine, olevin_settings, olevin_financial_wellness;
@@ -83,3 +86,6 @@ CALL pg_temp.transfer_ownership('public', 'olevin_logto');
 
 \connect atlas
 ALTER SCHEMA public OWNER TO olevin_atlas;
+
+\connect glitchtip
+ALTER SCHEMA public OWNER TO olevin_glitchtip;

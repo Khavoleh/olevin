@@ -2,10 +2,8 @@ import {
 	LANGUAGE_COOKIE,
 	PAGE_URLS,
 	PUBLIC_PAGE_URLS,
-	TRACEPARENT_HEADER,
 } from "@shared/constants";
 import {
-	createTraceparent,
 	getIsAuthenticated,
 	getIsOnboarded,
 	getLanguage,
@@ -25,14 +23,6 @@ function redirectTo(request: NextRequest, pathname: string): NextResponse {
 	});
 }
 
-/** Lets the request through with a new trace that every API call of its Server Action or page continues. */
-function proceed(request: NextRequest): NextResponse {
-	const headers = new Headers(request.headers);
-	headers.set(TRACEPARENT_HEADER, createTraceparent());
-
-	return NextResponse.next({ request: { headers } });
-}
-
 /** Adds the language to the URL and lets only signed-in, onboarded users into the app. */
 export async function proxy(request: NextRequest) {
 	const { pathname } = request.nextUrl;
@@ -50,7 +40,7 @@ export async function proxy(request: NextRequest) {
 	const page = pathname.slice(language.length + 1) || PAGE_URLS.HOME;
 
 	if (PUBLIC_PAGE_URLS.includes(page)) {
-		return proceed(request);
+		return NextResponse.next();
 	}
 
 	if (!(await getIsAuthenticated(request))) {
@@ -62,7 +52,7 @@ export async function proxy(request: NextRequest) {
 		page.startsWith(`${PAGE_URLS.ONBOARDING}/`);
 
 	if (isOnboarding || getIsOnboarded(request)) {
-		return proceed(request);
+		return NextResponse.next();
 	}
 
 	return redirectTo(request, getLanguageUrl(PAGE_URLS.ONBOARDING, language));

@@ -34,7 +34,7 @@ Prefer the tools already in the project; add a dependency only when it clearly e
 - **Mapping:** by hand, no mapping library. EF reads project in the query with `Select(entity => new Dto(...))`, so only the DTO's columns are read (`Settings/Slices/UserSettings/Contracts/GetUserSettingsHandler`); a response is built in the endpoint itself. A `<UseCase>Mapping` static class only when it holds real logic. Don't add Mapperly, AutoMapper or Mapster.
 - **Auth:** `Microsoft.AspNetCore.Authentication.JwtBearer` against Logto (`Infrastructure/Auth`).
 - **API docs:** `Microsoft.AspNetCore.OpenApi` + `Scalar.AspNetCore` (Development only). No Swashbuckle/NSwag.
-- **Observability:** `Serilog.AspNetCore`, `Serilog.Sinks.Seq`, `Serilog.Enrichers.Environment`; `OpenTelemetry.Extensions.Hosting` + `.Instrumentation.AspNetCore/Http/Runtime` + `.Exporter.OpenTelemetryProtocol` → Seq (`Infrastructure/Telemetry`).
+- **Observability:** `Serilog.AspNetCore`, `Serilog.Sinks.OpenTelemetry` (logs over OTLP); `OpenTelemetry.Extensions.Hosting` + `.Instrumentation.AspNetCore/Http/Runtime` + `.Exporter.OpenTelemetryProtocol` → OpenTelemetry Collector (`Infrastructure/Telemetry`). Errors: `Sentry.AspNetCore` + `Sentry.Serilog` (Error logs become events) → GlitchTip; no Sentry tracing, traces stay in OpenTelemetry.
 - **Config:** `DotNetEnv` loads `server/.env`; everything else is standard `IConfiguration` + options.
 - **Built-ins to prefer:** `System.Text.Json` (no Newtonsoft), `IHttpClientFactory` for outbound HTTP, `TimeProvider` for testable time, `[GeneratedRegex]`.
 
