@@ -76,7 +76,7 @@ const Privacy = ({ language }: Readonly<PrivacyProps>) => {
 				<Text>{t("processors_intro")}</Text>
 				<LegalList
 					items={[
-						t("processors_netcup"),
+						t("processors_ovh"),
 						t("processors_google"),
 						t("processors_resend"),
 						t("processors_push"),

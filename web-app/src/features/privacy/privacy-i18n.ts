@@ -59,8 +59,8 @@ export const PRIVACY_I18N: I18N = {
 
 		processors_title: "5. Where data is kept and who processes it",
 		processors_intro:
-			"The app, its database, the Logto sign-in service, logs and error monitoring run on our own servers in Manassas, Virginia, USA. Some data is processed by these providers:",
-		processors_netcup: "Netcup — the hosting provider of the servers (USA);",
+			"The app, its database, the Logto sign-in service, logs and error monitoring run on our own servers near Montreal, Quebec, Canada. Some data is processed by these providers:",
+		processors_ovh: "OVHcloud — the hosting provider of the servers (Canada);",
 		processors_google:
 			"Google — signs you in if you choose Google, under Google's own privacy policy;",
 		processors_resend:
@@ -70,7 +70,7 @@ export const PRIVACY_I18N: I18N = {
 		processors_rates:
 			"ExchangeRate-API — provides currency exchange rates and receives no data about you.",
 		processors_transfers:
-			"If you live outside the United States, your data is transferred there. For users in the EU and the UK, the transfer relies on safeguards required by the GDPR, such as the EU Standard Contractual Clauses.",
+			"If you live outside Canada, your data is transferred there. For users in the EU and the UK, transfers to Canada and to providers in other countries rely on safeguards required by the GDPR, such as the adequacy decision for Canada or the EU Standard Contractual Clauses.",
 
 		storage_title: "6. Cookies and browser storage",
 		storage_intro:
@@ -175,8 +175,8 @@ export const PRIVACY_I18N: I18N = {
 
 		processors_title: "5. Де зберігаються дані та хто їх обробляє",
 		processors_intro:
-			"Застосунок, його база даних, сервіс входу Logto, логи та моніторинг помилок працюють на наших власних серверах у Манассасі, Вірджинія, США. Частину даних обробляють такі постачальники:",
-		processors_netcup: "Netcup — хостинг-провайдер серверів (США);",
+			"Застосунок, його база даних, сервіс входу Logto, логи та моніторинг помилок працюють на наших власних серверах поблизу Монреаля, Квебек, Канада. Частину даних обробляють такі постачальники:",
+		processors_ovh: "OVHcloud — хостинг-провайдер серверів (Канада);",
 		processors_google:
 			"Google — виконує вхід, якщо ви обираєте Google, за власною політикою конфіденційності Google;",
 		processors_resend:
@@ -186,7 +186,7 @@ export const PRIVACY_I18N: I18N = {
 		processors_rates:
 			"ExchangeRate-API — надає курси валют і не отримує жодних даних про вас.",
 		processors_transfers:
-			"Якщо ви живете не в США, ваші дані передаються туди. Для користувачів з ЄС і Великої Британії передача спирається на гарантії, яких вимагає GDPR, як-от стандартні договірні умови ЄС.",
+			"Якщо ви живете не в Канаді, ваші дані передаються туди. Для користувачів з ЄС і Великої Британії передача до Канади та постачальникам в інших країнах спирається на гарантії, яких вимагає GDPR, як-от рішення про адекватність захисту для Канади чи стандартні договірні умови ЄС.",
 
 		storage_title: "6. Cookies та сховище браузера",
 		storage_intro:
