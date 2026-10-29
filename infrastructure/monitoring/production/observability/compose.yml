@@ -94,7 +94,7 @@ services:
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?}
       GF_SECURITY_SECRET_KEY: ${GRAFANA_SECRET_KEY:?}
       GF_DATABASE_TYPE: postgres
-      GF_DATABASE_HOST: ${POSTGRES_HOST:?}:5432
+      GF_DATABASE_HOST: monitoring-postgresql:5432
       GF_DATABASE_NAME: grafana
       GF_DATABASE_USER: monitoring_grafana
       GF_DATABASE_PASSWORD: ${GRAFANA_DATABASE_PASSWORD:?}
@@ -133,10 +133,14 @@ networks:
 
 volumes:
   victoria_logs_data:
+    name: monitoring_victoria_logs_data
     driver: local
   victoria_traces_data:
+    name: monitoring_victoria_traces_data
     driver: local
   victoria_metrics_data:
+    name: monitoring_victoria_metrics_data
     driver: local
   grafana_data:
+    name: monitoring_grafana_data
     driver: local
