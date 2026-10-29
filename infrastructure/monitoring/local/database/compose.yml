@@ -1,0 +1,49 @@
+services:
+  postgresql:
+    image: postgres:18.6
+    container_name: monitoring-postgresql
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: monitoring
+      POSTGRES_PASSWORD: monitoring
+      POSTGRES_DB: monitoring
+    networks:
+      - monitoring
+    volumes:
+      - postgresql_data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U monitoring -d monitoring"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  postgresql-bootstrap:
+    image: postgres:18.6
+    container_name: monitoring-postgresql-bootstrap
+    restart: "no"
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    environment:
+      PGHOST: postgresql
+      PGUSER: monitoring
+      PGPASSWORD: monitoring
+      PGDATABASE: monitoring
+      MONITORING_GLITCHTIP_PASSWORD: monitoring_glitchtip
+      MONITORING_GRAFANA_PASSWORD: monitoring_grafana
+    command:
+      ["psql", "--no-psqlrc", "--quiet", "--file", "/bootstrap/infrastructure-bootstrap.sql"]
+    networks:
+      - monitoring
+    volumes:
+      - ../../shared/bootstrap:/bootstrap:ro
+
+networks:
+  monitoring:
+    name: monitoring
+
+volumes:
+  postgresql_data:
+    name: monitoring_postgresql_data
+    driver: local

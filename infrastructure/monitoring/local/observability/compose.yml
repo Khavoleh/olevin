@@ -1,27 +1,27 @@
 services:
   victoria-logs:
     image: victoriametrics/victoria-logs:v1.53.0
-    container_name: victoria-logs
+    container_name: monitoring-victoria-logs
     restart: unless-stopped
     command: ["-storageDataPath=/storage", "-retentionPeriod=30d"]
     networks:
-      - olevin
+      - monitoring
     volumes:
       - victoria_logs_data:/storage
 
   victoria-traces:
     image: victoriametrics/victoria-traces:v0.12.0
-    container_name: victoria-traces
+    container_name: monitoring-victoria-traces
     restart: unless-stopped
     command: ["-storageDataPath=/storage", "-retentionPeriod=30d"]
     networks:
-      - olevin
+      - monitoring
     volumes:
       - victoria_traces_data:/storage
 
   victoria-metrics:
     image: victoriametrics/victoria-metrics:v1.154.0
-    container_name: victoria-metrics
+    container_name: monitoring-victoria-metrics
     restart: unless-stopped
     command:
       [
@@ -30,7 +30,7 @@ services:
         "-opentelemetry.usePrometheusNaming",
       ]
     networks:
-      - olevin
+      - monitoring
     volumes:
       - victoria_metrics_data:/storage
     healthcheck:
@@ -42,7 +42,7 @@ services:
 
   otel-collector:
     image: otel/opentelemetry-collector-contrib:0.162.0
-    container_name: otel-collector
+    container_name: monitoring-otel-collector
     restart: unless-stopped
     depends_on:
       victoria-logs:
@@ -53,17 +53,19 @@ services:
         condition: service_healthy
     command: ["--config=/etc/otelcol-contrib/config.yml"]
     networks:
-      - olevin
+      - monitoring
     ports:
       - "4318:4318"
     volumes:
-      - ./otel-collector.yml:/etc/otelcol-contrib/config.yml:ro
+      - ../../shared/observability/otel-collector.yml:/etc/otelcol-contrib/config.yml:ro
 
   grafana:
     image: grafana/grafana:13.2.4
-    container_name: grafana
+    container_name: monitoring-grafana
     restart: unless-stopped
     depends_on:
+      postgresql-bootstrap:
+        condition: service_completed_successfully
       victoria-logs:
         condition: service_started
       victoria-traces:
@@ -71,16 +73,22 @@ services:
       victoria-metrics:
         condition: service_healthy
     environment:
-      GF_SERVER_ROOT_URL: https://grafana.localhost
-      GF_SECURITY_ADMIN_USER: olevin
-      GF_SECURITY_ADMIN_PASSWORD: olevin
+      GF_SERVER_ROOT_URL: https://grafana.localhost:8443
+      GF_SECURITY_ADMIN_USER: monitoring
+      GF_SECURITY_ADMIN_PASSWORD: monitoring
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: postgresql:5432
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_USER: monitoring_grafana
+      GF_DATABASE_PASSWORD: monitoring_grafana
+      GF_DATABASE_SSL_MODE: disable
       GF_AUTH_ANONYMOUS_ENABLED: "false"
       GF_ANALYTICS_REPORTING_ENABLED: "false"
       GF_PLUGINS_PREINSTALL_SYNC: victoriametrics-logs-datasource@0.32.0
     networks:
-      - olevin
+      - monitoring
     volumes:
-      - ./grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
+      - ../../shared/observability/grafana/datasources.yml:/etc/grafana/provisioning/datasources/datasources.yml:ro
       - grafana_data:/var/lib/grafana
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
@@ -90,15 +98,19 @@ services:
       start_period: 30s
 
 networks:
-  olevin:
-    name: olevin
+  monitoring:
+    name: monitoring
 
 volumes:
   victoria_logs_data:
+    name: monitoring_victoria_logs_data
     driver: local
   victoria_traces_data:
+    name: monitoring_victoria_traces_data
     driver: local
   victoria_metrics_data:
+    name: monitoring_victoria_metrics_data
     driver: local
   grafana_data:
+    name: monitoring_grafana_data
     driver: local

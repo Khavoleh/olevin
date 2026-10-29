@@ -1,7 +1,7 @@
 services:
   mailpit:
     image: axllent/mailpit:v1.31.3
-    container_name: mailpit
+    container_name: olevin-mailpit
     restart: unless-stopped
     environment:
       MP_DATABASE: /data/mailpit.db
@@ -25,4 +25,5 @@ networks:
 
 volumes:
   mailpit_data:
+    name: olevin_mailpit_data
     driver: local

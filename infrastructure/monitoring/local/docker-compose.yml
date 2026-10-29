@@ -1,0 +1,7 @@
+name: monitoring
+
+include:
+  - database/compose.yml
+  - observability/compose.yml
+  - glitchtip/compose.yml
+  - proxy/compose.yml

@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Olevin.Api.Features.Settings.Data.UserSettings;
 
 /// <summary>
-/// Maps <see cref="UserSetting"/> to <c>settings.user_settings</c>; mirrors <c>infrastructure/db/schemas/settings.hcl</c>.
+/// Maps <see cref="UserSetting"/> to <c>settings.user_settings</c>; mirrors <c>infrastructure/olevin/shared/schemas/settings.hcl</c>.
 /// </summary>
 public sealed class UserSettingConfiguration : IEntityTypeConfiguration<UserSetting>
 {

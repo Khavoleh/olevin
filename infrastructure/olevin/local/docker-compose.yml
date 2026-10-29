@@ -4,6 +4,4 @@ include:
   - database/compose.yml
   - auth/compose.yml
   - mail/compose.yml
-  - observability/compose.yml
-  - glitchtip/compose.yml
   - proxy/compose.yml

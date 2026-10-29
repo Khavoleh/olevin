@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 namespace Olevin.Api.Features.Settings.Data.CfpbResponses;
 
 /// <summary>
-/// Maps <see cref="CfpbResponse"/> to <c>settings.cfpb_responses</c>; mirrors <c>infrastructure/db/schemas/settings.hcl</c>.
+/// Maps <see cref="CfpbResponse"/> to <c>settings.cfpb_responses</c>; mirrors <c>infrastructure/olevin/shared/schemas/settings.hcl</c>.
 /// </summary>
 public sealed class CfpbResponseConfiguration : IEntityTypeConfiguration<CfpbResponse>
 {

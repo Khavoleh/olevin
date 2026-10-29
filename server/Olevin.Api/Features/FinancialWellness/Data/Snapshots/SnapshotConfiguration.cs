@@ -6,7 +6,7 @@ namespace Olevin.Api.Features.FinancialWellness.Data.Snapshots;
 
 /// <summary>
 /// Maps <see cref="Snapshot"/> to <c>financial_wellness.snapshots</c>; mirrors
-/// <c>infrastructure/db/schemas/financial_wellness.hcl</c>.
+/// <c>infrastructure/olevin/shared/schemas/financial_wellness.hcl</c>.
 /// </summary>
 public sealed class SnapshotConfiguration : IEntityTypeConfiguration<Snapshot>
 {

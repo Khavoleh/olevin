@@ -1,0 +1,142 @@
+services:
+  victoria-logs:
+    image: victoriametrics/victoria-logs:v1.53.0
+    restart: unless-stopped
+    command:
+      ["-storageDataPath=/storage", "-retentionPeriod=30d", "-memory.allowedBytes=160MiB"]
+    networks:
+      - monitoring
+    volumes:
+      - victoria_logs_data:/storage
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  victoria-traces:
+    image: victoriametrics/victoria-traces:v0.12.0
+    restart: unless-stopped
+    command:
+      ["-storageDataPath=/storage", "-retentionPeriod=30d", "-memory.allowedBytes=160MiB"]
+    networks:
+      - monitoring
+    volumes:
+      - victoria_traces_data:/storage
+    deploy:
+      resources:
+        limits:
+          memory: 256M
+
+  victoria-metrics:
+    image: victoriametrics/victoria-metrics:v1.154.0
+    restart: unless-stopped
+    command:
+      [
+        "-storageDataPath=/storage",
+        "-retentionPeriod=30d",
+        "-opentelemetry.usePrometheusNaming",
+        "-memory.allowedBytes=256MiB",
+      ]
+    networks:
+      - monitoring
+    volumes:
+      - victoria_metrics_data:/storage
+    deploy:
+      resources:
+        limits:
+          memory: 384M
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:8428/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 5s
+
+  otel-collector:
+    build:
+      context: ../../shared/observability
+      dockerfile_inline: |
+        FROM otel/opentelemetry-collector-contrib:0.162.0
+        COPY otel-collector.yml /etc/otelcol-contrib/config.yml
+    restart: unless-stopped
+    depends_on:
+      victoria-logs:
+        condition: service_started
+      victoria-traces:
+        condition: service_started
+      victoria-metrics:
+        condition: service_healthy
+    command: ["--config=/etc/otelcol-contrib/config.yml"]
+    networks:
+      - monitoring
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+  grafana:
+    build:
+      context: ../../shared/observability/grafana
+      dockerfile_inline: |
+        FROM grafana/grafana:13.2.4
+        COPY datasources.yml /etc/grafana/provisioning/datasources/datasources.yml
+    restart: unless-stopped
+    depends_on:
+      victoria-logs:
+        condition: service_started
+      victoria-traces:
+        condition: service_started
+      victoria-metrics:
+        condition: service_healthy
+    environment:
+      GF_SERVER_ROOT_URL: https://grafana.khavol.com
+      GF_SECURITY_ADMIN_USER: monitoring
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?}
+      GF_SECURITY_SECRET_KEY: ${GRAFANA_SECRET_KEY:?}
+      GF_DATABASE_TYPE: postgres
+      GF_DATABASE_HOST: ${POSTGRES_HOST:?}:5432
+      GF_DATABASE_NAME: grafana
+      GF_DATABASE_USER: monitoring_grafana
+      GF_DATABASE_PASSWORD: ${GRAFANA_DATABASE_PASSWORD:?}
+      GF_DATABASE_SSL_MODE: disable
+      GF_USERS_ALLOW_SIGN_UP: "false"
+      GF_AUTH_ANONYMOUS_ENABLED: "false"
+      GF_ANALYTICS_REPORTING_ENABLED: "false"
+      GF_PLUGINS_PREINSTALL_SYNC: victoriametrics-logs-datasource@0.32.0
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.monitoring-grafana.rule=Host(`grafana.khavol.com`)
+      - traefik.http.routers.monitoring-grafana.entrypoints=web
+      - traefik.http.services.monitoring-grafana.loadbalancer.server.port=3000
+    networks:
+      - monitoring
+      - dokploy-network
+    volumes:
+      - grafana_data:/var/lib/grafana
+    deploy:
+      resources:
+        limits:
+          memory: 1G
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://127.0.0.1:3000/api/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+networks:
+  monitoring:
+    external: true
+  dokploy-network:
+    external: true
+
+volumes:
+  victoria_logs_data:
+    driver: local
+  victoria_traces_data:
+    driver: local
+  victoria_metrics_data:
+    driver: local
+  grafana_data:
+    driver: local

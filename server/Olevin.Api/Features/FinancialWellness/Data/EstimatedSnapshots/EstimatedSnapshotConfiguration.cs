@@ -5,7 +5,7 @@ namespace Olevin.Api.Features.FinancialWellness.Data.EstimatedSnapshots;
 
 /// <summary>
 /// Maps <see cref="EstimatedSnapshot"/> to <c>financial_wellness.estimated_snapshots</c>; mirrors
-/// <c>infrastructure/db/schemas/financial_wellness.hcl</c>.
+/// <c>infrastructure/olevin/shared/schemas/financial_wellness.hcl</c>.
 /// </summary>
 public sealed class EstimatedSnapshotConfiguration : IEntityTypeConfiguration<EstimatedSnapshot>
 {

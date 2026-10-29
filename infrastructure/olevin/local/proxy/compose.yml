@@ -1,0 +1,36 @@
+services:
+  caddy:
+    image: caddy:2.11.4
+    container_name: olevin-caddy
+    restart: unless-stopped
+    depends_on:
+      postgresql:
+        condition: service_healthy
+      logto:
+        condition: service_healthy
+      mailpit:
+        condition: service_healthy
+    networks:
+      - olevin
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    ports:
+      - "80:80"
+      - "443:443"
+      - "3001:3001"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data
+      - caddy_config:/config
+
+networks:
+  olevin:
+    name: olevin
+
+volumes:
+  caddy_data:
+    name: olevin_caddy_data
+    driver: local
+  caddy_config:
+    name: olevin_caddy_config
+    driver: local

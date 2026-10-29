@@ -1,0 +1,52 @@
+services:
+  glitchtip:
+    image: glitchtip/glitchtip:6.2.6
+    restart: unless-stopped
+    environment:
+      SERVER_ROLE: all_in_one
+      DATABASE_URL: postgres://monitoring_glitchtip:${GLITCHTIP_DATABASE_PASSWORD:?}@${POSTGRES_HOST:?}:5432/glitchtip
+      VALKEY_URL: ""
+      SECRET_KEY: ${GLITCHTIP_SECRET_KEY:?}
+      PORT: "8000"
+      GLITCHTIP_DOMAIN: https://glitchtip.khavol.com
+      DEFAULT_FROM_EMAIL: glitchtip@khavol.com
+      EMAIL_URL: ${GLITCHTIP_EMAIL_URL:-consolemail://}
+      ENABLE_USER_REGISTRATION: "false"
+      GLITCHTIP_MAX_EVENT_LIFE_DAYS: "30"
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.monitoring-glitchtip.rule=Host(`glitchtip.khavol.com`)
+      - traefik.http.routers.monitoring-glitchtip.entrypoints=web
+      - traefik.http.services.monitoring-glitchtip.loadbalancer.server.port=8000
+    networks:
+      - monitoring
+      - dokploy-network
+    volumes:
+      - glitchtip_data:/code/uploads
+    deploy:
+      resources:
+        limits:
+          memory: 800M
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://localhost:8000/_health/')",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+networks:
+  monitoring:
+    external: true
+  dokploy-network:
+    external: true
+
+volumes:
+  glitchtip_data:
+    driver: local

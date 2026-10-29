@@ -1,7 +1,7 @@
 services:
   postgresql:
     image: postgres:18.6
-    container_name: postgresql
+    container_name: olevin-postgresql
     restart: unless-stopped
     environment:
       POSTGRES_USER: olevin
@@ -22,7 +22,7 @@ services:
 
   postgresql-bootstrap:
     image: postgres:18.6
-    container_name: postgresql-bootstrap
+    container_name: olevin-postgresql-bootstrap
     restart: "no"
     depends_on:
       postgresql:
@@ -37,17 +37,16 @@ services:
       OLEVIN_WOLVERINE_PASSWORD: olevin_wolverine
       OLEVIN_SETTINGS_PASSWORD: olevin_settings
       OLEVIN_FINANCIAL_WELLNESS_PASSWORD: olevin_financial_wellness
-      OLEVIN_GLITCHTIP_PASSWORD: olevin_glitchtip
     command:
       ["psql", "--no-psqlrc", "--quiet", "--file", "/bootstrap/bootstrap.sql"]
     networks:
       - olevin
     volumes:
-      - ../../db/bootstrap:/bootstrap:ro
+      - ../../shared/bootstrap:/bootstrap:ro
 
   atlas:
     image: arigaio/atlas:1.3.3
-    container_name: atlas
+    container_name: olevin-atlas
     restart: "no"
     depends_on:
       postgresql-bootstrap:
@@ -57,7 +56,7 @@ services:
     networks:
       - olevin
     volumes:
-      - ../../db:/db:ro
+      - ../../shared:/db:ro
 
 networks:
   olevin:
@@ -65,4 +64,5 @@ networks:
 
 volumes:
   postgresql_data:
+    name: olevin_postgresql_data
     driver: local

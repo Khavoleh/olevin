@@ -5,7 +5,7 @@ namespace Olevin.Api.Features.Settings.Data.PushSubscriptions;
 
 /// <summary>
 /// Maps <see cref="PushSubscription"/> to <c>settings.push_subscriptions</c>; mirrors
-/// <c>infrastructure/db/schemas/settings.hcl</c>.
+/// <c>infrastructure/olevin/shared/schemas/settings.hcl</c>.
 /// </summary>
 public sealed class PushSubscriptionConfiguration : IEntityTypeConfiguration<PushSubscription>
 {

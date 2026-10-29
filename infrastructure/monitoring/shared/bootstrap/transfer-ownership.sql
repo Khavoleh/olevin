@@ -22,9 +22,15 @@ BEGIN
         WHERE n.nspname = target_schema
           AND c.relkind IN ('r', 'p', 'v', 'm', 'f', 'S', 'c')
           AND c.relowner <> new_owner::regrole
-          AND NOT EXISTS (
-              SELECT FROM pg_depend d
-              WHERE d.classid = 'pg_class'::regclass AND d.objid = c.oid AND d.deptype IN ('a', 'i', 'e')
+          AND (
+              c.relispartition
+              OR NOT EXISTS (
+                  SELECT FROM pg_depend d
+                  WHERE d.classid = 'pg_class'::regclass
+                    AND d.objid = c.oid
+                    AND d.refobjid <> c.oid
+                    AND d.deptype IN ('a', 'i', 'e')
+              )
           )
         UNION ALL
         SELECT format('ALTER TYPE %I.%I OWNER TO %I', n.nspname, t.typname, new_owner)

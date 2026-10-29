@@ -1,38 +1,30 @@
 services:
   caddy:
     image: caddy:2.11.4
-    container_name: caddy
+    container_name: monitoring-caddy
     restart: unless-stopped
     depends_on:
-      postgresql:
-        condition: service_healthy
       grafana:
         condition: service_healthy
       glitchtip:
         condition: service_healthy
-      logto:
-        condition: service_healthy
-      mailpit:
-        condition: service_healthy
     networks:
-      - olevin
-    extra_hosts:
-      - "host.docker.internal:host-gateway"
+      - monitoring
     ports:
-      - "80:80"
-      - "443:443"
-      - "3001:3001"
+      - "8443:8443"
     volumes:
       - ./Caddyfile:/etc/caddy/Caddyfile:ro
       - caddy_data:/data
       - caddy_config:/config
 
 networks:
-  olevin:
-    name: olevin
+  monitoring:
+    name: monitoring
 
 volumes:
   caddy_data:
+    name: monitoring_caddy_data
     driver: local
   caddy_config:
+    name: monitoring_caddy_config
     driver: local
