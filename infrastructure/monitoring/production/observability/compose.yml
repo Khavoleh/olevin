@@ -67,8 +67,18 @@ services:
       victoria-metrics:
         condition: service_healthy
     command: ["--config=/etc/otelcol-contrib/config.yml"]
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.monitoring-otel-collector.rule=Host(`otel.internal.khavol.com`)
+      - traefik.http.routers.monitoring-otel-collector.entrypoints=websecure
+      - traefik.http.routers.monitoring-otel-collector.tls.certresolver=cloudflare
+      - traefik.http.routers.monitoring-otel-collector.tls.domains[0].main=*.internal.khavol.com
+      - traefik.http.routers.monitoring-otel-collector.service=monitoring-otel-collector
+      - traefik.http.services.monitoring-otel-collector.loadbalancer.server.port=4318
     networks:
       - monitoring
+      - dokploy-network
     deploy:
       resources:
         limits:
@@ -89,7 +99,8 @@ services:
       victoria-metrics:
         condition: service_healthy
     environment:
-      GF_SERVER_ROOT_URL: https://grafana.khavol.com
+      GF_SERVER_ROOT_URL: https://grafana.internal.khavol.com
+      GF_SECURITY_COOKIE_SECURE: "true"
       GF_SECURITY_ADMIN_USER: monitoring
       GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_ADMIN_PASSWORD:?}
       GF_SECURITY_SECRET_KEY: ${GRAFANA_SECRET_KEY:?}
@@ -106,8 +117,13 @@ services:
     labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
-      - traefik.http.routers.monitoring-grafana.rule=Host(`grafana.khavol.com`)
-      - traefik.http.routers.monitoring-grafana.entrypoints=web
+      - traefik.http.routers.monitoring-grafana.rule=Host(`grafana.internal.khavol.com`)
+      - traefik.http.routers.monitoring-grafana.entrypoints=websecure
+      - traefik.http.routers.monitoring-grafana.tls.certresolver=cloudflare
+      - traefik.http.routers.monitoring-grafana.tls.domains[0].main=*.internal.khavol.com
+      - traefik.http.routers.monitoring-grafana.middlewares=monitoring-grafana-hsts
+      - traefik.http.routers.monitoring-grafana.service=monitoring-grafana
+      - traefik.http.middlewares.monitoring-grafana-hsts.headers.stsSeconds=31536000
       - traefik.http.services.monitoring-grafana.loadbalancer.server.port=3000
     networks:
       - monitoring

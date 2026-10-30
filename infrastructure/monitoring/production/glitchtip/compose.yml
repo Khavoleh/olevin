@@ -8,16 +8,25 @@ services:
       VALKEY_URL: ""
       SECRET_KEY: ${GLITCHTIP_SECRET_KEY:?}
       PORT: "8000"
-      GLITCHTIP_DOMAIN: https://glitchtip.khavol.com
+      GLITCHTIP_DOMAIN: https://glitchtip.internal.khavol.com
       DEFAULT_FROM_EMAIL: glitchtip@khavol.com
       EMAIL_URL: ${GLITCHTIP_EMAIL_URL:-consolemail://}
       ENABLE_USER_REGISTRATION: "false"
       GLITCHTIP_MAX_EVENT_LIFE_DAYS: "30"
+      CSRF_TRUSTED_ORIGINS: https://glitchtip.internal.khavol.com
     labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
-      - traefik.http.routers.monitoring-glitchtip.rule=Host(`glitchtip.khavol.com`)
-      - traefik.http.routers.monitoring-glitchtip.entrypoints=web
+      - traefik.http.routers.monitoring-glitchtip.rule=Host(`glitchtip.internal.khavol.com`)
+      - traefik.http.routers.monitoring-glitchtip.entrypoints=websecure
+      - traefik.http.routers.monitoring-glitchtip.tls.certresolver=cloudflare
+      - traefik.http.routers.monitoring-glitchtip.tls.domains[0].main=*.internal.khavol.com
+      - traefik.http.routers.monitoring-glitchtip.middlewares=monitoring-glitchtip-hsts
+      - traefik.http.routers.monitoring-glitchtip.service=monitoring-glitchtip
+      - traefik.http.middlewares.monitoring-glitchtip-hsts.headers.stsSeconds=31536000
+      - traefik.http.routers.monitoring-glitchtip-ingest.rule=Host(`glitchtip.khavol.com`) && PathRegexp(`^/api/[0-9]+/(envelope|store)/`)
+      - traefik.http.routers.monitoring-glitchtip-ingest.entrypoints=web
+      - traefik.http.routers.monitoring-glitchtip-ingest.service=monitoring-glitchtip
       - traefik.http.services.monitoring-glitchtip.loadbalancer.server.port=8000
     networks:
       - monitoring

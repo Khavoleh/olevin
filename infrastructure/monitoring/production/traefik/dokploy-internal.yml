@@ -1,0 +1,24 @@
+http:
+  routers:
+    dokploy-internal:
+      rule: Host(`dokploy.internal.khavol.com`)
+      entryPoints:
+        - websecure
+      service: dokploy-internal
+      middlewares:
+        - dokploy-internal-hsts
+      tls:
+        certResolver: cloudflare
+        domains:
+          - main: "*.internal.khavol.com"
+
+  middlewares:
+    dokploy-internal-hsts:
+      headers:
+        stsSeconds: 31536000
+
+  services:
+    dokploy-internal:
+      loadBalancer:
+        servers:
+          - url: http://dokploy:3000
