@@ -1,0 +1,43 @@
+services:
+  logto:
+    image: svhd/logto:1.44.0
+    restart: unless-stopped
+    entrypoint: ["sh", "-c", "npm run cli db seed -- --swe && npm start"]
+    environment:
+      TRUST_PROXY_HEADER: "1"
+      DB_URL: postgres://olevin_logto:${LOGTO_DATABASE_PASSWORD:?}@olevin-postgresql:5432/auth
+      ENDPOINT: https://auth.olevin.app
+      ADMIN_ENDPOINT: http://localhost:3002
+      SSRF_ALLOWED_ADDRESSES: 10.0.0.0/8,172.16.0.0/12,192.168.0.0/16,fc00::/7
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.olevin-logto.rule=Host(`auth.olevin.app`)
+      - traefik.http.routers.olevin-logto.entrypoints=web
+      - traefik.http.routers.olevin-logto.service=olevin-logto
+      - traefik.http.services.olevin-logto.loadbalancer.server.port=3001
+    networks:
+      - olevin
+      - dokploy-network
+    ports:
+      - "127.0.0.1:3002:3002"
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    healthcheck:
+      test:
+        [
+          "CMD-SHELL",
+          'node -e "fetch(''http://localhost:3001/api/status'').then(r=>process.exit(r.ok?0:1)).catch(()=>process.exit(1))"',
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 60s
+
+networks:
+  olevin:
+    external: true
+  dokploy-network:
+    external: true

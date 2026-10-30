@@ -1,0 +1,39 @@
+services:
+  web-app:
+    build:
+      context: ../../../../web-app
+      args:
+        NEXT_PUBLIC_SENTRY_DSN: ${WEB_APP_SENTRY_DSN:?}
+    restart: unless-stopped
+    environment:
+      APP_BASE_URL: https://app.olevin.app
+      LOGTO_ENDPOINT: https://auth.olevin.app
+      LOGTO_APP_ID: ${LOGTO_APP_ID:?}
+      LOGTO_APP_SECRET: ${LOGTO_APP_SECRET:?}
+      LOGTO_COOKIE_SECRET: ${LOGTO_COOKIE_SECRET:?}
+      LOGTO_API_RESOURCE: https://api.olevin.app
+      LOGTO_M2M_APP_ID: ${LOGTO_M2M_APP_ID:?}
+      LOGTO_M2M_APP_SECRET: ${LOGTO_M2M_APP_SECRET:?}
+      API_URL: http://olevin-api:8080
+      NEXT_PUBLIC_SENTRY_DSN: ${WEB_APP_SENTRY_DSN:?}
+      VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:?}
+    labels:
+      - traefik.enable=true
+      - traefik.docker.network=dokploy-network
+      - traefik.http.routers.olevin-web-app.rule=Host(`app.olevin.app`)
+      - traefik.http.routers.olevin-web-app.entrypoints=web
+      - traefik.http.routers.olevin-web-app.service=olevin-web-app
+      - traefik.http.services.olevin-web-app.loadbalancer.server.port=3000
+    networks:
+      - olevin
+      - dokploy-network
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+
+networks:
+  olevin:
+    external: true
+  dokploy-network:
+    external: true

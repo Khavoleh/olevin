@@ -24,8 +24,10 @@ services:
       - traefik.http.routers.monitoring-glitchtip.middlewares=monitoring-glitchtip-hsts
       - traefik.http.routers.monitoring-glitchtip.service=monitoring-glitchtip
       - traefik.http.middlewares.monitoring-glitchtip-hsts.headers.stsSeconds=31536000
-      - traefik.http.routers.monitoring-glitchtip-ingest.rule=Host(`glitchtip.khavol.com`) && PathRegexp(`^/api/[0-9]+/(envelope|store)/`)
-      - traefik.http.routers.monitoring-glitchtip-ingest.entrypoints=web
+      - traefik.http.routers.monitoring-glitchtip-ingest.rule=Host(`ingest.internal.khavol.com`) && PathRegexp(`^/api/[0-9]+/(envelope|store)/`)
+      - traefik.http.routers.monitoring-glitchtip-ingest.entrypoints=websecure
+      - traefik.http.routers.monitoring-glitchtip-ingest.tls.certresolver=cloudflare
+      - traefik.http.routers.monitoring-glitchtip-ingest.tls.domains[0].main=*.internal.khavol.com
       - traefik.http.routers.monitoring-glitchtip-ingest.service=monitoring-glitchtip
       - traefik.http.services.monitoring-glitchtip.loadbalancer.server.port=8000
     networks:

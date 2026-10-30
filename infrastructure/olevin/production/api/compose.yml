@@ -1,0 +1,32 @@
+services:
+  api:
+    build:
+      context: ../../../../server
+    restart: unless-stopped
+    environment:
+      ConnectionStrings__Wolverine: Host=olevin-postgresql;Port=5432;Database=olevin;Username=olevin_wolverine;Password=${WOLVERINE_DATABASE_PASSWORD:?}
+      ConnectionStrings__Settings: Host=olevin-postgresql;Port=5432;Database=olevin;Username=olevin_settings;Password=${SETTINGS_DATABASE_PASSWORD:?}
+      ConnectionStrings__FinancialWellness: Host=olevin-postgresql;Port=5432;Database=olevin;Username=olevin_financial_wellness;Password=${FINANCIAL_WELLNESS_DATABASE_PASSWORD:?}
+      Logto__Endpoint: https://auth.olevin.app
+      Logto__ApiResource: https://api.olevin.app
+      Logto__WebhookSigningKey: ${LOGTO_WEBHOOK_SIGNING_KEY:?}
+      ExchangeRate__ApiKey: ${EXCHANGE_RATE_API_KEY:?}
+      WebPush__PublicKey: ${VAPID_PUBLIC_KEY:?}
+      WebPush__PrivateKey: ${VAPID_PRIVATE_KEY:?}
+      Telemetry__OtlpEndpoint: https://otel.internal.khavol.com/
+      Sentry__Dsn: ${API_SENTRY_DSN:?}
+    networks:
+      olevin:
+        aliases:
+          - olevin-api
+      dokploy-network:
+    deploy:
+      resources:
+        limits:
+          memory: 640M
+
+networks:
+  olevin:
+    external: true
+  dokploy-network:
+    external: true

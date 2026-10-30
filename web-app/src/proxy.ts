@@ -58,7 +58,7 @@ export async function proxy(request: NextRequest) {
 	return redirectTo(request, getLanguageUrl(PAGE_URLS.ONBOARDING, language));
 }
 
-/** Requests the proxy runs for everything except the API, Next.js internals, auth callback, health check and files. */
+/** Requests the proxy runs for everything except the API, Next.js internals, auth callback, health check, error tunnel and files. */
 export const config = {
-	matcher: ["/((?!api|_next|callback|health|.*\\..*).*)"],
+	matcher: ["/((?!api|_next|callback|health|tunnel|.*\\..*).*)"],
 };
