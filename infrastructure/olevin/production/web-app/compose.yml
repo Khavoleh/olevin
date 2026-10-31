@@ -25,6 +25,9 @@ services:
       - traefik.http.routers.olevin-web-app.entrypoints=web
       - traefik.http.routers.olevin-web-app.service=olevin-web-app
       - traefik.http.services.olevin-web-app.loadbalancer.server.port=3000
+    dns:
+      - 1.1.1.1
+      - 1.0.0.1
     networks:
       - olevin
       - dokploy-network
