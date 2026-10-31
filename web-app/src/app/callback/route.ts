@@ -7,7 +7,9 @@ import type { NextRequest } from "next/server";
 
 /** Logto redirect URI: signs the user in and sends them home or to their onboarding step. */
 export async function GET(request: NextRequest) {
-	await handleSignIn(getLogtoConfig(), request.nextUrl.searchParams);
+	const { searchParams } = request.nextUrl;
+
+	await handleSignIn(getLogtoConfig(), searchParams);
 
 	const status = await syncOnboardingStatus();
 
