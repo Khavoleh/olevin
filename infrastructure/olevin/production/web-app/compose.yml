@@ -17,6 +17,7 @@ services:
       API_URL: http://olevin-api:8080
       NEXT_PUBLIC_SENTRY_DSN: ${WEB_APP_SENTRY_DSN:?}
       VAPID_PUBLIC_KEY: ${VAPID_PUBLIC_KEY:?}
+      NODE_OPTIONS: --dns-result-order=ipv4first
     labels:
       - traefik.enable=true
       - traefik.docker.network=dokploy-network
