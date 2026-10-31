@@ -19,7 +19,9 @@ export const getApiToken = cache(async (): Promise<string | null> => {
 
 	try {
 		return await getToken(getLogtoConfig(), getApiResource());
-	} catch {
+	} catch (error) {
+		console.error("Could not get the API access token", error);
+
 		return null;
 	}
 });
