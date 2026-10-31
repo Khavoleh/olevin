@@ -16,6 +16,11 @@ services:
       - traefik.http.routers.olevin-logto.entrypoints=web
       - traefik.http.routers.olevin-logto.service=olevin-logto
       - traefik.http.services.olevin-logto.loadbalancer.server.port=3001
+      - traefik.http.routers.olevin-logto-local.rule=Host(`auth.olevin.app`)
+      - traefik.http.routers.olevin-logto-local.entrypoints=websecure
+      - traefik.http.routers.olevin-logto-local.service=olevin-logto
+      - traefik.http.routers.olevin-logto-local.tls.certresolver=cloudflare
+      - traefik.http.routers.olevin-logto-local.tls.domains[0].main=auth.olevin.app
       - traefik.http.routers.olevin-logto-admin.rule=Host(`auth-admin.internal.olevin.app`)
       - traefik.http.routers.olevin-logto-admin.entrypoints=websecure
       - traefik.http.routers.olevin-logto-admin.service=olevin-logto-admin
