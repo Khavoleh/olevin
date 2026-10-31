@@ -1,5 +1,7 @@
 using System.Text.Json.Serialization;
 using DotNetEnv;
+using JasperFx;
+using JasperFx.CodeGeneration;
 using MicroElements.AspNetCore.OpenApi.FluentValidation;
 using Npgsql;
 using Olevin.Api.Features.FinancialWellness;
@@ -25,6 +27,9 @@ WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 builder.AddTelemetry();
 
+builder.Services.CritterStackDefaults(options =>
+    options.Production.GeneratedCodeMode = TypeLoadMode.Static
+);
 builder.Host.UseWolverine(options =>
 {
     options.UseFluentValidation();
@@ -83,4 +88,4 @@ if (app.Environment.IsDevelopment())
 app.MapHealthChecks("/health").AllowAnonymous();
 app.MapWolverineEndpoints(options => options.AddPolicy<ValidationPolicy>());
 
-await app.RunAsync();
+return await app.RunJasperFxCommands(args);

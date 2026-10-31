@@ -30,3 +30,6 @@ docker-compose*
 
 # Test results
 **/TestResults/
+
+# Wolverine code, generated during the build
+**/Internal/Generated/

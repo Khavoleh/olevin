@@ -482,3 +482,6 @@ $RECYCLE.BIN/
 
 # Vim temporary swap files
 *.swp
+
+# Wolverine code, generated during the Docker build
+Olevin.Api/Internal/Generated/
