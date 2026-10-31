@@ -44,12 +44,6 @@ export async function proxy(request: NextRequest) {
 	}
 
 	if (!(await getIsAuthenticated(request))) {
-		console.info(
-			"Proxy found no session",
-			pathname,
-			request.cookies.getAll().map(({ name }) => name),
-		);
-
 		return redirectTo(request, getLanguageUrl(PAGE_URLS.SIGN_IN, language));
 	}
 

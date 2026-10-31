@@ -28,11 +28,7 @@ export const getApiToken = cache(async (): Promise<string | null> => {
 	try {
 		return await getToken(getLogtoConfig(), getApiResource());
 	} catch (error) {
-		if (!getIsSessionError(error)) {
-			throw error;
-		}
-
-		console.error("Could not get the API access token", error);
+		if (!getIsSessionError(error)) throw error;
 
 		return null;
 	}

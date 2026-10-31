@@ -9,7 +9,7 @@ const createEnvelope = (header: unknown) =>
 describe("getEnvelopeUrl", () => {
 	it("should return the envelope URL of the project", () => {
 		expect(getEnvelopeUrl(createEnvelope({ dsn: DSN }), DSN)).toBe(
-			"https://ingest.internal.khavol.com/api/2/envelope/",
+			"https://ingest.internal.khavol.com/api/2/envelope/?sentry_key=4f1c2a8e9b7d4e6f",
 		);
 	});
 
@@ -17,7 +17,7 @@ describe("getEnvelopeUrl", () => {
 		const dsn = "https://4f1c2a8e9b7d4e6f@example.com/glitchtip/7";
 
 		expect(getEnvelopeUrl(createEnvelope({ dsn }), dsn)).toBe(
-			"https://example.com/glitchtip/api/7/envelope/",
+			"https://example.com/glitchtip/api/7/envelope/?sentry_key=4f1c2a8e9b7d4e6f",
 		);
 	});
 

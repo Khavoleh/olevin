@@ -14,7 +14,7 @@ const parseHeader = (envelope: string): unknown => {
 	}
 };
 
-/** Gets the GlitchTip envelope URL of the DSN. Returns `undefined` when the envelope is sent to another DSN. */
+/** Gets the GlitchTip envelope URL of the DSN with its public key. Returns `undefined` when the envelope is sent to another DSN. */
 export const getEnvelopeUrl = (
 	envelope: string,
 	dsn: string | undefined,
@@ -36,5 +36,5 @@ export const getEnvelopeUrl = (
 	const path = url.pathname.slice(0, separator);
 	const projectId = url.pathname.slice(separator + 1);
 
-	return `${url.origin}${path}/api/${projectId}/envelope/`;
+	return `${url.origin}${path}/api/${projectId}/envelope/?sentry_key=${url.username}`;
 };
