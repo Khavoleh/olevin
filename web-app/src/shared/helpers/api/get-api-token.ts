@@ -1,5 +1,6 @@
 import { LogtoClientError, LogtoRequestError } from "@logto/next";
 import { getAccessToken, getAccessTokenRSC } from "@logto/next/server-actions";
+import { connection } from "next/server";
 import { cache } from "react";
 import { getLogtoConfig } from "../auth/get-logto-config";
 import { getApiResource } from "./get-api-resource";
@@ -18,8 +19,10 @@ const getIsRendering = () => {
 const getIsSessionError = (error: unknown): boolean =>
 	error instanceof LogtoClientError || error instanceof LogtoRequestError;
 
-/** Access token for the API, or `null` without a valid session. Throws when Logto is unreachable. */
+/** Access token for the API, or `null` without a valid session. Waits for a request, so it never runs at build time. */
 export const getApiToken = cache(async (): Promise<string | null> => {
+	await connection();
+
 	const getToken = getIsRendering() ? getAccessTokenRSC : getAccessToken;
 
 	try {
