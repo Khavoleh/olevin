@@ -9,6 +9,8 @@ export async function requestOrRedirect<T>(
 ): Promise<T> {
 	return request().catch((error) => {
 		if (error instanceof ApiError && error.status === 401) {
+			console.info("API answered 401, opening sign-in");
+
 			redirect(getLanguageUrl(PAGE_URLS.SIGN_IN, language));
 		}
 
