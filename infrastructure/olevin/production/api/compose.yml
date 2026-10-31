@@ -1,7 +1,7 @@
 services:
   api:
     build:
-      context: ../../../../server
+      context: ../../../../api
     restart: unless-stopped
     environment:
       ConnectionStrings__Wolverine: Host=olevin-postgresql;Port=5432;Database=olevin;Username=olevin_wolverine;Password=${WOLVERINE_DATABASE_PASSWORD:?}

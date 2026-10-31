@@ -1,6 +1,6 @@
 ---
 name: project-workflow
-description: Handle all GitHub operations for the Olevin monorepo (`Khavoleh/olevin`: `web-app/`, `server/`, `infrastructure/`) — branches, commits, PRs, and issues — using the GitHub CLI (`gh`), following the `[id]/task-name` branch convention, the repo's commit message style, PR base = `main`, and a required approval gate before filing any issue. Use this skill when: creating a branch, writing a commit message, opening or updating a PR, drafting or filing an issue, assigning labels, or wiring `Closes #N` in a PR body. Also trigger when wondering how to phrase a commit or what to verify before a PR. Examples: "create a branch for this task", "open a PR for my changes", "file a GitHub issue for the snapshot form", "write a commit message for this".
+description: Handle all GitHub operations for the Olevin monorepo (`Khavoleh/olevin`: `web-app/`, `api/`, `infrastructure/`) — branches, commits, PRs, and issues — using the GitHub CLI (`gh`), following the `[id]/task-name` branch convention, the repo's commit message style, PR base = `main`, and a required approval gate before filing any issue. Use this skill when: creating a branch, writing a commit message, opening or updating a PR, drafting or filing an issue, assigning labels, or wiring `Closes #N` in a PR body. Also trigger when wondering how to phrase a commit or what to verify before a PR. Examples: "create a branch for this task", "open a PR for my changes", "file a GitHub issue for the snapshot form", "write a commit message for this".
 ---
 
 # Project workflow
@@ -21,7 +21,7 @@ Work with GitHub in line with the repo's conventions and automation. Don't fight
 ## Commits
 
 - Use **Conventional Commits** (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`, `ci:`, `style:`) when releases are automated from commit history — the type drives the version bump and changelog. Otherwise follow the style already in the history. Keep messages accurate; they become release notes.
-- One logical change per commit; in a monorepo, don't mix unrelated `web-app/` and `server/` changes in one commit.
+- One logical change per commit; in a monorepo, don't mix unrelated `web-app/` and `api/` changes in one commit.
 
 ## Pull requests
 
@@ -107,11 +107,11 @@ Guidelines:
 
 ## In this repo (Olevin)
 
-- Repo: `Khavoleh/olevin` — a monorepo: `web-app/` (Next.js), `server/` (.NET API), `infrastructure/` (DB schema, deployment), `landing/` (Astro, planned).
+- Repo: `Khavoleh/olevin` — a monorepo: `web-app/` (Next.js), `api/` (.NET API), `infrastructure/` (DB schema, deployment), `landing/` (Astro, planned).
 - **Base branch = `main`** (the only long-lived branch). No CI workflows, git hooks or release automation yet — nothing checks the branch name, tests or secrets for you.
 - **Branch name:** `[id]/[task-name]`, lowercase + hyphens, `id` = GitHub issue number, e.g. `12/snapshot-form-validation`.
 - **Commits:** no semantic-release yet, so no Conventional Commit prefixes. Follow the existing history: imperative, sentence case, no trailing period, a short summary of the change — e.g. `Add user creation endpoint`, `Rework database schema to separate tables`, `Rename devops folder to infrastructure`. Once semantic-release is added, switch to Conventional Commits and update this skill.
 - **Before a PR**, run the checks of every touched project and report them under **Testing**:
   - `web-app/`: `pnpm validate`; for UI changes add the manual checks done (locales, widths, keyboard).
-  - `server/`: `dotnet build` (fails on CSharpier formatting) and `dotnet test`.
+  - `api/`: `dotnet build` (fails on CSharpier formatting) and `dotnet test`.
 - **Labels:** fetch the label list with `gh label list` before assigning; add an area label for the touched project (web-app / server / infrastructure) and slice when one exists.

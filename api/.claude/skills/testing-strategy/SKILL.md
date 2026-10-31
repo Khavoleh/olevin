@@ -1,6 +1,6 @@
 ---
 name: testing-strategy
-description: Decide where to test, what to test, and how to run tests in the Olevin .NET API (`server/`, xUnit v3 unit tests in `Olevin.Tests`). Use this skill when: writing a new test, a test is failing, deciding whether a calculation, validator, mapping or endpoint needs a test, building test data, changing the index model (calibration and reference tests), or verifying a change before calling it done. Trigger on: "write a test for X", "does this need a test?", "dotnet test is failing", "test this validator", "run only these tests", "is this ready?". Also use it when adding domain logic or a validator (ships with unit tests). Examples: "test SnapshotScorer for estimates", "add cases to ConfigureUserSettingsValidatorTests", "the calibration test broke after I changed a membership function", "what's the test command?".
+description: Decide where to test, what to test, and how to run tests in the Olevin .NET API (`api/`, xUnit v3 unit tests in `Olevin.Tests`). Use this skill when: writing a new test, a test is failing, deciding whether a calculation, validator, mapping or endpoint needs a test, building test data, changing the index model (calibration and reference tests), or verifying a change before calling it done. Trigger on: "write a test for X", "does this need a test?", "dotnet test is failing", "test this validator", "run only these tests", "is this ready?". Also use it when adding domain logic or a validator (ships with unit tests). Examples: "test SnapshotScorer for estimates", "add cases to ConfigureUserSettingsValidatorTests", "the calibration test broke after I changed a membership function", "what's the test command?".
 ---
 
 # Testing strategy
@@ -41,7 +41,7 @@ Fast, deterministic **unit** tests for logic, validation and pure endpoints. Put
   - Shared fixtures in `Olevin.Tests/TestData/` (`ControlExample` — the control example of the method); per-area fixtures next to their tests (`SyntheticProfiles`, `ControlExampleAdvice`).
 - **Index model guards:** `ControlExampleTests`, `CalibrationTests`, `ReferenceProfilesTests`, `OlevinModelTests`. If one fails after a model change, the change altered results — confirm it's intended, update the expected values deliberately and bump `IndexConstants.ModelVersion`; never loosen the precision to make it pass.
 - **DB-touching endpoints** (`CreateUserEndpoint`, `ConfigureUserSettingsEndpoint`) aren't tested directly; their validators are. Keep decisions that need tests out of the DbContext code.
-- **Run** (in `server/`):
+- **Run** (in `api/`):
   - all: `dotnet test`
   - one class: `dotnet test --filter-class "*ConfigureUserSettingsValidatorTests"`
   - one test: `dotnet test --filter-method "*SnapshotDay_OutsideTheBounds_IsRejected"`
